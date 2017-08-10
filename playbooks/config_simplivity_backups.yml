@@ -7,10 +7,10 @@
     - ../group_vars/vars
     - ../group_vars/vault
 
+  environment: "{{ env }}"
+
   vars:
     ovc: "{{ omnistack_ovc | random }}"
-
-  environment: "{{ env }}"
 
   tasks:
     # This task should use the uri module but not sure how to use the parameters in it
