@@ -1,9 +1,9 @@
 ## UCP
 [ucp_main]
-nm-ucp-01 ip_addr='10.10.174.92/22' esxi_host='dh01.am2.cloudra.local'
+nm-ucp01 ip_addr='10.10.174.92/22' esxi_host='dh01.am2.cloudra.local'
 
 [ucp]
-nm-ucp-01 ip_addr='10.10.174.92/22' esxi_host='dh01.am2.cloudra.local'
+nm-ucp01 ip_addr='10.10.174.92/22' esxi_host='dh01.am2.cloudra.local'
 #dp-ucp-02 ip_addr='10.10.174.75/22' esxi_host='dh01.am2.cloudra.local'
 #dp-ucp-03 ip_addr='10.10.174.76/22' esxi_host='dh01.am2.cloudra.local'
 
@@ -15,10 +15,10 @@ node_policy='dp-bronze'
 
 # DTR
 [dtr_main]
-nm-dtr-01 ip_addr='10.10.174.93/22' esxi_host='dh01.am2.cloudra.local'
+nm-dtr01 ip_addr='10.10.174.93/22' esxi_host='dh01.am2.cloudra.local'
 
 [dtr]
-nm-dtr-01 ip_addr='10.10.174.93/22' esxi_host='dh01.am2.cloudra.local'
+nm-dtr01 ip_addr='10.10.174.93/22' esxi_host='dh01.am2.cloudra.local'
 #dp-dtr-02 ip_addr='10.10.174.72/22' esxi_host='dh01.am2.cloudra.local'
 #dp-dtr-03 ip_addr='10.10.174.73/22' cpus='6' esxi_host='dh01.am2.cloudra.local'
 
@@ -30,8 +30,8 @@ node_policy='dp-gold'
 
 ## WORKER
 [worker]
-nm-worker-01 ip_addr='10.10.174.98/22' esxi_host='dh01.am2.cloudra.local'
-nm-worker-02 ip_addr='10.10.174.99/22' esxi_host='dh02.am2.cloudra.local'
+nm-worker01 ip_addr='10.10.174.98/22' esxi_host='dh01.am2.cloudra.local'
+nm-worker02 ip_addr='10.10.174.99/22' esxi_host='dh02.am2.cloudra.local'
 #dp-worker-03 ip_addr='10.10.174.79/22' esxi_host='dh01.am2.cloudra.local'
 
 [worker:vars]
