@@ -36,7 +36,8 @@ domain_name: 'am2.cloudra.local'
 ntp_server: ['10.12.2.1']
 
 # Docker settings
-docker_ee_url: 'https://storebits.docker.com/ee/linux/sub-bee89908-9360-4f5c-a3e2-e059a8f88605'
+#docker_ee_url: 'https://storebits.docker.com/ee/linux/sub-bee89908-9360-4f5c-a3e2-e059a8f88605'
+docker_ee_url: 'https://storebits.docker.com/ee/rhel/sub-33cfc952-4f93-4a5f-a5d5-115f999cc45c'
 rhel_version: '7.3'
 dtr_version: 'latest'
 ucp_version: 'latest'
