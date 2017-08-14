@@ -1,12 +1,13 @@
 ## What is this
 This bunch of playbooks will install Docker Datacenter on top of a Simplivity environment using vCenter. The whole environment is created from a single temlate having RHEL 7.3 as the OS. It will install:
 
-- A number of UCP nodes (typically 3)
-- A number of DTR nodes (typically 3)
-- A number of Worker nodes (typically 3)
+- A number of UCP nodes (typically 1)
+- A number of DTR nodes (typically 1)
+- A number of Worker nodes (typically 2)
 - 3 load balancers (one for each of the above sets)
 - 1 NFS node
 - 1 logger node
+- 1 ELK and Clodbee node (Still being worked on)
 
 It will also create some grafana/prometheus containers to monitor the health of the system, an NFS node to store images, a centralized logger node (rsyslog) for all nodes and containers and it will set up backup policies for VMs and volumes in SImplivity.
 
@@ -15,6 +16,23 @@ The playbooks are meant to support a different number of nodes (ie. 5 DTR nodes 
 The following instructions assume some basic knowledge on vCenter/Linux.
 
 Also, please keep in mind that you need a Docker license (you can request a 1-month trial here: https://store.docker.com/editions/enterprise/docker-ee-server-rhel)
+
+For the dev edition we've selected enterprise edition standard license, which omits image security scanning.
+
+Capabilities	  		Enterprise Edition Standard	Enterprise Edition Advanced
+
+Container engine and built                  Yes				Yes
+in orchestration, networking, 
+security	
+
+Certified infrastructure,  		    Yes				Yes
+plugins and ISV containers	 	   
+
+Image management	 	 	    Yes				Yes
+
+Container app management	 	    Yes				Yes
+
+Image security scanning	 	 	    No				Yes
 
 ## How to use it
 You need to manually configure two things first:
