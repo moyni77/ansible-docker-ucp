@@ -19,16 +19,7 @@ Also, please keep in mind that you need a Docker license (you can request a 1-mo
 
 For the dev edition we've selected enterprise edition standard license, which omits image security scanning.
 
-Capabilities	  		Enterprise Edition Standard	
-
-Container engine and built                  Yes				
-in orchestration, networking, 
-security	
-Certified infrastructure,  		    Yes				
-plugins and ISV containers	 	   
-Image management	 	 	    Yes				
-Container app management	 	    Yes				
-Image security scanning	 	 	    No				
+Capabilities that are provided by the enterprise edition standard follow: Container engine and built in orchestration, networking, security, Certified infrastructure, plugins and ISV containers, Image management, and Container app management. Image security scanning is only available with the advanced licsense. 
 
 ## How to use it
 You need to manually configure two things first:
