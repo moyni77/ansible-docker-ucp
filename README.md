@@ -19,20 +19,16 @@ Also, please keep in mind that you need a Docker license (you can request a 1-mo
 
 For the dev edition we've selected enterprise edition standard license, which omits image security scanning.
 
-Capabilities	  		Enterprise Edition Standard	Enterprise Edition Advanced
+Capabilities	  		Enterprise Edition Standard	
 
-Container engine and built                  Yes				Yes
+Container engine and built                  Yes				
 in orchestration, networking, 
 security	
-
-Certified infrastructure,  		    Yes				Yes
+Certified infrastructure,  		    Yes				
 plugins and ISV containers	 	   
-
-Image management	 	 	    Yes				Yes
-
-Container app management	 	    Yes				Yes
-
-Image security scanning	 	 	    No				Yes
+Image management	 	 	    Yes				
+Container app management	 	    Yes				
+Image security scanning	 	 	    No				
 
 ## How to use it
 You need to manually configure two things first:
