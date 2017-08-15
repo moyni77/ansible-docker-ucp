@@ -1,13 +1,14 @@
 ## What is this
 This bunch of playbooks will install Docker Datacenter on top of a Simplivity environment using vCenter. The whole environment is created from a single temlate having RHEL 7.3 as the OS. It will install:
 
-- A number of UCP nodes (typically 1)
-- A number of DTR nodes (typically 1)
-- A number of Worker nodes (typically 2)
-- 3 load balancers (one for each of the above sets)
+- A number of UCP nodes (typically 3) for development we're only using 1 UCP
+- A number of DTR nodes (typically 3) for development we're only using 1 DTR
+- A number of Worker nodes (typically 3) for development we're using 2 worker nodes
+- 3 load balancers (one for each of the above sets) 
 - 1 NFS node
 - 1 logger node
-- 1 ELK and Clodbee node (Still being worked on)
+- 1 ELK stack node
+- 1 Cloudbees node  
 
 It will also create some grafana/prometheus containers to monitor the health of the system, an NFS node to store images, a centralized logger node (rsyslog) for all nodes and containers and it will set up backup policies for VMs and volumes in SImplivity.
 
