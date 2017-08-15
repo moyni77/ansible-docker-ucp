@@ -80,6 +80,23 @@ nm-logger ip_addr='10.10.174.100/22' esxi_host='dh01.am2.cloudra.local'
 [logger:vars]
 cpus='2'
 ram='4096'
+disk2_size='200'
+node_policy='dp-gold'
+
+[elk]
+nm-elk ip_addr='10.10.174.101/22' esxi_host='dh01.am2.cloudra.local'
+
+[elk:vars]
+cpus='2'
+ram='16384'
+node_policy='dp-gold'
+
+[cloudbees]
+nm-cloudbees ip_addr='10.10.174.102/22' esxi_host='dh01.am2.cloudra.local'
+
+[cloudbees:vars]
+cpus='2'
+ram='8192'
 node_policy='dp-gold'
 
 [vms:children]
@@ -89,6 +106,8 @@ worker
 lbs
 nfs
 logger
+elk
+cloudbees
 
 # Local 
 [local]
