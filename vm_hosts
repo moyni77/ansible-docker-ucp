@@ -96,7 +96,7 @@ nm-cloudbees ip_addr='10.10.174.102/22' esxi_host='dh01.am2.cloudra.local'
 
 [cloudbees:vars]
 cpus='2'
-ram='8192'
+ram='16384'
 node_policy='dp-gold'
 
 [vms:children]
