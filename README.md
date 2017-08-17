@@ -8,7 +8,8 @@ This bunch of playbooks will install Docker EE on top of a Simplivity environmen
 - 1 NFS node
 - 1 logger node
 - 1 ELK stack node
-- 1 Cloudbees node  
+- 1 Cloudbees node 
+- 1 Play With docker container.
 
 NFS node to store images, a centralized logger node (rsyslog) for all nodes and containers and it will set up backup policies for VMs and volumes in Simplivity.
 
