@@ -40,7 +40,7 @@ ntp_server: ['10.12.2.1']
 docker_ee_url: 'https://storebits.docker.com/ee/rhel/sub-33cfc952-4f93-4a5f-a5d5-115f999cc45c'
 rhel_version: '7.3'
 dtr_version: 'latest'
-ucp_version: '2.1.5'
+ucp_version: 'latest'
 images_folder: '/docker-images'
 license_file: '/root/ansible-docker-ucp/license.lic'
 ucp_username: 'admin'
