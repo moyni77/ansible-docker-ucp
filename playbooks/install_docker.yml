@@ -11,7 +11,7 @@
 
   tasks:
     - name: Enable extras REHL repository
-    - shell: yum-config-manager --enable rhel-7-server-extras-rpms
+      shell: yum-config-manager --enable rhel-7-server-extras-rpms
 
     - name: Install dependencies
       yum:
