@@ -1,8 +1,12 @@
 # ansible-docker-ucp
-Spin up a virtual Docker UCP environment using ansible and use some of the simplivity features
+Spin up a virtual Docker UCP "Development" environment using ansible and use some of the simplivity features
 # Introduction
 
 The present document describes how to automate the provisioning of a Docker Enterprise Edition environment by using a set of Ansible playbooks. It also outlines a set of manual steps to harden, secure and audit the overall status of the system.
+
+For the dev edition we've selected enterprise edition standard license, which omits image security scanning.
+Capabilities that are provided by the enterprise edition standard follow: Container engine and built in orchestration, networking, security, Certified infrastructure, plugins and ISV containers, Image management, and Container app management. Image security scanning is only available with the advanced license.
+
 
 ## About Docker Enterprise Edition
 
@@ -27,7 +31,7 @@ The present document assumes a minimum understanding in concepts like virtualiza
 The following versions or higher are required to use the playbooks described in later sections.
 
 - Ansible 2.2
-- Docker EE 17.03
+- Docker EE 17.06
 
 # Steps to provision the environment
 
@@ -144,11 +148,11 @@ Change to the directory that you previously cloned using git and edit the vm\_ho
 The nodes inside the inventory are organized in groups. The groups are defined by brackets and its names are static so they must not be changed. Anything else (hostnames, specifications, IP addresses…) are meant to be amended to match the user needs. The groups are as follows:
 
 - [ucp\_main]: A group containing one single node which will be the main UCP node and swarm leader. Do not add more than one node under this group.
-- [ucp]: A group containing all the UCP nodes, including the main UCP node. Typically you should have either 3 or 5 nodes under this group.
+- [ucp]: A group containing all the UCP nodes, including the main UCP node. Typically you should have either 3 or 5 nodes under this group. For dev were only specifying 1 node.
 - [dtr\_main]: A group containing one single node which will be the first DTR node to be installed. Do not add more than one node under this group.
-- [dtr]: A group containing all the DTR nodes, including the main DTR node. Typically you should have either 3 or 5 nodes under this group.
+- [dtr]: A group containing all the DTR nodes, including the main DTR node. Typically you should have either 3 or 5 nodes under this group. For dev were only specifying 1 node.
 - [worker]: A group containing all the UCP nodes, including the main UCP node. Typically you should have either 3 or 5 nodes under this group.
-- [ucp\_lb]: A group containing one single node which will be the load balancer for the UCP nodes. Do not add more than one node under this group.
+- [ucp\_lb]: A group containing one single node which will be the load balancer for the UCP nodes. Do not add more than one node under this group. 
 - [dtr\_lb]: A group containing one single node which will be the load balancer for the DTR nodes. Do not add more than one node under this group.
 - [worker\_lb]: A group containing one single node which will be the load balancer for the worker nodes. Do not add more than one node under this group.
 - [lbs]: A group containing all the load balances. This group will have 3 nodes, also defined in the three groups above.
@@ -169,7 +173,9 @@ Finally, you will find some variables defined for each group:
 - [lbs:vars]: A set of variables defined for all nodes in the [lbs] group.
 - [nfs:vars]: A set of variables defined for all nodes in the [nfs] group.
 - [logger:vars]: A set of variables defined for all nodes in the [logger] group.
-
+- [elk:vars]:  A set of variables defined for all nodes in the [elk] group.
+- [cloudbees:vars]: A set of variables defined for all nodes in the [cloudbees] group
+ 
 If you wish to configure your nodes with different specifications rather than the ones defined by the group, it is possible to declare the same variables at the node level, overriding the group value. For instance, you could have one of your workers with higher specifications by doing:
 
 ```
@@ -255,17 +261,6 @@ All Docker-related variables should be here. All of them are mandatory and descr
 | images\_folder | Directory in the NTP server that will be mounted in the DTR nodes and that will host your Docker images |
 | license\_file | Full path to your Docker license file (it should be stored in your Ansible host) |
 | ucp\_username | Username of the administrator user for UCP and DTR, typically admin. |
-
-### Monitoring configuration
-
-All Monitoring-related variables should be here. This section only include versions and it is recommended to leave it as is. All of them are specified in the Table 6 below.
-
-| Variable | Description |
-| --- | --- |
-| cadvisor\_version | You could try a different version but it's not guaranteed that it will work. To make sure that no issues arise please use 'v0.25.0' |
-| node\_exporter\_version | You could try a different version but it's not guaranteed that it will work. To make sure that no issues arise please use 'v1.14.0' |
-| prometheus\_version | You could try a different version but it's not guaranteed that it will work. To make sure that no issues arise please use 'v1.7.1' |
-| grafana\_version | You could try a different version but it's not guaranteed that it will work. To make sure that no issues arise please use '4.4.3' |
 
 ### Environment configuration
 
@@ -534,24 +529,22 @@ It is composed of the following sequential tasks:
 - Check if node already belongs to the swarm: Uses the docker info command to verify if the node is already part of the swarm and records the output to be used in later tasks. This is to prevent trying to install Workers on nodes that are already part of the swarm
 - Add Worker nodes to the swarm: Uses the previously registered command to join the swarm
 
-## playbooks/config\_monitoring.yml
+## playbooks/install\_elk.yml
 
-This playbook will configure a monitoring system for the Docker environment by making use of Grafana, Prometheus, cAdvisor and node-exporter Docker containers.
+This playbook will install and configure ELK stack defined in the inventory.
 
-It is composed of the following sequential tasks:
 
-- Open required ports for Grafana and Prometheus: Makes use of the firewalld command to open the required ports for the Grafana and Prometheus
-- Reload firewalld configuration: Reloads the firewall on the logger node to apply the new rules
-- Copy monitoring files to UCP: Uses the Ansible copy module to push the monitoring folder into the first UCP node. This folder contains all the required files to install the monitoring system.
-- Copy docker compose file: Creates the docker-compose.yml file using a template. This file will be used at a later stage by the docker stack deploy command to build the monitoring stack. The template file is called docker-compose.yml.j2 and is located in the templates folder. More information about Ansible templates can be found here: [http://docs.ansible.com/ansible/latest/playbooks\_templating.html](http://docs.ansible.com/ansible/latest/playbooks_templating.html).
-- Deploy monitoring stack: Runs the docker stack deploy command to build the monitoring stack.
-- Wait for Prometheus to be available: Waits for Prometheus port 9090 to be listening so the playbook can proceed with the configuration steps
-- Wait for Grafana to be available: Waits for Grafana port 3000 to be listening so the playbook can proceed with the configuration steps
-- Check if datasource already available: Makes use of the Grafana REST API to find out if a Prometheus data source is already there from a previous run. The task will register the output to decide whether to run the next step
-- Create Grafana Data Source: Makes use of the Grafana REST API to create the Prometheus data source, using the provided json file. This task is conditional to the previous step output
-- Import Dashboard: Makes use of the Grafana REST API to create a monitoring Dashboard, based on the provided JSON file Docker-Swarm-Dashboard.json
+## playbooks/install\_playwithdocker.yml
 
-At this stage we can connect to the UCP nodes on port 3000 and we will see the Grafana dashboard. The username and password are defaulted to admin/admin. When we log in we can pick up the Dashboard that was imported by the playbooks and observe the ongoing monitoring.
+This playbook will install and configure Play With Docker container defined in the inventory.
+
+"Added PWD info here"
+
+## playbooks/install\_cloudbees.yml
+
+This playbook will install and configure Cloudbees Team Edition CI/CD Jekins pipe line.
+
+"Added Cloudbees info here"
 
 ## playbooks/config\_dummy\_vms\_for\_docker\_volumes\_backup.yml
 
