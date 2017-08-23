@@ -64,6 +64,7 @@ node_policy='dp-bronze'
 ucp
 dtr
 worker
+elk
 
 [nfs]
 nm-nfs ip_addr='10.10.174.97/22' esxi_host='dh01.am2.cloudra.local'
