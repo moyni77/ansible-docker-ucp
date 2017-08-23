@@ -1,0 +1,48 @@
+---
+- hosts: elk
+  become: yes
+  vars:
+    compose_ver: 1.15.0
+
+  vars_files:
+    - ../group_vars/vars
+
+  environment: "{{ env }}"
+
+  tasks:
+    - name: Copy config file
+      copy: src={{ item }} dest=/root
+      with_fileglob:
+         - /root/ansible-docker-ucp/files/elk/*
+
+    #- name: Installing packages
+    #  apt: name={{ item }} state=present update_cache=yes
+    #  with_items:
+    #    - python-setuptools
+    #    - python-pip
+    #    - ansible
+
+    - name: Installing docker compose
+      shell: curl -L https://github.com/docker/compose/releases/download/{{ compose_ver }}/docker-compose-`uname -s`-`uname -m` -o /usr/local/bin/docker-compose
+
+    - name: change compose permission
+      file:
+         path: /usr/local/bin/docker-compose
+         mode: 0755
+    - name: copy docker.service file with our proxy configuration
+      shell: cp -f /root/docker.service /usr/lib/systemd/system
+   
+    - name: restart daemon to bring in new docker.service file and restart docker
+      shell: systemctl daemon-reload
+
+    - name: restart docker service
+      shell: systemctl restart docker
+
+    - name: run Dockerfile
+      shell: docker build -f /root/elk-Dockerfile -t docker.elastic.co/logstash/logstash:5.4.2_hpe .
+
+    - name: Set momory para
+      shell: sysctl -w vm.max_map_count=262144
+
+    - name: execute compose file
+      shell: /usr/local/bin/docker-compose -f /root/elk-docker-compose.yml up -d 
