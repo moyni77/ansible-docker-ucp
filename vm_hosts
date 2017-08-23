@@ -67,7 +67,7 @@ worker
 elk
 
 [nfs]
-nm-nfs ip_addr='10.10.174.97/22' esxi_host='dh01.am2.cloudra.local'
+nm-nfs ip_addr='10.10.174.97/22' esxi_host='dh02.am2.cloudra.local'
 
 [nfs:vars]
 cpus='2'
@@ -76,7 +76,7 @@ disk2_size='200'
 node_policy='dp-gold'
 
 [logger]
-nm-logger ip_addr='10.10.174.100/22' esxi_host='dh01.am2.cloudra.local'
+nm-logger ip_addr='10.10.174.100/22' esxi_host='dh02.am2.cloudra.local'
 
 [logger:vars]
 cpus='2'
@@ -85,7 +85,7 @@ disk2_size='200'
 node_policy='dp-gold'
 
 [elk]
-nm-elk ip_addr='10.10.174.101/22' esxi_host='dh01.am2.cloudra.local'
+nm-elk ip_addr='10.10.174.101/22' esxi_host='dh02.am2.cloudra.local'
 
 [elk:vars]
 cpus='2'
@@ -93,7 +93,7 @@ ram='16384'
 node_policy='dp-gold'
 
 [cloudbees]
-nm-cloudbees ip_addr='10.10.174.102/22' esxi_host='dh01.am2.cloudra.local'
+nm-cloudbees ip_addr='10.10.174.102/22' esxi_host='dh02.am2.cloudra.local'
 
 [cloudbees:vars]
 cpus='2'
