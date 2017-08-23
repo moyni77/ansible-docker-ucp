@@ -22,6 +22,7 @@
     #    - python-pip
     #    - ansible
 
+    # Installing elk stack
     - name: Installing docker compose
       shell: curl -L https://github.com/docker/compose/releases/download/{{ compose_ver }}/docker-compose-`uname -s`-`uname -m` -o /usr/local/bin/docker-compose
 

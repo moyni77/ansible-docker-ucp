@@ -4,6 +4,7 @@ Documentation=https://docs.docker.com
 After=network-online.target firewalld.service
 
 [Service]
+#Added for poxy
 Environment="HTTP_PROXY=http://proxy.am2.hpelabs.net:8080/"
 Environment="HTTPS_PROXY=https://proxy.am2.hpelabs.net:8080/"
 Type=notify

@@ -3,5 +3,3 @@ COPY logstash.conf /usr/share/logstash/pipeline/
 COPY logstash.yml /usr/share/logstash/config/
 
 CMD ["logstash", "-f", "/usr/share/logstash/pipeline"]
-
-
