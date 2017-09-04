@@ -1,6 +1,6 @@
 Set-PowerCLIConfiguration -InvalidCertificateAction ignore -Confirm:$false
 {% for datastore in datastores %}
-Connect-VIServer {{ vcenter_hostname }} -User {{ vcenter_username }} -Password {{ vcenter_password }}
+Connect-VIServer {{ vcenter_hostname }} -User '{{ vcenter_username }}' -Password '{{ vcenter_password }}'
 $datastore=Get-Datastore -Name "{{ datastore }}" -Refresh:$true
 New-PSDrive -Location $datastore -name ds{{ datastore }} -PSProvider VimDatastore -Root "\"
 Copy-DatastoreItem -Item ds{{ datastore }}:\{{ dummy_vm_prefix }}-{{ datastore }}\*.vmx -Destination ds{{ datastore }}:\dockvols\
