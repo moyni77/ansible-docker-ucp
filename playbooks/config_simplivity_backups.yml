@@ -1,5 +1,6 @@
 ---
-- hosts: all
+- hosts:  localhost vms
+  serial: 3
   connection: local
   gather_facts: false
 
@@ -7,10 +8,11 @@
     - ../group_vars/vars
     - ../group_vars/vault
 
-  environment: "{{ env }}"
-
   vars:
     ovc: "{{ omnistack_ovc | random }}"
+    sleep_interval: 5
+
+  environment: "{{ env }}"
 
   tasks:
     # This task should use the uri module but not sure how to use the parameters in it
@@ -33,6 +35,9 @@
     #    validate_certs: no
     #  when: inventory_hostname in groups.local
 
+    - name: sleep
+      command: sleep '{{ sleep_interval }}'
+
     - name: Retrieve current backup policies
       uri:
         url: "https://{{ ovc }}/api/policies"
@@ -47,6 +52,9 @@
       when: inventory_hostname in groups.local
       register: current_policies
 
+    - name: sleep
+      command: sleep '{{ sleep_interval }}'
+
     - name: Extract existing policies names
       set_fact: current_policies_names="{{ current_policies | json_query(q) }}"
       vars:
@@ -58,7 +66,7 @@
       with_items: "{{ backup_policies }}"
       when: inventory_hostname in groups.local
 
-    - name: Set list of non existent policies to be added
+    - name: Set list of nonexistent policies to be added
       set_fact: new_policies_names="{{ backup_policies_names | difference(current_policies_names) }}"
       when: inventory_hostname in groups.local
 
@@ -74,8 +82,9 @@
         body_format: json
         force_basic_auth: yes
         validate_certs: no
-      #with_items: "{{ backup_policies_names | difference(current_policies_names) }}"
       with_items: "{{ new_policies_names }}"
+      loop_control:
+        pause: 10
       when: inventory_hostname in groups.local
       register: create_output
 
@@ -92,6 +101,9 @@
       register: policy_ids
       when: inventory_hostname in groups.local
 
+    - name: sleep
+      command: sleep '{{ sleep_interval }}'
+
     - name: Create backup rules
       uri:
         url: "https://{{ ovc }}/api/policies/{{ policy_ids | json_query(q) }}/rules"
@@ -105,11 +117,16 @@
         force_basic_auth: yes
         validate_certs: no
       with_items: "{{ backup_policies }}"
+      loop_control:
+        pause: 10
       vars: 
         q: "json.policies[?name=='{{ item.name }}'].id | [0]"
       when: inventory_hostname in groups.local and new_policies_names | length > 0
 
-    - name: Get VM IDs
+    - name: sleep
+      command: sleep '{{ sleep_interval }}'
+
+    - name: Get VMs information
       uri:
         url: "https://{{ ovc }}/api/virtual_machines"
         headers:
@@ -121,6 +138,9 @@
         validate_certs: no
       register: vm_ids
       when: inventory_hostname in groups.local
+
+    - name: sleep
+      command: sleep '{{ sleep_interval }}'
 
     - name: Assign backup policies to VMs
       uri:
@@ -140,10 +160,16 @@
       delegate_to: localhost
       when: inventory_hostname not in groups.local
 
-    - set_fact: dummy_vms_string="{{ dummy_vm_prefix }}-in-dockvols-{{ datastores | join(','+dummy_vm_prefix+'-in-dockvols-') }}"
+    - name: sleep
+      command: sleep '{{ sleep_interval }}'
+
+    - name: Set dummy VM names in one string
+      set_fact: dummy_vms_string="{{ dummy_vm_prefix }}-in-dockvols-{{ datastores | join(','+dummy_vm_prefix+'-in-dockvols-') }}"
+      #set_fact: dummy_vms_string="{{ dummy_vm_prefix }}-{{ datastores | join(','+dummy_vm_prefix+'-in-dockvols-') }}"
       when: inventory_hostname in groups.local
 
-    - set_fact: dummy_vms="{{ dummy_vms_string.split(',') }}"
+    - name: Convert to list 
+      set_fact: dummy_vms="{{ dummy_vms_string.split(',') }}"
       when: inventory_hostname in groups.local
 
     - name: Assign backup policies to Docker volumes
@@ -164,4 +190,8 @@
       delegate_to: localhost
       when: inventory_hostname in groups.local
       with_items: "{{ dummy_vms }}"
+      loop_control:
+        pause: 10
 
+    - name: sleep
+      command: sleep '{{ sleep_interval }}'
