@@ -18,6 +18,8 @@ services:
     image: docker.elastic.co/logstash/logstash:5.4.2_hpe
     depends_on:
       - elasticsearch
+    ports:
+      - '5000:5000/udp'
     deploy:
       replicas: 1
 

@@ -10,6 +10,12 @@
   environment: "{{ env }}"
 
   tasks:
+
+    - name: Check for partitions on disk
+      shell: parted -s {{ disk2 }} print 1
+      register: partPresent
+      failed_when: partPresent.rc is not defined
+
     - name: Create partition on second disk
       parted:
         label: gpt
@@ -20,12 +26,14 @@
         number: 1
         part_start: 0%
         part_end: 100%
-      ignore_errors: yes
+      when: partPresent.rc != 0
+#      ignore_errors: yes
         
     - name: Create Docker VG
       lvg:
         vg: docker
         pvs: "{{ disk2_part }}"
+      when: partPresent.rc != 0
 
     - name: Create thinpool LV
       lvol:
@@ -33,6 +41,7 @@
         opts: --wipesignatures y
         vg: docker
         size: 95%VG
+      when: partPresent.rc != 0
 
     - name: Create thinpoolmeta LV
       lvol:
@@ -40,19 +49,20 @@
         opts: --wipesignatures y
         vg: docker
         size: 1%VG
+      when: partPresent.rc != 0
 
-    - name: LV convert
-      command: lvconvert -y  --zero n -c 512K  --thinpool docker/thinpool --poolmetadata docker/thinpoolmeta
-      ignore_errors: yes
+    - name: Convert LVs to thinpool and storage for metadata
+      command: lvconvert -y --zero n -c 512K  --thinpool docker/thinpool --poolmetadata docker/thinpoolmeta
+      when: partPresent.rc != 0
 
     - name: Config thinpool profile
       copy: src=../files/docker-thinpool.profile dest=/etc/lvm/profile/docker-thinpool.profile
 
-    - name: LV change
+    - name: Apply the LVM profile
       command: lvchange --metadataprofile docker-thinpool docker/thinpool
-      ignore_errors: yes
+#      ignore_errors: yes
 
-    - name: LV monitor
+    - name: Enable monitoring for LVs
       command: lvs -o+seg_monitor
 
     - name: Create /etc/docker directory
@@ -62,3 +72,9 @@
 
     - name: Config Docker daemon
       template: src=../templates/daemon.json.j2 dest=/etc/docker/daemon.json
+
+    #- name: Enable and start docker service
+    #  systemd:
+    #    name: docker
+    #    enabled: yes
+    #    state: started

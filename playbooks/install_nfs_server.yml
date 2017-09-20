@@ -13,25 +13,33 @@
     - name: Open required ports
       command: firewall-cmd --permanent --zone=public --add-port=2049/tcp --add-port=2049/udp --add-port=111/tcp --add-port=111/udp --add-port=54302/tcp --add-port=54302/udp --add-port=20048/tcp --add-port=20048/udp --add-port=46666/tcp --add-port=46666/udp --add-port=42955/tcp --add-port=42955/udp --add-port=875/tcp --add-port=875/udp
 
-    - name: Reload firewalld
+    - name: Reload firewalld configuration
       command: firewall-cmd --reload
+
+    - name: Check for partitions on disk
+      shell: parted -s {{ disk2 }} print 1
+      register: partPresent
+      failed_when: partPresent.rc is not defined
 
     - name: Create partition on second disk
       parted:
         device: "{{ disk2 }}"
         number: 1
         state: present    
+      when: partPresent.rc != 0
 
     - name: Create filesystem
       filesystem:
         fstype: xfs
         dev: "{{ disk2_part }}"
+      when: partPresent.rc != 0
 
-    - name: Create folder
+    - name: Create images folder
       file:
         path: "{{ images_folder }}"
         state: directory
         mode: 0777
+      when: partPresent.rc != 0
 
     - name: Mount filesystem
       mount:
@@ -60,10 +68,7 @@
         - nfs-idmap
 
     - name: Modify exports file on NFS server
-      template:
-        src: ../templates/exports.j2
-        dest: /etc/exports
+      template: src=../templates/exports.j2 dest=/etc/exports
 
     - name: Refresh exportfs
       command: exportfs -a
-

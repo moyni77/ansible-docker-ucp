@@ -46,4 +46,14 @@
       shell: sysctl -w vm.max_map_count=262144
 
     - name: execute compose file
-      shell: /usr/local/bin/docker-compose -f /root/elk-docker-compose.yml up -d 
+      shell: /usr/local/bin/docker-compose -f /root/elk-docker-compose.yml up -d
+
+- hosts: worker
+  become: yes
+
+  tasks:
+    - name: sleep for 2 min
+      pause: minutes=3
+
+    - name: run logspout container
+      shell: docker run -r ROUTE_URIS='logstash://10.10.174.101:5000' -v /var/run/docker.sock:/var/run/docker.sock --name logspout bekt/logspout-logstash 
