@@ -92,14 +92,6 @@ cpus='2'
 ram='16384'
 node_policy='dp-gold'
 
-[cloudbees]
-nm-cloudbees ip_addr='10.10.174.102/22' esxi_host='dh02.am2.cloudra.local'
-
-[cloudbees:vars]
-cpus='2'
-ram='16384'
-node_policy='dp-gold'
-
 [vms:children]
 ucp
 dtr
@@ -108,7 +100,6 @@ lbs
 nfs
 logger
 elk
-cloudbees
 
 # Local 
 [local]

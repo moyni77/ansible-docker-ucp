@@ -1,0 +1,52 @@
+---
+- hosts: nm-worker01
+  gather_facts: false
+  become_user: root
+  become: true
+
+  vars_files:
+    - ../group_vars/vars
+
+  environment: "{{ env }}"
+
+  tasks:
+    - name: Install easy_install
+      yum:
+        name: python-setuptools
+        state: latest
+      changed_when: false 
+    
+    - name: Install PIP
+      easy_install:
+        name: pip
+        state: latest
+
+    - name: Ensure latest docker.py is installed
+      pip:
+        name: docker.py
+        state: latest
+      changed_when: false
+
+    - name: Pull Cloudbees Docker Image
+      docker_image:
+        name: cloudbees/cloudbees-jenkins-team
+
+    - name: Start Cloudbees Docker Container
+      docker_container:
+        name: cloudbees
+        image: cloudbees/cloudbees-jenkins-team
+        state: started
+        ports:
+          - 8080:8080
+
+    #
+    # Sleep for 10 seconds to allow Jenkins to initialize before retrieving password
+    #
+    - name: Retrieve Initial Jenkins Password
+      shell: sleep 10 && docker exec cloudbees cat "/var/jenkins_home/secrets/initialAdminPassword"
+      register: initial_admin_password
+      changed_when: false
+
+    - debug:
+        msg: "Initial Jenkins Admin Password is: {{ initial_admin_password.stdout }}"
+

@@ -23,20 +23,6 @@ services:
     deploy:
       replicas: 1
 
-  logspout:
-    image: bekt/logspout-logstash
-    environment:
-      ROUTE_URIS: 'logstash://logstash:5000'
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-    depends_on:
-      - logstash
-    deploy:
-      mode: global
-      restart_policy:
-        condition: on-failure
-        delay: 30s
-
   kibana:
     image: docker.elastic.co/kibana/kibana:5.3.2
     ports:

@@ -10,6 +10,12 @@
   environment: "{{ env }}"
 
   tasks:
+    - name: Open required ports for logspout
+      command: firewall-cmd --permanent --zone=public --add-port=5000/udp 
+
+    - name: Reload firewalld configuration
+      command: firewall-cmd --reload
+
     - name: Copy config file
       copy: src={{ item }} dest=/root
       with_fileglob:
@@ -50,10 +56,30 @@
 
 - hosts: worker
   become: yes
+  vars:
+    compose_ver: 1.15.0
+  
+  vars_files:
+    - ../group_vars/vars
+  
+  environment: "{{ env }}"
 
   tasks:
-    - name: sleep for 2 min
+    - name: Copy config file
+      copy: src={{ item }} dest=/root
+      with_fileglob:
+         - /root/ansible-docker-ucp/files/elk/logspout-docker-compose.yml
+    
+    - name: Installing docker compose
+      shell: curl -L https://github.com/docker/compose/releases/download/{{ compose_ver }}/docker-compose-`uname -s`-`uname -m` -o /usr/local/bin/docker-compose
+
+    - name: change compose permission
+      file:
+         path: /usr/local/bin/docker-compose
+         mode: 0755
+
+    - name: sleep for 3 min
       pause: minutes=3
 
     - name: run logspout container
-      shell: docker run -r ROUTE_URIS='logstash://10.10.174.101:5000' -v /var/run/docker.sock:/var/run/docker.sock --name logspout bekt/logspout-logstash 
+      shell: /usr/local/bin/docker-compose -f /root/logspout-docker-compose.yml up -d
