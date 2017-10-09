@@ -2,6 +2,7 @@
 # VMware information
 vcenter_hostname: 'dhvc.am2.cloudra.local'
 vcenter_username: 'administrator@vsphere.local'
+vcenter_validate_certs: no
 datacenter: 'PCE-DC'
 vm_username: 'root'
 vm_template: 'nm-template'

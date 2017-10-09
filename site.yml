@@ -5,6 +5,7 @@
 - include: playbooks/power_on_guests.yml
 - include: playbooks/config_networking.yml
 #- include: playbooks/distribute_keys.yml # this step is optional; enabling it will allow for passwordless login between nodes
+#- include: playbooks/config_subscription.yml
 - include: playbooks/install_haproxy.yml
 - include: playbooks/install_ntp.yml
 - include: playbooks/install_docker.yml
@@ -18,6 +19,6 @@
 - include: playbooks/install_dtr_nodes.yml
 - include: playbooks/install_worker_nodes.yml
 - include: playbooks/install_elk.yml
-#- include: playbooks/install_cloudbees.yml
+- include: playbooks/install_cloudbees.yml
 - include: playbooks/config_dummy_vms_for_docker_volumes_backup.yml
 #- include: playbooks/config_simplivity_backups.yml
