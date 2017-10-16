@@ -1,5 +1,5 @@
 ---
-- hosts: nm-worker01
+- hosts: nm-worker02
   gather_facts: false
   become_user: root
   become: true
