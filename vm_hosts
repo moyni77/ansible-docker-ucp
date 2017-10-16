@@ -32,7 +32,11 @@ node_policy='dp-gold'
 [worker]
 nm-worker01 ip_addr='10.10.174.98/22' esxi_host='dh01.am2.cloudra.local'
 nm-worker02 ip_addr='10.10.174.99/22' esxi_host='dh02.am2.cloudra.local'
-#dp-worker-03 ip_addr='10.10.174.79/22' esxi_host='dh01.am2.cloudra.local'
+#nm-worker-03 ip_addr='10.10.174.79/22' esxi_host='dh01.am2.cloudra.local'
+
+## Cloudbees
+[cloudbees]
+nm-worker02 ip_addr='10.10.174.99/22' esxi_host='dh02.am2.cloudra.local'
 
 [worker:vars]
 cpus='4'

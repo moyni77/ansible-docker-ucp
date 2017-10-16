@@ -1,5 +1,5 @@
 ---
-- hosts: nm-worker02
+- hosts: cloudbees
   gather_facts: false
   become_user: root
   become: true
