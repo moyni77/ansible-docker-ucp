@@ -50,9 +50,8 @@
     - name: sleep for 3 min
       pause: minutes=3
 
-- hosts: ucp_main 
+- hosts: worker 
   become: yes
-
 
   vars_files:
     - ../group_vars/vars
@@ -60,5 +59,29 @@
   environment: "{{ env }}"
 
   tasks:
+    - name: Install easy_install
+      yum:
+        name: python-setuptools
+        state: latest
+      changed_when: false
+
+    - name: Install PIP
+      easy_install:
+        name: pip
+        state: latest
+
+    - name: Ensure latest docker.py is installed
+      pip:
+        name: docker.py
+        state: latest
+      changed_when: false
+
     - name: run logspout
-      shell: docker service create --name logspout  --mount type=bind,source=/var/run/docker.sock,destination=/var/run/docker.sock --env ROUTE_URIS=logstash://{{ hostvars['nm-elk']['ip_addr_only'] }}:5000 --mode=global bekt/logspout-logstash
+      docker:
+         name: logspout
+         image: bekt/logspout-logstash
+         env:
+           ROUTE_URIS: logstash://{{ hostvars['nm-elk']['ip_addr'] }}:5000
+         volumes:
+           - /var/run/docker.sock:/var/run/docker.sock
+         state: started
