@@ -174,7 +174,6 @@ Finally, you will find some variables defined for each group:
 - [nfs:vars]: A set of variables defined for all nodes in the [nfs] group.
 - [logger:vars]: A set of variables defined for all nodes in the [logger] group.
 - [elk:vars]:  A set of variables defined for all nodes in the [elk] group.
-- [cloudbees:vars]: A set of variables defined for all nodes in the [cloudbees] group
  
 If you wish to configure your nodes with different specifications rather than the ones defined by the group, it is possible to declare the same variables at the node level, overriding the group value. For instance, you could have one of your workers with higher specifications by doing:
 
@@ -533,18 +532,35 @@ It is composed of the following sequential tasks:
 
 This playbook will install and configure ELK stack defined in the inventory.
 
+It is composed of the following sequential tasks:
 
-## playbooks/install\_playwithdocker.yml
-
-This playbook will install and configure Play With Docker container defined in the inventory.
-
-"Added PWD info here"
+- Open port: Makes use of the firewalld command to open the required ports tcp/5000
+- Reload firewalld configuration: Reloads the firewall to apply the new rules
+- Copies configuration files from src: files/elk/* to elk virtual machine under root
+- Installing elk stack: install docker\-compose from github.com/docker/compose
+- Starts docker.service
+- Docker build from file elk-Dockerfile usning docker.elastic.co/logstash/logstash:5.4.2_hpe
+- Execute compose file: elk-docker-compose.yml
+- Run logspout as a service which will send all container logs to logstash elk host which are visible through http://(your-elk-host}:5000
 
 ## playbooks/install\_cloudbees.yml
 
 This playbook will install and configure Cloudbees Team Edition CI/CD Jekins pipe line.
 
-"Added Cloudbees info here"
+- Cloudbees team edition software is pulled from docker hub
+- Container is spun up from cloudbees\-jenkins\-team image
+- exposing port 8080
+- Jenkins application starts and provides you with instance ID for licensing
+- Admin password will be displayed on start\-up or alternativley \/var\/jenkins\_home\/secrets/\initailAdminPasssword
+
+
+## playbooks/install\_playwithdocker.yml
+
+This playbook will install and configure Play With Docker container defined in the inventory.
+
+- Play with docker or PWD will provide a deveveloper with a crash and burn environment to run up to 5 instances in docker swarm mode for a duration of 24hrs which will assist with knowledge take on and temp tested bed.
+
+#ADD tasks here#
 
 ## playbooks/config\_dummy\_vms\_for\_docker\_volumes\_backup.yml
 
