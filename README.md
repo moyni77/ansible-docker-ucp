@@ -551,14 +551,14 @@ This playbook will install and configure Cloudbees Team Edition CI/CD Jekins pip
 - Container is spun up from cloudbees\-jenkins\-team image
 - exposing port 8080
 - Jenkins application starts and provides you with instance ID for licensing
-- Admin password will be displayed on start\-up or alternativley \/var\/jenkins\_home\/secrets/\initailAdminPasssword
+- Admin password will be displayed on start\-up or alternativley \/var\/jenkins\_home\/secrets/initailAdminPasssword
 
 
 ## playbooks/install\_playwithdocker.yml
 
 This playbook will install and configure Play With Docker container defined in the inventory.
 
-- Play with docker or PWD will provide a deveveloper with a crash and burn environment to run up to 5 instances in docker swarm mode for a duration of 24hrs which will assist with knowledge take on and temp tested bed.
+- Play with docker or PWD will provide a developer with a crash and burn environment to run up to 5 instances in docker swarm mode for a duration of 24hrs which will assist with knowledge take on and temp tested bed.
 
 #ADD tasks here#
 
