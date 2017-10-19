@@ -2,7 +2,7 @@
 Spin up a virtual Docker UCP "Development" environment using ansible and use some of the simplivity features
 # Introduction
 
-The present document describes how to automate the provisioning of a Docker Enterprise Edition environment by using a set of Ansible playbooks. It also outlines a set of manual steps to harden, secure and audit the overall status of the system.
+This document describes how to automate the provisioning of a Docker Enterprise Edition environment by using a set of Ansible playbooks. It also outlines a set of manual steps to harden, secure and audit the overall status of the system.
 
 For the dev edition we've selected enterprise edition standard license, which omits image security scanning.
 Capabilities that are provided by the enterprise edition standard follow: Container engine and built in orchestration, networking, security, Certified infrastructure, plugins and ISV containers, Image management, and Container app management. Image security scanning is only available with the advanced license.
