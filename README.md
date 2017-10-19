@@ -564,7 +564,7 @@ This playbook will install and configure Play With Docker container defined in t
 
 ## playbooks/config\_dummy\_vms\_for\_docker\_volumes\_backup.yml
 
-This playbook will make sure that we are able to backup Docker volumes that have been created using the vSphere plugin in Simplivity. There is not a straight forward way to do this, so we need to use a workaround. Since all Docker volumes are going to be stored in the dockvols folder in the datastore(s), we need to create a 'dummy' VM per datastore. The vmx, vmsd and vmkd files from this VMs will have to be inside the dockvols folder, so when these VMs are backed up, the volumes are backed up as well. Obviously these VMs don't need to take any resources and we can keep them powered off.
+This playbook will make sure that we are able to backup Docker volumes that have been created using the vSphere plugin in Simplivity. There is not a straight forward way to do this, so we need to use a workaround. Since all Docker volumes are going to be stored in the dockvols folder in the datastore(s), we need to create a 'dummy' VM per datastore. The vmx, vmsd and vmkd files from this VMs will have to be inside the dockvols folder, so when these VMs are backed up, the volumes are backed up as well. Obviously these VMs don't need to take any resources and we can keep them powered off. Remember to create the dockvols folder under your specific datastores.
 
 It is composed of the following sequential tasks:
 
