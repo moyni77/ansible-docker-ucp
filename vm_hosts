@@ -94,6 +94,7 @@ nm-elk ip_addr='10.10.174.101/22' ip_addr_only='10.10.174.101' esxi_host='dh02.a
 [elk:vars]
 cpus='2'
 ram='16384'
+disk2_size='200'
 node_policy='dp-gold'
 
 [vms:children]
