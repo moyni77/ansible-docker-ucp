@@ -10,7 +10,7 @@ folder_name: '/nm'
 datastores: ['docker_share_data1','docker_share_data2']
 disk2: '/dev/sdb'
 disk2_part: '/dev/sdb1'
-vsphere_plugin_version: 'latest' # was 0.12
+vsphere_plugin_version: '0.13' # was 0.12
 
 # Simplivity information
 simplivity_username: 'David.Pintor@DEMO'
