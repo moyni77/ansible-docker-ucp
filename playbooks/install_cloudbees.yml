@@ -55,10 +55,13 @@
           - 8080:8080
 
     #
-    # Sleep for 10 seconds to allow Jenkins to initialize before retrieving password
+    # Sleep for 1 minute to allow Jenkins to initialize before retrieving password
     #
+    - name: Sleep one minute
+      pause: minutes=1
+
     - name: Retrieve Initial Jenkins Password
-      shell: sleep 10 && docker exec cloudbees cat /var/jenkins_home/secrets/initialAdminPassword
+      shell: docker exec cloudbees cat /var/jenkins_home/secrets/initialAdminPassword
       register: initial_admin_password
       changed_when: false
 
