@@ -38,6 +38,10 @@ nm-worker02 ip_addr='10.10.174.99/22' esxi_host='dh02.am2.cloudra.local'
 [cloudbees]
 nm-worker02 ip_addr='10.10.174.99/22' esxi_host='dh02.am2.cloudra.local'
 
+## Play With Docker or PWD
+[playwithdocker]
+nm-worker02 ip_addr='10.10.174.99/22' esxi_host='dh02.am2.cloudra.local'
+
 [worker:vars]
 cpus='4'
 ram='16384'

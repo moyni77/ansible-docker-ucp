@@ -12,9 +12,10 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-###
+### 
 ---
 - hosts: dtr
+  serial: 1
   gather_facts: false
   become_user: root
   become: true
@@ -22,15 +23,15 @@
   vars_files:
     - ../group_vars/vars
     - ../group_vars/vault
-  
-  environment: "{{ env }}"
 
   vars:
     dtr_lb: "{{ groups['dtr_lb'][0] }}.{{ domain_name }}"
     ucp_main: "{{ groups['ucp_main'][0] }}.{{ domain_name }}"
     dtr_main: "{{ groups['dtr_main'][0] }}"
     nfs_server: "{{ hostvars[groups['nfs'][0]].ip_addr | ipaddr('address') }}"
-
+    http_proxy_switch:  "{% if  env.http_proxy is defined %} --http-proxy {{ env.http_proxy }} {% endif %}"
+    https_proxy_switch:  "{% if  env.https_proxy is defined %} --https-proxy {{ env.https_proxy }} {% endif %}"
+    no_proxy_switch:  "{% if  env.no_proxy is defined %} --no-proxy '{{ env.no_proxy }}' {% endif %}"
 
   tasks:
     - name: Open required ports for DTR
@@ -48,12 +49,12 @@
       shell: docker info | grep "Swarm{{':'}} inactive" | wc -l
       register: swarm_inactive
 
-    - name: Add DTR and Worker nodes to the swarm
+    - name: Add DTR nodes to the swarm
       command: "{{ add_worker.token }}"
       when: swarm_inactive.stdout == "1"
 
     - name: Install first DTR node
-      command: docker run --rm docker/dtr:{{ dtr_version }} install --nfs-storage-url nfs://{{ nfs_server }}{{ images_folder }} --ucp-node {{ inventory_hostname }}.{{ domain_name }} --ucp-insecure-tls --dtr-external-url https://{{ dtr_lb }} --ucp-url https://{{ ucp_main }} --ucp-username {{ ucp_username }} --ucp-password {{ ucp_password }}
+      command: docker run --rm docker/dtr:{{ dtr_version }} install --nfs-storage-url nfs://{{ nfs_server }}{{ images_folder }} --ucp-node {{ inventory_hostname }}.{{ domain_name }} --ucp-insecure-tls --dtr-external-url https://{{ dtr_lb }} --ucp-url https://{{ ucp_main }} --ucp-username {{ ucp_username }} --ucp-password {{ ucp_password }}  {{ http_proxy_switch }} {{ https_proxy_switch }} {{ no_proxy_switch }}
       when: inventory_hostname in groups.dtr_main and swarm_inactive.stdout == "1"
       register: dtrlog
       until: dtrlog.rc == 0
@@ -70,19 +71,19 @@
       register: task_result
       until: task_result.rc == 0
       retries: 20
-      delay: 30
+      delay: 60
       when: inventory_hostname not in groups.dtr_main and swarm_inactive.stdout == "1"
 
-#    - name: Enable image scanning
-#      uri:
-#        url: "https://{{ inventory_hostname }}/api/v0/meta/settings"
-#        method: POST
-#        user: "{{ ucp_username }}"
-#        password: "{{ ucp_password }}"
-#        body: {"scanningEnabled":true}
-#        status_code: 200
-#        body_format: json
-#        force_basic_auth: yes
-#        validate_certs: no
-#      when: inventory_hostname in groups.dtr_main
-
+# This task is not needed any more from DTR version 2.2.0 since it's enabled by default
+    - name: Enable image scanning
+      uri:
+        url: "https://{{ inventory_hostname }}.{{ domain_name }}/api/v0/meta/settings"
+        method: POST
+        user: "{{ ucp_username }}"
+        password: "{{ ucp_password }}"
+        body: {"scanningEnabled":true}
+        status_code: 202
+        body_format: json
+        force_basic_auth: yes
+        validate_certs: no
+      when: inventory_hostname in groups.dtr_main

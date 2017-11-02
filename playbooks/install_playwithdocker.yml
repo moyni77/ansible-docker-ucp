@@ -1,0 +1,226 @@
+---
+- hosts: playwithdocker
+  gather_facts: true
+
+  vars_files:
+    - ../group_vars/vars
+
+  environment: "{{ env }}"
+
+  tasks:
+    #
+    # Install any dependencies for play-with-docker
+    #
+    - name: Install play-with-docker dependencies
+      yum:
+        name: "{{ item }}"
+        state: latest
+      with_items: 
+        - python-setuptools
+        - git
+
+    #
+    # Ensure the latest version of PIP is installed.
+    #
+    - name: Install PIP
+      easy_install:
+        name: pip
+        state: latest
+
+    #
+    # Check if the GO language is already installed on the target server.
+    #
+    - name: Determine if GO Language is Installed 
+      stat:
+        path: /usr/local/go/bin/go
+      register: go_bin
+
+    #
+    # Download the latest GO archive if it is not installed.
+    #
+    - name: Download GO Language
+      get_url: 
+        url: "{{ golang_url }}"
+        dest: /tmp/{{ golang_archive }}
+        mode: 0755
+      when: go_bin.stat.exists == false
+
+    #
+    # Install GO language if it is not installed.
+    #
+    - name: Install GO Language
+      unarchive:
+        src: /tmp/{{ golang_archive }}
+        dest: /usr/local
+        remote_src: yes
+      when: go_bin.stat.exists == false
+
+    #
+    # If GO archive was downloaded, delete it.
+    #
+    - name: Determine if GO archive file remains
+      stat:
+        path: /tmp/{{ golang_archive }}
+      register: go_archive
+
+    - name: Cleanup GO archive file
+      file:
+        path: /tmp/{{ golang_archive }}
+        state: absent
+      when: go_archive.stat.exists == true
+
+    #
+    # Update the PATH and GOPATH environment variables
+    # on the target server's .bashrc file.
+    #
+    - name: Add PATH environment variable to .bashrc
+      lineinfile:
+        path: /root/.bashrc
+        regexp: '^export PATH='
+        line: "export PATH=$PATH:/usr/local/go/bin"
+
+    - name: Add GOPATH environment variable to .bashrc
+      lineinfile:
+        path: /root/.bashrc
+        regexp: '^export GOPATH='
+        line: "export GOPATH=/root/.go"
+
+    #
+    # If any old versions of docker-compose, docker-py or docker PIP
+    # packages are present, remove them.
+    #
+    - name: Remove stale docker PIP components
+      pip: 
+        name: "{{ item }}"
+        state: absent
+      with_items:
+        - docker-compose
+        - docker-py
+        - docker
+
+    #
+    # Install the latest docker-compose PIP package.
+    #
+    - name: Install latest docker-compose PIP package
+      pip: 
+        name: "{{ item }}"
+        state: latest
+      with_items:
+        - docker-compose
+        
+    - pause:
+      
+    #
+    # Install the latest docker-compose binary.
+    #
+    - name: Install docker-compose binary
+      get_url:
+        url: "{{ compose_url }}"
+        dest: /usr/local/bin/docker-compose
+        mode: 0755
+
+    #
+    # Load the xt_ipvs Kernel Module needed by Docker-in-Docker.
+    #
+    - name: Configure xt_ipvs Kernel Module
+      modprobe:
+        name: xt_ipvs
+        state: present
+
+    #
+    # Check if Docker daemon is running in Swarm mode.
+    #
+    - name: Determine Docker Swarm Status
+      shell: > 
+        docker info | egrep '^Swarm: ' | cut -d ' ' -f2
+      register: swarm_status
+      changed_when: false
+
+    #
+    # Enable Swarm Mode if it was not already configured.
+    #
+    - name: Enable Docker Swarm Mode
+      command: docker swarm init
+      when: not 'active' in swarm_status.stdout_lines
+
+    #
+    # Download the latest Docker-in-Docker image.
+    #
+    - name: Pull Docker-in-Docker Image
+      docker_image:
+        name: franela/dind
+
+    #
+    # Check if Play-with-Docker Respository exists.
+    #
+    - name: Check if play-with-docker repository exists
+      stat:
+        path: "{{ pwd_path }}"
+      register: pwd_dir
+
+    #
+    # Shutdown any previous instances of play-with-docker.
+    #
+    - name: Stop any running play-with-docker Instance
+      docker_service: 
+        project_name: play-with-docker
+        project_src: "{{ pwd_path }}"
+        state: absent
+      when: pwd_dir.stat.exists == true
+
+    #
+    # Remove any existing play-with-docker Repository.
+    #
+    - name: Delete existing play-with-docker Repository
+      file:
+        path: "{{ pwd_path }}"
+        state: absent
+      when: pwd_dir.stat.exists == true
+
+    #
+    # Clone the latest play-with-docker repository.
+    #
+    - name: Clone play-with-docker Repository from GitHub
+      git:
+        repo: 'https://github.com/play-with-docker/play-with-docker.git'
+        clone: yes
+        dest: "{{ pwd_path }}"
+
+    #
+    # Populate the play-with-docker GO directory.
+    #
+    - name: Build play-with-docker
+      command: go get -v -d -t ./...
+      args:
+        chdir: "{{ pwd_path }}"
+
+    #
+    # Patch the play-with-docker code to add the ability to 
+    # customize the duration of the play-with-docker session.  
+    # The variables are user modifiable and are stored in the 
+    # ../vars/main.yml file.  The docker-compose.yml file is 
+    # updated to reference the new variables.
+    #
+    - name: Add EXPIRY variable to docker-compose.yml file for pwd1 and pwd2
+      replace:
+        path: "{{ pwd_path }}/docker-compose.yml"
+        regexp: '^ *GOOGLE_RECAPTCHA_DISABLED: "true"$\n^ *ports:$'
+        replace: '            GOOGLE_RECAPTCHA_DISABLED: "true"\n            EXPIRY: "{{ pwd_duration }}"\n        ports:'
+        backup: yes
+
+    #
+    # Start the new play-with-docker instance.
+    #
+    - name: Start Play-with-Docker
+      docker_service: 
+        project_name: play-with-docker
+        project_src: "{{ pwd_path }}"
+        build: no
+        state: present
+
+    #
+    # Pause for 10 seconds to let play-with-docker instance start.
+    #
+    - name: Pause 10 seconds while play-with-docker initializes
+      pause:
+        seconds: 10

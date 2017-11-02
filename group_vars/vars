@@ -48,6 +48,20 @@ images_folder: '/docker-images'
 license_file: '/root/ansible-docker-ucp/license.lic'
 ucp_username: 'admin'
 
+
+# Docker Variables
+compose_vers: '1.16.1'
+compose_url: 'https://github.com/docker/compose/releases/download/{{ compose_vers }}/docker-compose-{{ ansible_system }}-{{ ansible_architecture }}'
+
+# GO Variables
+golang_version: '1.9.1'
+golang_archive: 'go{{ golang_version }}.linux-amd64.tar.gz'
+golang_url: 'https://storage.googleapis.com/golang/{{ golang_archive }}'
+
+# Play-with-Docker Variables
+pwd_path: '/root/play-with-docker'
+pwd_duration: '24h'
+
 # Monitoring settings for Grafana and Prometheus which aren't being used in dev edition only ops.
 # cadvisor_version: 'v0.25.0'
 # node_exporter_version: 'v1.14.0'
@@ -61,4 +75,5 @@ env:
   http_proxy: 'http://proxy.am2.hpelabs.net:8080'
   https_proxy: 'https://proxy.am2.hpelabs.net:8080' 
   no_proxy: 'localhost,am2.cloudra.local,10.10.174.'
+  GOPATH: '/root/.go'
   foo: 'bar' # Don't comment to avoid annoying messages when not using the proxy 
