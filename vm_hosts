@@ -40,7 +40,7 @@ nm-worker02 ip_addr='10.10.174.99/22' esxi_host='dh02.am2.cloudra.local'
 
 ## Play With Docker or PWD
 [playwithdocker]
-nm-worker02 ip_addr='10.10.174.99/22' esxi_host='dh02.am2.cloudra.local'
+nm-ucp01 ip_addr='10.10.174.92/22' esxi_host='dh01.am2.cloudra.local'
 
 [worker:vars]
 cpus='4'

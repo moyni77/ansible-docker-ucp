@@ -1,95 +1,40 @@
 ---
 - hosts: playwithdocker
   gather_facts: true
+  become_user: root
+  become: true
 
   vars_files:
     - ../group_vars/vars
 
   environment: "{{ env }}"
 
-  tasks:
-    #
-    # Install any dependencies for play-with-docker
-    #
-    - name: Install play-with-docker dependencies
-      yum:
-        name: "{{ item }}"
-        state: latest
-      with_items: 
-        - python-setuptools
-        - git
+# Install missing PIP package and deps
 
-    #
-    # Ensure the latest version of PIP is installed.
-    #
+
+  tasks:
+    - name: Install easy_install
+      yum:
+        name: python-setuptools
+        state: latest
+      changed_when: false
+
     - name: Install PIP
       easy_install:
         name: pip
         state: latest
 
-    #
-    # Check if the GO language is already installed on the target server.
-    #
-    - name: Determine if GO Language is Installed 
-      stat:
-        path: /usr/local/go/bin/go
-      register: go_bin
-
-    #
-    # Download the latest GO archive if it is not installed.
-    #
-    - name: Download GO Language
-      get_url: 
-        url: "{{ golang_url }}"
-        dest: /tmp/{{ golang_archive }}
-        mode: 0755
-      when: go_bin.stat.exists == false
-
-    #
-    # Install GO language if it is not installed.
-    #
-    - name: Install GO Language
-      unarchive:
-        src: /tmp/{{ golang_archive }}
-        dest: /usr/local
-        remote_src: yes
-      when: go_bin.stat.exists == false
-
-    #
-    # If GO archive was downloaded, delete it.
-    #
-    - name: Determine if GO archive file remains
-      stat:
-        path: /tmp/{{ golang_archive }}
-      register: go_archive
-
-    - name: Cleanup GO archive file
-      file:
-        path: /tmp/{{ golang_archive }}
-        state: absent
-      when: go_archive.stat.exists == true
-
-    #
-    # Update the PATH and GOPATH environment variables
-    # on the target server's .bashrc file.
-    #
-    - name: Add PATH environment variable to .bashrc
-      lineinfile:
-        path: /root/.bashrc
-        regexp: '^export PATH='
-        line: "export PATH=$PATH:/usr/local/go/bin"
-
-    - name: Add GOPATH environment variable to .bashrc
-      lineinfile:
-        path: /root/.bashrc
-        regexp: '^export GOPATH='
-        line: "export GOPATH=/root/.go"
+    - name: Ensure latest docker.py is installed
+      pip:
+        name: docker.py
+        state: latest
+      changed_when: false
 
     #
     # If any old versions of docker-compose, docker-py or docker PIP
     # packages are present, remove them.
     #
-    - name: Remove stale docker PIP components
+    - name: Remove Docker PIP components
       pip: 
         name: "{{ item }}"
         state: absent
@@ -107,9 +52,7 @@
         state: latest
       with_items:
         - docker-compose
-        
-    - pause:
-      
+
     #
     # Install the latest docker-compose binary.
     #
@@ -128,20 +71,26 @@
         state: present
 
     #
-    # Check if Docker daemon is running in Swarm mode.
+    # Load the overlay Kernel Module needed by Docker-in-Docker.
     #
-    - name: Determine Docker Swarm Status
-      shell: > 
-        docker info | egrep '^Swarm: ' | cut -d ' ' -f2
-      register: swarm_status
-      changed_when: false
+    - name: Configure overlay Kernel Module
+      modprobe:
+        name: overlay
+        state: present
 
     #
-    # Enable Swarm Mode if it was not already configured.
+    # Download the latest Play-with-Docker pwd image.
     #
-    - name: Enable Docker Swarm Mode
-      command: docker swarm init
-      when: not 'active' in swarm_status.stdout_lines
+    - name: Pull Play-with-Docker pwd Image
+      docker_image:
+        name: franela/play-with-docker
+
+    #
+    # Download the latest Play-with-Docker l2 image.
+    #
+    - name: Pull Play-with-Docker l2 Image
+      docker_image:
+        name: franela/play-with-docker:l2
 
     #
     # Download the latest Docker-in-Docker image.
@@ -151,9 +100,75 @@
         name: franela/dind
 
     #
-    # Check if Play-with-Docker Respository exists.
+    # Download the latest HAProxy image.
     #
-    - name: Check if play-with-docker repository exists
+    - name: Pull HAProxy Image
+      docker_image:
+        name: haproxy
+
+    #
+    # Tune sysctl Settings
+    #
+    - name: Tune net.ipv4.neigh.default.gc_thresh1 = 4096
+      sysctl:
+        name: net.ipv4.neigh.default.gc_thresh1
+        value: 4096 
+        state: present
+        reload: yes
+
+    - name: Tune net.ipv4.neigh.default.gc_thresh2 = 8192
+      sysctl:
+        name: net.ipv4.neigh.default.gc_thresh2
+        value: 8192 
+        state: present
+        reload: yes
+
+    - name: Tune net.ipv4.neigh.default.gc_thresh3 = 8192
+      sysctl:
+        name: net.ipv4.neigh.default.gc_thresh3
+        value: 8192 
+        state: present
+        reload: yes
+
+    - name: Tune net.ipv4.tcp_tw_recycle = 1
+      sysctl:
+        name: net.ipv4.tcp_tw_recycle
+        value: 1
+        state: present
+        reload: yes
+
+    - name: Tune net.ipv4.ip_local_port_range = 1024 65000
+      sysctl:
+        name: net.ipv4.ip_local_port_range
+        value: 1024 65000
+        state: present
+        reload: yes
+
+    - name: Tune fs.inotify.max_user_instances = 10000
+      sysctl:
+        name: fs.inotify.max_user_instances
+        value: 10000
+        state: present
+        reload: yes
+
+    - name: Tune net.netfilter.nf_conntrack_tcp_timeout_established = 600
+      sysctl:
+        name: net.netfilter.nf_conntrack_tcp_timeout_established
+        value: 600
+        state: present
+        reload: yes
+
+    - name: Tune net.netfilter.nf_conntrack_tcp_timeout_time_wait = 1
+      sysctl:
+        name: net.netfilter.nf_conntrack_tcp_timeout_time_wait
+        value: 1
+        state: present
+        reload: yes
+
+    #
+    # Check if Play-with-Docker directory exists.
+    #
+    - name: Check if play-with-docker directory exists
       stat:
         path: "{{ pwd_path }}"
       register: pwd_dir
@@ -162,51 +177,60 @@
     # Shutdown any previous instances of play-with-docker.
     #
     - name: Stop any running play-with-docker Instance
-      docker_service: 
+      docker_service:
         project_name: play-with-docker
         project_src: "{{ pwd_path }}"
         state: absent
       when: pwd_dir.stat.exists == true
 
     #
-    # Remove any existing play-with-docker Repository.
+    # Remove any existing play-with-docker directory.
     #
-    - name: Delete existing play-with-docker Repository
+    - name: Delete existing play-with-docker Directory
       file:
         path: "{{ pwd_path }}"
         state: absent
       when: pwd_dir.stat.exists == true
 
     #
-    # Clone the latest play-with-docker repository.
+    # Create Play-with-Docker directory
     #
-    - name: Clone play-with-docker Repository from GitHub
-      git:
-        repo: 'https://github.com/play-with-docker/play-with-docker.git'
-        clone: yes
-        dest: "{{ pwd_path }}"
+    - name: Create Play-with-Docker directory
+      file:
+        path: "{{ pwd_path }}"
+        state: directory
+        mode: 0755
 
     #
-    # Populate the play-with-docker GO directory.
+    # Create HAProxy directory
     #
-    - name: Build play-with-docker
-      command: go get -v -d -t ./...
-      args:
-        chdir: "{{ pwd_path }}"
+    - name: Create HAProxy Directory
+      file:
+        path: "{{ pwd_path }}/haproxy"
+        state: directory
+        mode: 0755
 
     #
-    # Patch the play-with-docker code to add the ability to 
-    # customize the duration of the play-with-docker session.  
-    # The variables are user modifiable and are stored in the 
-    # ../vars/main.yml file.  The docker-compose.yml file is 
-    # updated to reference the new variables.
+    # Copy pwd haproxy.cfg File
     #
-    - name: Add EXPIRY variable to docker-compose.yml file for pwd1 and pwd2
-      replace:
-        path: "{{ pwd_path }}/docker-compose.yml"
-        regexp: '^ *GOOGLE_RECAPTCHA_DISABLED: "true"$\n^ *ports:$'
-        replace: '            GOOGLE_RECAPTCHA_DISABLED: "true"\n            EXPIRY: "{{ pwd_duration }}"\n        ports:'
-        backup: yes
+    - name: Copy haproxy.cfg File
+      copy:
+        src: ../files/haproxy.cfg
+        dest: "{{ pwd_path }}/haproxy/haproxy.cfg"
+        owner: root
+        group: root
+        mode: 0644
+
+    #
+    # Deploy Play-with-Docker docker-compose.yml File
+    #
+    - name: Deploy Play-with-Docker docker-compose.yml File
+      template:
+        src: ../templates/pwd-docker-compose.yml.j2
+        dest: "{{ pwd_path }}/docker-compose.yml"
+        owner: root
+        group: root
+        mode: 0644
 
     #
     # Start the new play-with-docker instance.
