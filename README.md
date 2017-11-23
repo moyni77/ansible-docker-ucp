@@ -298,39 +298,50 @@ It would be possible to automate the creation of the template. However, as this 
 18.	The Red Hat packages required during the deployment of the solution come from two repositories: `rhel-7-server-rpms` and `rhel 7-server-extras-rpms`. The first repository can be found on the Red Hat DVD but the second cannot. There are two options, with both options requiring a Red Hat Network account.
 
 
-
-
-
-
-
-
-
-
-**Option 1:** Use Red Hat subscription manager to register your system. This is the easiest way and will give you automatically access to the official Red Hat repositories. It requires having a Red Hat Network account though, so if you don't have one, you can use either Option 2 or 3. For option run you would do:
-
-```# subscription-manager register --auto-attach```
-
-If you are behind a proxy you will need to run this beforehand:
-
-```# subscription-manager config --server.proxy_hostname=<proxy IP> --server.proxy_port=<proxy port>```
-
-**Option 2:** Use a local repository by copying the DVD contents into Virtual Machine primary disk. The procedure on how to do this is explained here: [https://access.redhat.com/solutions/1355683](https://access.redhat.com/solutions/1355683)
-
-**Option 3:** Use an internal repository. Instead of pulling the packages locally after copying the DVD contents into the local drive, you could have a dedicated node with the Red Hat packages available and configure the repository to pull the packages from there. Your `/etc/yum.repos.d/redhat.repo` could look something like this:
-
+  - **Option 1:** Use Red Hat subscription manager to register your system. This is the easiest way and will automatically give you access to the official Red Hat repositories. Use the `subscription-manager register` command as follows.
 ```
-[internal-rhel7-repo]
-name = Internal RHEL7 repository
-baseurl = http://redhat-node.your.domain/your/packages/directory
-enabled = 1
-gpgcheck = 0
+# subscription-manager register --auto-attach
 ```
+If you are behind a proxy, you must configure this before running the above command to register.
+```
+# subscription-manager config --server.proxy_hostname=<proxy IP> --server.proxy_port=<proxy port>
+```
+If you use this option, the playbooks will automatically enable the `extras` repository on the VMs that need it. If you encounter proxy errors related to `cdn.redhat.com`, you should run the subscription-manager refresh command to recreate your certificate.
 
-For additional information on how to configure a repository please check the Red Hat documentation: [https://access.redhat.com/documentation/en-US/Red\_Hat\_Enterprise\_Linux/7/html/System\_Administrators\_Guide/sec-Configuring\_Yum\_and\_Yum\_Repositories.html](https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_Linux/7/html/System_Administrators_Guide/sec-Configuring_Yum_and_Yum_Repositories.html)
+  - **Option 2:** Use an internal repository. Instead of pulling the packages from Red Hat, you can create copies of the required repositories on a dedicated node. You can then configure the package manager to pull the packages from the dedicated node. Your `/etc/yum.repos.d/redhat.repo` could look as follows.
+```
+[RHEL7-Server]
+name=Red Hat Enterprise Linux $releasever - $basearch
+baseurl=http://yourserver.example.com/rhel-7-server-rpms/
+enabled=1
+gpgcheck=1
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-redhat-release
 
-Please keep in mind that if you use option 2 or 3 you will need to have the RHEL extra packages available. This is required for Docker 17.06, which needs the `container-selinux` package.
+[RHEL7-Server-extras]
+name=Red Hat Enterprise Linux Extra pkg $releasever - $basearch
+baseurl=http://yourserver.example.com/rhel-7-server-extras-rpms/
+enabled=1
+gpgcheck=1
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-redhat-release
+```
+The following articles explain how you can create a local mirror of the Red Hat repositories and how to share them.
+https://access.redhat.com/solutions/23016  
+https://access.redhat.com/solutions/7227
 
-At this stage the only thing left to do is to power off the Virtual Machine and convert it to a VM Template, but before we do that we need to set up our Ansible host, as explained in the next section.
+Before converting the VM to a template, you will need to setup up access for the Ansible host to configure the individual VMs. This is explained in the next section. 
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 ## Creating the Ansible node
 
