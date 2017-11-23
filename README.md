@@ -343,30 +343,42 @@ Before converting the VM to a template, you will need to setup up access for the
 
 
 
-## Creating the Ansible node
+## Create the Ansible node
 
-In addition to the VM Template, we need another Virtual Machine where Ansible will be installed. This node will act as the driver to automate the provision of the environment and is essential that it is properly installed. The steps are as follows:
+In addition to the VM Template, you need another Virtual Machine where Ansible will be installed. This node will act as the driver to automate the provisioning of the environment and it is essential that it is properly installed. The steps are as follows:
 
-1. Create a Virtual Machine and install your preferred OS (in this example, and for the sake of simplicity, RHEL7 will be used). The rest of the instructions assume that, if the user were to use a different OS, he understands the possible differences in syntax for the provided commands.
-2. Configure a repository as explained in the previous section and install Ansible. Please note that version 2.2 is the minimum required. The instructions on how to install Ansible are described in its official website: [http://docs.ansible.com/ansible/intro\_installation.html](http://docs.ansible.com/ansible/intro_installation.html)
-3. Make a list of all the hostnames and IPs that will be in your system and update your /etc/hosts accordingly. This includes your UCP nodes, DTR nodes, worker nodes, NFS server, logger server and load balancers.
-4. Install the following packages. They are a mandatory requirement for the playbooks to function as expected. Update pip if requested:
-
+1. Create a Virtual Machine and install your preferred OS (in this example, and for the sake of simplicity, RHEL7 will be used). The rest of the instructions assume that, if you use a different OS, you understand the possible differences in syntax for the provided commands. If you use RHEL 7, select **Infrastructure Server** as the base environment and the **Guests Agents** add-on during the installation.
+2. Log in to the root account and create an SSH key pair. Do not protect the key with a passphrase (unless you want to use ssh-agent).  
+```
+# ssh-keygen
+```
+3. Configure the following yum repositories, rhel-7-server-rpms and rhel-7-server-extras-rpms as explained in the previous section.
+4. Configure the EPEL repository. See here for more information: http://fedoraproject.org/wiki/EPEL. Note that `yum-config-manager` comes with the Infrastructure Server base environment, if you did not select this environment you will have to install the `yum-utils` package.
+```
+# rpm -ivh https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
+# yum-config-manager --enable rhel-7-server-extras-rpms	
+```
+5. Install Ansible. The playbooks were tested with Ansible 2.2 and 2.3. Please note that the playbooks will not work with Ansible 2.4 due to an open defect https://github.com/ansible/ansible/issues/32000. Do not use Ansible 2.4 until this defect is fixed. To install the Ansible 2.3 use the following command:
+```
+# yum install ansible-2.3.2.0-2.el7
+```
+6. Make a list of all the hostnames and IPs that will be in your system and update your `/etc/hosts` file accordingly. This includes your UCP nodes, DTR nodes, worker nodes, NFS server, logger server and load balancers.
+7. Install the following packages which are a mandatory requirement for the playbooks to function as expected. (Update pip if requested).
 ```
 # yum install python-pyvmomi python-netaddr python2-jmespath python-pip gcc python-devel openssl-devel git
+# pip install --upgrade pip
 # pip install cryptography
 # pip install pysphere
 ```
+8. Copy your SSH public key to the VM Template so that, in the future, your Ansible node can SSH without the need of a password to all the Virtual Machines created from the VM Template.
+```
+# ssh-copy-id root@<VM_Template>
+```
 
-5. Copy your SSH id to the VM Template so, in the future, your Ansible node can SSH without the need of a password to all the Virtual Machines created from the VM Template.
+Please note that in both the Ansible node and the VM Template you might need to configure the network so one node can reach the other. Instructions for this step have been omitted since it is a basic step and could vary depending on the user’s environment.
 
-`# ssh-copy-id root@<VM_Template>`
 
-Please note that in both the Ansible node and the VM Template you might need to configure the network so one node can reach the other. Since this is a basic step and could vary on the user's environment I have purposefully omitted it.
 
-6. Retrieve the latest version of the playbooks using git.
-
-```# git clone https://github.com/ophintor/ansible-docker-ucp.git```
 
 ## Finalize the template
 
