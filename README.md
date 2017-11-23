@@ -40,22 +40,25 @@ More information about Docker Enterprise Edition can be found here: [https://www
 
 ## About Simplivity
 
-Simplivity is an enterprise-grade hyper-converged platform uniting best-in-class data services with the world's bestselling server.
+Simplivity is an enterprise-grade hyper-converged platform uniting best-in-class data services with the world's best-selling server.
 
-Rapid proliferation of applications and the increasing cost of maintaining legacy infrastructure causes significant IT challenges for many organisations. With HPE SimpliVity, you can streamline and enable IT operations at a fraction of the cost of traditional and public cloud solutions by combining your IT infrastructure and advanced data services into a single, integrated solution. HPE SimpliVity is a powerful, simple, and efficient hyperconverged platform that joins best-in-class data services with the world's best-selling server and offers the industry's most complete guarantee.
+Rapid proliferation of applications and the increasing cost of maintaining legacy infrastructure causes significant IT challenges for many organizations. With HPE SimpliVity, you can streamline and enable IT operations at a fraction of the cost of traditional and public cloud solutions by combining your IT infrastructure and advanced data services into a single, integrated solution. HPE SimpliVity is a powerful, simple, and efficient hyperconverged platform that joins best-in-class data services with the world’s best-selling server and offers the industry’s most complete guarantee.
 
 More information about Simplivity can be found here: [https://www.hpe.com/us/en/integrated-systems/simplivity.html](https://www.hpe.com/us/en/integrated-systems/simplivity.html)
 
-## Assumptions
+**Target Audience:** This document is primarily aimed at technical individuals working in the development side of the pipeline, such as technical architects, developers and system administrators, but anybody with an interest in automating the provisioning of virtual servers and containers may find this document useful.
 
-The present document assumes a minimum understanding in concepts like virtualization, containerization and some knowledge around Linux and VMWare technologies.
+**Assumptions:** This document assumes a minimum understanding of concepts like virtualization, containerization and some knowledge around Linux and VMWare technologies.
 
 ## Required Versions
 
-The following versions or higher are required to use the playbooks described in later sections.
+The following software versions were used to implement the playbooks that are described in later sections. Other version may work but have not been tested.
 
-- Ansible 2.2
-- Docker EE 17.06
+- Ansible 2.2 and 2.3. Please note that the playbooks will not work with Ansible 2.4 due to an open defect https://github.com/ansible/ansible/issues/32000. Do not use Ansible 2.4 until this defect is fixed.
+- Docker EE 17.06 (tested with UCP 2.2.3 and 2.2.4 and DTR 2.4.0)
+- Red Hat Enterprise Linux 7.3 and 7.4
+- VMWare ESXi 6.5.0 and vCenter 6.5.0
+- HPE SimpliVity OmniStack 3.7.1.60
 
 # Steps to provision the environment
 
