@@ -328,19 +328,7 @@ The following articles explain how you can create a local mirror of the Red Hat 
 https://access.redhat.com/solutions/23016  
 https://access.redhat.com/solutions/7227
 
-Before converting the VM to a template, you will need to setup up access for the Ansible host to configure the individual VMs. This is explained in the next section. 
-
-
-
-
-
-
-
-
-
-
-
-
+Before converting the VM to a template, you will need to setup access for the Ansible host to configure the individual VMs. This is explained in the next section. 
 
 
 ## Create the Ansible node
@@ -382,7 +370,7 @@ Please note that in both the Ansible node and the VM Template you might need to 
 
 ## Finalize the template
 
-Now that the VM Template has the public key of the Ansible node, we're ready to convert this VM to a VM Template. Perform the following steps in the VM Template to finalize its creation:
+Now that the VM Template has the public key of the Ansible node, we’re ready to convert this VM to a VM Template. Perform the following steps in the VM Template to finalize its creation:
 
 1. Clean up the template by running the following commands:
 
@@ -393,11 +381,21 @@ Now that the VM Template has the public key of the Ansible node, we're ready to 
 
 2. Shut down the VM
 
-```# shutdown –h now```
+```
+# shutdown –h now
+```
 
-3. Once the Virtual Machine is ready and turned off, we are ready to convert it to a template.
+3. Once the Virtual Machine is ready and turned off, convert it to a template as shown in Figure 20.
+![Convert to template][converttotemplate]  
+**Figure 20** Convert to template  
 
 This completes the creation of the VM Template.
+
+
+
+
+
+
 
 ## Prepare your Ansible configuration
 
