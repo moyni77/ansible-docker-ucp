@@ -399,17 +399,41 @@ This completes the creation of the VM Template.
 
 ## Prepare your Ansible configuration
 
-In the Ansible node, we need now to prepare the configuration to match your own environment, prior to deploying Docker Datacenter and the rest of the nodes. To do so, we will need to edit and modify three different files:
+On the Ansible node, retrieve the latest version of the playbooks using git.
+```
+# git clone https://github.com/HewlettPackard/Docker-SimpliVity
+```
+Change to the directory which you just cloned:
+```# cd ~/Docker-SimplVity```
 
-- The inventory: `vm_hosts`
-- The group variables: `group_vars/vars`
-- The encrypted group variable: `group_vars/vault`
+Change to the `dev` directory
+```# cd dev```
+
+
+**Note:** File names are relative to the `dev` directory. For example `vm_hosts` is located in `~/Docker-SimpliVity/dev` and `group_vars/vars` relates to `~/Docker-SimpliVity/dev/groups_vars/vars`.
+
+
+You now need to prepare the configuration to match your own environment, prior to deploying Docker EE and the rest of the nodes. To do so, you will need to edit and modify three different files:
+
+
+
+- `vm_hosts` (the inventory file)
+- `group_vars/vars` (the group variables file)
+- `group_vars/vault` (the encrypted group variable file)
+
+You should work from the root account for the configuration steps and later when you run the playbooks.
+
+
+
+
+
+
 
 ## Editing the inventory
 
 Change to the directory that you previously cloned using git and edit the vm\_hosts file.
 
-The nodes inside the inventory are organized in groups. The groups are defined by brackets and its names are static so they must not be changed. Anything else (hostnames, specifications, IP addresses…) are meant to be amended to match the user needs. The groups are as follows:
+The nodes inside the inventory are organized in groups. The groups are defined by brackets and the group names are static so they must not be changed. All other inforamtion, including hostnames, specifications, IP addresses can be edited to match your needs. The groups are as follows:
 
 - [ucp\_main]: A group containing one single node which will be the main UCP node and swarm leader. Do not add more than one node under this group.
 - [ucp]: A group containing all the UCP nodes, including the main UCP node. Typically you should have either 3 or 5 nodes under this group. For dev were only specifying 1 node.
@@ -928,3 +952,13 @@ A much briefer video with a quick demo can be found here: https://vimeo.com/2293
 [installdrive]: </dev/images/installdrive.png> "Figure 17. Select installation drive"
 [configuser]: </dev/images/configuser.png> "Figure 18. Configure user settings"
 [setrootpwd]: </dev/images/setrootpwd.png> "Figure 19. Set root password"
+
+[converttotemplate]: </ops/images/converttotemplate.png> "Figure 20. Convert to template"
+[ucpauth]: </ops/images/ucpauth.png> "Figure 21. UCP authentication screen"
+[ucpdash]: </ops/images/ucpdash.png> "Figure 22. UCP dashboard"
+[nodesinfo]: </ops/images/nodesinfo.png> "Figure 23. Nodes information"
+[servicesinfo]: </ops/images/servicesinfo.png> "Figure 24. Services information"
+[dtrauth]: </ops/images/dtrauth.png> "Figure 25. DTR authentication screen"
+[dtrrepos]: </ops/images/dtrrepos.png> "Figure 26. DTR repositories"
+[imagescanning]: </ops/images/imagescanning.png> "Figure 27. Image scanning in DTR"
+[DTRstorage]: </ops/images/DTRstorage.png> "Figure 28. DTR storage settings"
