@@ -187,6 +187,25 @@ You must assemble the information required to assign values to each and every va
 
 
 
+## Enable vSphere High Availability
+You must enable vSphere High Availability (HA) to support virtual machine failover during an HA event such as a host failure. Sufficient CPU and memory resources must be reserved across the system so that all VMs on the affected host(s) can fall over to remaining available hosts in the system. You configure an Admission Control Policy (ACP) to specify the percentage CPU and memory to reserve on all the hosts in the cluster to support HA functionality. 
+
+More information on enabling vSphere HA and configuring Admission Control Policy is available in the HPE SimpliVity documentation. Log in to the HPE Support Center at https://www.hpe.com/us/en/support.html and search for “HPE SimpliVity 380”. The administration guide is listed when you select the User document type.
+**Note: ** You should not use the default Admission Control Policy. Instead, you should calculate the memory and CPU requirements that are specific to your environment.
+
+
+## Install vSphere Docker Volume Service driver on all ESXi hosts
+
+vSphere Docker Volume Service technology enables stateful containers to access the storage volumes provided by SimpliVity. This is a one-off manual step. In order to be able to use Docker volumes using the vSphere driver, you must first install the latest release of the vSphere Docker Volume Service (vDVS) driver, which is available as a vSphere Installation Bundle (VIB). To perform this operation, login to each of the ESXi hosts in turn and then download and install the latest release of vDVS driver.
+
+```
+# esxcli software vib install -v /tmp/vmware-esx-vmdkops-<version>.vib --no-sig-check
+```
+
+More information on how to download and install the driver can be found on the Docker Store at https://store.docker.com/plugins/vsphere-docker-volume-service
+
+
+
 
 
 
