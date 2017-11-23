@@ -693,11 +693,23 @@ For Ansible to be able to read the vault, you need to specify a file where the p
 
 # Running the playbooks
 
-So at this point the system is ready to be deployed. Go to the root folder and run the following command:
+At this point, the system is ready to be deployed. Go to the root folder and run the following command:
 
-```# ansible-playbook -i vm_hosts site.yml --vault-password-file .vault_pass```
+```
+# ansible-playbook -i vm_hosts site.yml --vault-password-file .vault_pass
+```
 
-The playbooks should run for 25-35 minutes depending on your server specifications and in the size of your environment.
+The playbooks should run for 25-35 minutes depending on your server specifications and the size of your environment.
+
+
+## Post Deployment
+
+The playbooks are intended to be used to deploy a new environment. You should only use them for Day 0 deployment purposes. 
+
+
+
+
+
 
 ## Scaling out your environment
 
