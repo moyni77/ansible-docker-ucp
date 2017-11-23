@@ -503,7 +503,7 @@ The different variables you can use are as described in Table 4 below. They are 
 
 ## Editing the group variables
 
-Once our inventory is ready, the next step is to modify the group variables to match our environment. To do so, we need to edit the file group\_vars/vars under the cloned directory containing the playbooks. The variables here can be defined in any order but for the sake of clarity they have been divided into sections.
+Once the inventory is ready, the next step is to modify the group variables to match your environment. To do so, you need to edit the file `group_vars/vars`. The variables here can be defined in any order but for the sake of clarity they have been divided into sections.
 
 ### VMware configuration
 
@@ -528,41 +528,97 @@ All VMware-related variables are mandatory and are described in Table 5.
 
 ### Simplivity configuration
 
-All Simplivity-related variables should be here. All of them are mandatory and described in the Table 3 below.
+All SimpliVity variables are mandatory and are described in Table 6.
 
-| Variable | Description |
-| --- | --- |
-| simplivity\_username | Username to log in to the Simplivity Omnistack appliances. It might include a domain i.e. ' [administrator@vsphere.local](mailto:administrator@vsphere.local)' |
-| omnistack\_ovc | List of Omnistack hosts to be used, in list format, i.e. ['omni1.local','onmi2.local'...] |
-| backup\_policies | List of dictionaries containing the different backup policies to be used along with the scheduling information. Any number of backup policies can be created and they need to match the node\_policy variables defined in the inventory. The format is as follows:backup\_policies: - name: daily'   days: 'All'   start\_time: '11:30'   frequency: '1440'   retention: '10080' - name: 'hourly'   days: 'All'   start\_time: '00:00'   frequency: '60'   retention: '2880' |
-| dummy\_vm\_prefix | In order to be able to backup the Docker volumes, a number of "dummy" VMs need to be spin up. This variable will set a recognizable prefix for them |
-| docker\_volumes\_policy | Backup policy to use for the Docker Volumes |
+**Table 6.** SimpliVity variables
+
+<table>
+  <tr>
+    <th>Variable</th>
+    <th>Description</th>
+  </tr>
+  <tr>
+    <td>simplivity_username</td>
+	<td>Username to log in to the Simplivity Omnistack appliances. It might include a domain, for example, <a href="mailto:administrator@vsphere.local">administrator@vsphere.local</a>. Note: The corresponding password is stored in a separate file (<code>group_vars/vault</code>) with the variable named <code>simplivity_password</code>.</td>
+  </tr>
+  <tr>
+    <td>omnistack_ovc</td>
+	<td>List of Omnistack hosts to be used, in list format, i.e. <code>[‘omni1.local’,’onmi2.local’...]</code>. If your OmniStack virtual machines do not have their names registered in DNS, you can use their IP addresses.  
+	</td>
+  </tr>
+  <!--<tr>
+    <td>rest_api_pause</td>
+	<td>TODO: Default value is 10.
+	</td>
+  </tr>	-->
+   <tr>
+	<td>backup_policies </td>
+	<td>
+	List of dictionaries containing the different backup policies to be used along with the scheduling information. Any number of backup policies can be created and they need to match the <code>node_policy</code> variables defined in the inventory. Times are indicated in minutes.  All month calculations use a 30-day month. All year calculations use a 365-day year. The format is as follows:
+<pre>
+backup_policies:
+ - name: daily'   
+   days: 'All'   
+   start_time: '11:30'   
+   frequency: '1440'   
+   retention: '10080' 
+ - name: 'hourly'   
+   days: 'All'   
+   start_time: '00:00'   
+   frequency: '60'   
+   retention: '2880'
+</pre>	
+	
+  </tr>
+  <tr>
+  <td>dummy_vm_prefix</td>
+  <td>In order to be able to backup the Docker volumes, a number of "dummy" VMs need to spin up. This variable will set a recognizable prefix for them. </td>
+  </tr>
+  <tr>
+	<td>docker_volumes_policy</td>
+	<td>Backup policy to use for the Docker Volumes.</td>
+  </tr>
+</table>
+
+
 
 ### Networking configuration
 
-All network-related variables should be here. All of them are mandatory and described in the Table 4 below.
+All network-related variables are mandatory and are described in Table 7.
 
-| Variable | Description |
-| --- | --- |
-| nic\_name | Name of the device, for RHEL this is typically ens192 and it is recommended to leave it as is |
-| gateway | IP address of the gateway to be used |
-| dns | List of DNS servers to be used, in list format, i.e. ['8.8.8.8','4.4.4.4'...] |
-| domain\_name | Domain name for your Virtual Machines |
-| ntp\_server | List of NTP servers to be used, in list format, i.e. ['1.2.3.4','0.us.pool.net.org'...] |
+**Table 7.** Network variables
+
+| Variable     | Description                              |
+| ------------ | ---------------------------------------- |
+| nic\_name    | Name of the device, for RHEL this is typically `ens192` and it is recommended to leave it as is. |
+| gateway      | IP address of the gateway to be used     |
+| dns          | List of DNS servers to be used, in list format, i.e. ['`10.10.173.1`','`10.10.173.2`'...] |
+| domain\_name | Domain name for your Virtual Machines    |
+| ntp\_server  | List of NTP servers to be used, in list format, i.e. ['`1.2.3.4`','`0.us.pool.net.org`'...] |
+
+
+
+
 
 ### Docker configuration
 
-All Docker-related variables should be here. All of them are mandatory and described in the Table 5 below.
+All Docker-related variables are mandatory and are described in Table 8.
 
-| Variable | Description |
-| --- | --- |
-| docker\_ee\_url | URL to your Docker EE packages |
-| rhel\_version | Version of your RHEL OS, i.e: 7.3 |
-| dtr\_version | Version of the Docker DTR you wish to install. You can use a numeric version or latest for the most recent one |
-| ucp\_version | Version of the Docker UCP you wish to install. You can use a numeric version or latest for the most recent one |
-| images\_folder | Directory in the NTP server that will be mounted in the DTR nodes and that will host your Docker images |
-| license\_file | Full path to your Docker license file (it should be stored in your Ansible host) |
-| ucp\_username | Username of the administrator user for UCP and DTR, typically admin. |
+**Table 8.** Docker variables
+
+| Variable      | Description                              |
+| ------------- | ---------------------------------------- |
+| docker_ee_url | Note: This is a private link to your Docker EE subscription. This should be kept secret and defined in `group_vars/vault`. The value for `docker_ee_url` is the URL documented at the following address: https://docs.docker.com/engine/installation/linux/docker-ee/rhel/. |
+| rhel_version  | Version of your RHEL OS, such as  `7.3`. The playbooks were tested with RHEL 7.3. and RHEL 7.4.        |
+| dtr_version   | Version of the Docker DTR you wish to install. You can use a numeric version or `latest` for the most recent one. The playbooks were tested with 2.3.3. and 2.4.0.|
+| ucp_version   | Version of the Docker UCP you wish to install. You can use a numeric version or `latest` for the most recent one. The playbooks were tested with UCP 2.2.3. and 2.2.4. |
+| images_folder | Directory in the NFS server that will be mounted in the DTR nodes and that will host your Docker images. |
+| license_file  | Full path to your Docker EE license file (it should be stored in your Ansible host).<br>License file is available from the Docker Store |
+| ucp_username  | Username of the administrator user for UCP and DTR, typically `admin`. Note: The corresponding password is stored in a separate file (`group_vars/vault`) with the variable named `ucp_password`.|
+
+
+
+
 
 ### Environment configuration
 
