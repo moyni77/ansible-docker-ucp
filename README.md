@@ -60,6 +60,21 @@ The following software versions were used to implement the playbooks that are de
 - VMWare ESXi 6.5.0 and vCenter 6.5.0
 - HPE SimpliVity OmniStack 3.7.1.60
 
+
+# Architecture
+
+The development environment is comprised of two HPE SimpliVity 380 Gen10 servers. HPE recommends dual socket SimpliVity systems with at least 14 CPU cores per socket (28 total cores per system) for optimal performance and support during HA failover scenario. Please refer to Appendix A for a sample BOM.  Since the SimpliVity technology relies on VMware virtualization, the servers are managed using vCenter. The load among the two hosts will be shared as per Figure 1.
+
+Uptime is paramount for any users implementing Docker containers in business critical environments. Express Containers offers various levels of high availability (HA) to support continuous availability. All containers including the Docker system containers are protected by Docker’s swarm mode. Swarm mode can protect against individual hardware, network, and container failures based on the user’s declarative model. 
+Express Containers with Docker EE also deploys load balancers in the system to help with container traffic management. There are three load balancer VMs – UCP load balancer, DTR load balancer, and Docker worker node load balancer. Since these load balancers exist in VMs, they have some degree of HA but may incur some downtime during the restoration of these VMs due to a planned or unplanned outage. For optimal HA configuration, the user should consider implementing a HA load balancer architecture using the Virtual Router Redundancy Protocol (VRRP). For more information see http://www.haproxy.com/solutions/high-availability/. 
+
+
+![Solution Architecture][dev-architecture]
+**Figure 1.** Solution Architecture
+
+
+
+
 # Steps to provision the environment
 
 This section will describe in detail how to provision the environment described in the previous section.
@@ -668,4 +683,10 @@ Please get in touch via Github if you have any questions.
 
 # Demo
 A much briefer video with a quick demo can be found here: https://vimeo.com/229389079
+
+
+
+[dev-architecture]: </dev/images/architecture.png> "Figure 1. Solution Architecture"
+
+
 
