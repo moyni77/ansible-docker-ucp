@@ -507,20 +507,24 @@ Once our inventory is ready, the next step is to modify the group variables to m
 
 ### VMware configuration
 
-All VMware-related variables should be here. All of them are mandatory and described in the Table 2 below.
+All VMware-related variables are mandatory and are described in Table 5.
 
-| Variable | Description |
-| --- | --- |
-| vcenter\_hostname | IP or hostname of the vCenter appliance |
-| vcenter\_username | Username to log in to the vCenter appliance. It might include a domain i.e. '[administrator@vsphere.local](mailto:administrator@vsphere.local)' |
-| datacenter | Name of the datacenter where the environment will be provisioned |
-| vm\_username | Username to log into the VMs. It needs to match the one from the VM Template, so unless you have created an user, you must use 'root' |
-| vm\_template | Name of the VM Template to be used. Note that this is the name from a vCenter perspective, not the hostname |
-| folder\_name | vCenter folder to deploy the VMs. If you do not wish to deploy in a particular folder, the value should be '/' |
-| datastores | List of datastores to be used, in list format, i.e. ['Datastore1','Datastore2'...]. Please note that from a Simplivity perspective it's best practice to use just one Datastore. Using more than one will not provide any advantages in terms of reliability and will add additional complexity. |
-| disk2 | UNIX name of the second disk for the Docker VMs. Typically '/dev/sdb' |
-| disk2\_part | UNIX name of the partition of the second disk for the Docker VMs. Typically '/dev/sdb1' |
-| vsphere\_plugin\_version | Version of the vSphere plugin for Docker. The default is 'latest' but you could pick a specific version, i.e. '0.12' |
+**Table 5. VMware variables**
+
+| Variable                 | Description                              |
+| ------------------------ | ---------------------------------------- |
+| vcenter\_hostname        | IP or hostname of the vCenter appliance  |
+| vcenter\_username        | Username to log in to the vCenter appliance. It might include a domain, for example, '[administrator@vsphere.local](mailto:administrator@vsphere.local)'. Note: The corresponding password is stored in a separate file (`group_vars/vault`) with the variable named `vcenter_password`. |
+|vcenter_validate_certs    | ‘no’ |
+| datacenter               | Name of the datacenter where the environment will be provisioned |
+| vm\_username             | Username to log into the VMs. It needs to match the one from the VM Template, so unless you have created an user, you must use 'root'. Note: The corresponding password is stored in a separate file (`group_vars/vault`) with the variable named `vm_password`.  |
+| vm\_template             | Name of the VM Template to be used. Note that this is the name from a vCenter perspective, not the hostname |
+| folder\_name             | vCenter folder to deploy the VMs. If you do not wish to deploy in a particular folder, the value should be `/`. **Note**: If you want to deploy in a specific folder, you need to create this folder in the inventory of the selected datacenter before starting the deployment. |
+| datastores               | List of datastores to be used, in list format, i.e. ['`Datastore1`','`Datastore2`'...]. Please note that from a Simplivity perspective, it is best practice to use just one Datastore. Using more than one will not provide any advantages in terms of reliability and will add additional complexity. This datastore must exist before you run the playbooks. |
+| disk2                    | UNIX name of the second disk for the Docker VMs. Typically `/dev/sdb` |
+| disk2\_part              | UNIX name of the partition of the second disk for the Docker VMs. Typically `/dev/sdb1` |
+| vsphere\_plugin\_version | Version of the vSphere plugin for Docker. The default is 0.18 which is the latest version at the time of writing this document. The version of the plugin should match the version of the vSphere Installation Bundle (VIB) that you installed on the ESXi servers. |
+
 
 ### Simplivity configuration
 
