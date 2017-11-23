@@ -151,7 +151,7 @@ For Express Containers with Docker EE: Dev Edition, the following section descri
 | worker_lb	|2 	   |          |
 | nfs	| 	       |  2        |
 | logger	| 	   |  2	      | 
-| **Total RAM required** (per node)| 	**46**	| **20*| 
+| **Total RAM required** (per node)| 	**46**	| **20**| 
 | **Total RAM required**| 	| 	**66**	
 | Available RAM	| 384	| 384| 	
 
@@ -160,13 +160,40 @@ For Express Containers with Docker EE: Dev Edition, the following section descri
 
 
 
+# Provisioning the operations environment
+
+This section describes in detail how to provision the environment described previously in the architecture section. This section describes in detail how to provision the environment described previously in the architecture section. The high level steps this guide will take are shown in Figure 3.
+
+![Provisioning steps][provisioning]
+**Figure 3.** Provisioning steps
+
+
+## Verify Prerequisites
+
+You must assemble the information required to assign values to each and every variable used by the playbooks, before you start deployment. The variables are fully documented in the following sections “Editing the group variables” and “Editing the vault”. A summary of the information required is presented in Table 3.
+
+**Table 3.** Summary of information required
+
+
+**Table 3.** Summary of information required
+
+|Component|	Details|
+|---------|-----------|
+|Virtual Infrastructure|	The FQDN of your vCenter server and the name of the Datacenter which contains the SimpliVity cluster. You will also need administrator credentials in order to create templates, and spin up virtual machines.
+|SimpliVity Cluster	|The name of the SimpliVity cluster and the names of the member of this cluster as they appear in vCenter. You will also need to know the name of the SimpliVity datastore where you want to land the various virtual machines. You may have to create this datastore if you just installed your SimpliVity cluster. In addition, you will need the IP addresses of the OmniStack virtual machines. Finally you will need credentials with admin capabilities for using the OmniStack API. These credentials are typically the same as you vCenter admin credentials
+|L3 Network requirements|	You will need one IP address for each and every VM configured in the Ansible inventory (see the section “Editing the inventory”). At the time of writing, the example inventory configures 14 virtual machines so you would need to allocate 14 IP addresses to use this example inventory. Note that the Ansible playbooks do not support DHCP so you need static IP addresses.   All the IPs should be in the same subnet. You will also have to specify the size of the subnet (for example /22 or /24) and the L3 gateway for this subnet.
+|DNS|	You will need to know the IP addresses of your DNS server. In addition, all the VMs you configure in the inventory should have their names registered in DNS. In addition, you will need the domain name to use for configuring the virtual machines (such as example.com)
+|NTP Services|	You need time services configured in your environment. The solution being deployed (including Docker) uses certificates and certificates are time sensitive. You will need the IP addresses of your time servers (NTP).
+|RHEL Subscription	|A RHEL subscription is required to pull extra packages that are not on the DVD.|
+|Docker Prerequisites|	You will need a URL for the official Docker EE software download and a license file.  Refer to the Docker documentation to learn more about this URL and the licensing requirements here: https://docs.docker.com/engine/installation/linux/docker-ee/rhel/ in the section entitled "Docker EE repository URL"
+
+|Proxy	|The playbooks pull the Docker packages from the Internet. If you environment accesses the Internet through a proxy, you will need the details of the proxy including the fully qualified domain name and the port number.
 
 
 
 
-# Steps to provision the environment
 
-This section will describe in detail how to provision the environment described in the previous section.
+
 
 ## Creation of a VM template
 
@@ -777,5 +804,5 @@ A much briefer video with a quick demo can be found here: https://vimeo.com/2293
 
 [dev-architecture]: </dev/images/architecture.png> "Figure 1. Solution Architecture"
 [solutionstack]: </dev/images/solutionstack.png> "Figure 2. Solution stack"
-
+[provisioning]: </ops/images/provisioning.png> "Figure 3. Provisioning steps"
 
