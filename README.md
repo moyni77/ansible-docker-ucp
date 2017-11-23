@@ -72,6 +72,34 @@ Express Containers with Docker EE also deploys load balancers in the system to h
 ![Solution Architecture][dev-architecture]
 **Figure 1.** Solution Architecture
 
+The Ansible playbooks can be modified to fit your environment and your high availability (HA) needs. By default, the Ansible Playbooks will set up a 2 node environment. HPE and Docker recommend a minimal starter configuration of 2 physical nodes for running Docker in a development environment.
+
+The distribution of the Docker and non-Docker modules over the 2 physical nodes via virtual machines (VMs) is as follows:
+
+- 1 Docker Universal Control Plane (UCP) VM node
+- 1 Docker Trusted Registry (DTR) VM node
+- 2 Docker Swarm worker VM nodes for container workloads
+- 1 Docker UCP load balancer VM to ensure access to UCP in the event of a node failure
+- 1 Docker DTR load balancer VM to ensure access to DTR in the event of a node failure
+- 1 Docker Swarm Worker node VM load balancer
+- 1 Logging server VM for central logging 
+- 1 NFS server VM for storage Docker DTR images
+
+In addition to the above, the playbooks also set up:
+
+- Docker persistent storage driver from VMware
+- Elasticsearch, Logstash, and Kibana (ELK) stack
+- Play with Docker (PWD)
+- CloudBees Jenkins
+- SimpliVity backup policy for data volumes and for the NFS storage used by DTR for storing Docker images
+
+These nodes can live in any of the hosts and they are not redundant. The vSphere Docker volume plug-in stores data in a shared datastore that can be accessed from any machine in the cluster.
+
+
+
+
+
+
 
 
 
