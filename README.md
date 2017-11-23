@@ -620,47 +620,76 @@ All Docker-related variables are mandatory and are described in Table 8.
 
 
 
+
+### Play with Docker configuration
+
+
+Play with Docker (PWD) is a free, cloud-based service that gives users the ability to experiment and interact with real live Docker instances for testing or educational purposes.  Variables associated with Play with Docker are described in Table 9.
+
+**Table 9.** Play with Docker variables
+
+| Variable                | Description                              |
+| ----------------------- | ---------------------------------------- |
+| pwd_path                | `‘/root/play-with-docker’` |
+| pwd_duration              | `‘24h’` |
+
+
+
+
+
 ### Environment configuration
 
-All Environment-related variables should be here. All of them are described in the Table 7 below.
+All Environment-related variables should be here. All of them are described in the Table 10 below.
 
-| Variable | Description |
-| --- | --- |
-| env | Dictionary containing all environment variables. It contains three entries described below. Please leave empty the proxy related settings if not required: <ul><li>http\_proxy: HTTP proxy URL, i.e. 'http://15.184.4.2:8080'. This variable defines the HTTP proxy url if your environment is behind a proxy.</li><li>https\_proxy: HTTP proxy URL, i.e. 'http://15.184.4.2:8080'. This variable defines the HTTPS proxy url if your environment is behind a proxy.</li><li>no\_proxy: List of hostnames or IPs that don't require proxy, i.e. 'localhost,127.0.0.1,.cloudra.local,10.10.174.'</li></ul>|
+**Table 10.** Environment variables
+
+| Variable | Description                              |
+| -------- | ---------------------------------------- |
+| env      | Dictionary containing all environment variables. It contains three entries described below. Please leave empty the proxy related settings if not required: <ul><li>http\_proxy: HTTP proxy URL, i.e. 'http://15.184.4.2:8080'. This variable defines the HTTP proxy url if your environment is behind a proxy.</li><li>https\_proxy: HTTP proxy URL, i.e. 'http://15.184.4.2:8080'. This variable defines the HTTPS proxy url if your environment is behind a proxy.</li><li>no\_proxy: List of hostnames or IPs that don't require proxy, i.e. 'localhost,127.0.0.1,.cloudra.local,10.10.174.'</li></ul> |
+
+
+
+
 
 ## Editing the vault
 
-Once our group variables file is ready, the next step is to create a vault file to match our environment. The vault file is essentially the same thing than the group variables but it will contain all sensitive variables and will be encrypted.
+Once your group variables file is ready, the next step is to create a vault file to match your environment. The vault file is essentially the same thing than the group variables but it will contain all sensitive variables and will be encrypted.
 
-To create a vault we'll create a new file group\_vars/vault and we'll add the following entries:
+There is a sample vault file named `group_vars/vault.sample` that you can use as a model for your vault file. To create a vault, you create a new file `group_vars/vault` and add entries similar to:
 
 ```
 ---
 vcenter_password: 'xxx'
+docker_ee_url: 'yoururl'
 vm_password: 'xxx'
 simplivity_password: 'xxx'
 ucp_password: 'xxx'
+rhn_orgid: 'Red Hat Organization ID'
+rhn_key: 'Red Hat Activation Key'
 ```
+
+
+`rhn_orgid` and `rhn_key` are the credentials needed to subscribe the virtual machines with Red Hat Customer Portal. For more info regarding activation keys see the following URL: https://access.redhat.com/articles/1378093
 
 To encrypt the vault you need to run the following command:
 
-```# ansible-vault encrypt group_vars/vault```
+```
+# ansible-vault encrypt group_vars/vault
+```
 
-You will be prompted for a password that will decrypt the vault when required.
+You will be prompted for a password that will decrypt the vault when required. You can update the values in your vault by running:
+```
+# ansible-vault edit group_vars/vault
+```
 
-Edit your vault anytime by running:
+For Ansible to be able to read the vault, you need to specify a file where the password is stored, for instance in a file called `.vault_pass`. Once the file is created, take the following precautions to avoid illegitimate access to this file:
 
-```# ansible-vault edit group_vars/vault```
+1. Change the permissions so only `root` can read it using  `# chmod 600 .vault_pass`
+	
+2. Add the file to your `.gitignore` file if you're pushing the set of playbooks to a git repository.
 
-The password you set on creation will be requested.
 
-In order for ansible to be able to read the vault we'll need to specify a file where the password is stored, for instance in a file called .vault\_pass. Once the file is created, take the following precautions to avoid illegitimate access to this file:
 
-1. Change the permissions so only root can read it
-
-```# chmod 600 .vault_pass```
-
-1. Add the file to your .gitignore file if you're pushing the set of playbooks to a git repository
 
 # Running the playbooks
 
