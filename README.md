@@ -211,31 +211,100 @@ More information on how to download and install the driver can be found on the D
 
 
 
-## Creation of a VM template
+## Create a VM template
 
-The very first step to our automated solution will be the creation of a VM Template that will be the base of all your nodes. In order to create a VM Template we will first create a Virtual Machine where the OS will be installed and then the Virtual Machine will be converted to a VM Template. Since the goal of the automation is get rid of as many repetitive tasks as possible, the VM Template will be created as lean as possible, so any additional software installs and/or system configuration will be done later by Ansible.
+The first step of the automated solution is the creation of a VM Template that you will use as the base for all your nodes. In order to create a VM Template you will first create a Virtual Machine with the OS installed and then convert the Virtual Machine to a VM Template. Since the goal of automation is to remove as many repetitive tasks as possible, the VM Template is created as lean as possible, with any additional software installs and/or system configuration performed subsequently using Ansible.
 
-Of course, the creation of the template could have been automated too, but since this is a one-off task, it's been decided to do it manually since it takes less time than building another playbook and thinking about the possible options and dependencies.
+It would be possible to automate the creation of the template. However, as this is a one-off task, it is appropriate to do it manually. The steps to create a VM template manually are described below.
 
-The steps to create a VM template are described below.
 
-1. Log in to vCenter and create a new Virtual Machine. 
-1. Provide a name for your template.
-1. Choose the location (host/cluster) where you wish to store your template.
-1. Choose a datastore where the template files will be stored.
-1. Choose the OS, in this case Linux, RHEL7 64bit.
-1. Pick the network to attach to your template. In this example we're only using one NIC but depending on how you plan to architect your environment you might want to add more than one.
-1. Create a primary disk. The chosen size in this case is 50GB but 20GB should be typically enough.
-1. Confirm that the settings are right and press Finish.
-1. The next step is to virtually insert the RHEL7 DVD, we do this by looking into the Settings of the newly created VM. Select your ISO file in the Datastore ISO File Device Type and make sure that the "Connect at power on" checkbox is checked.
-1. Finally, you can optionally remove the Floppy Disk as this is not required for the VM.
-1. Power on the server and open the console to install the OS. You should see something similar to this. Pick your language and hit Continue.
-1. Scroll down and click on Installation Destination.
-1. Select your installation drive and hit Done.
-1. Leave all the rest by default. Click Begin Installation.
-1. Select a root password.
-1. Press Done and wait for the install to finish. Reboot and login into the system using the VM console.
-2. Once we are logged into the system we need to configure a yum repository so we can install any packages required at a later stage. We can do this in three different ways:
+1. Log in to vCenter and create a new Virtual Machine. In the dialog box, shown in Figure 4, select `Typical` and press `Next`.  
+![Create New Virtual Machine][createnewvm]  
+**Figure 4.** Create New Virtual Machine  
+  
+2. Specify the name and location for your template, as shown in Figure 5.  
+![Specify name and location for the virtual machine][vmnamelocation]  
+**Figure 5.** Specify name and location for the virtual machine  
+  
+3. Choose the host/cluster on which you want to run this virtual machine, as shown in Figure 6.
+![Choose host / cluster][choosehost]  
+**Figure 6.** Choose host / cluster 
+
+
+4. Choose a datastore where the template files will be stored, as shown in Figure 7.
+![Select storage for template files][selectstorage]  
+**Figure 7.** Select storage for template files
+
+
+5. Choose the OS as shown in Figure 8, in this case Linux, RHEL7 64bit.
+![Choose operating system][chooseos]  
+**Figure 8.** Choose operating system
+
+6. Pick the network to attach to your template as shown in Figure 9. In this example there is only one NIC but depending on how you plan to architect your environment you might want to add more than one.
+![Create network connections][createnetwork]  
+**Figure 9.** Create network connections
+
+
+7. Create a primary disk as shown in Figure 10. The chosen size in this case is 50GB but 20GB should be typically enough.
+![Create primary disk][createprimarydisk]  
+**Figure 10.** Create primary disk
+
+
+8. Confirm that the settings are right and press Finish as shown in Figure 11.
+![Confirm settings][confirmsettings]  
+**Figure 11.** Confirm settings
+
+
+9. The next step is to virtually insert the RHEL7 DVD, using the Settings of the newly created VM as shown in Figure 12. Select your ISO file in the Datastore ISO File Device Type and make sure that the “Connect at power on” checkbox is checked.  
+![Virtual machine properties][vmprops]  
+**Figure 12.** Virtual machine properties
+
+
+
+10. Finally, you can optionally remove the Floppy Disk, as shown in Figure 13, as this is not required for the VM.
+![Remove Floppy drive][removefloppy]  
+**Figure 13.** Remove Floppy drive
+
+11. Power on the server and open the console to install the OS. On the welcome screen, as shown in Figure 14, pick your language and press `Continue`.
+![Welcome screen][welcomescreen]  
+**Figure 14.** Welcome screen
+
+12. The installation summary screen will appear, as shown in Figure 15.
+![Installation summary][installsummary]  
+**Figure 15.** Installation summary
+
+13. Scroll down and click on Installation Destination, as shown in Figure 16.
+![Installation destination][installdestination]  
+**Figure 16.** Installation destination
+
+14. Select your installation drive, as shown in Figure 17, and click Done.
+![Select installation drive][installdrive]  
+**Figure 17.** Select installation drive
+
+
+15. Click Begin Installation, using all the other default settings, and wait for the configuration of user settings dialog, shown in Figure 18.
+![Configure user settings][configuser]  
+**Figure 18.** Configure user settings
+
+
+16. Select a root password, as shown in Figure 19.
+![Set root password][setrootpwd]  
+**Figure 19.** Set root password
+
+
+
+17. Click Done and wait for the install to finish. Reboot and log in into the system using the VM console.
+
+18.	The Red Hat packages required during the deployment of the solution come from two repositories: `rhel-7-server-rpms` and `rhel 7-server-extras-rpms`. The first repository can be found on the Red Hat DVD but the second cannot. There are two options, with both options requiring a Red Hat Network account.
+
+
+
+
+
+
+
+
+
 
 **Option 1:** Use Red Hat subscription manager to register your system. This is the easiest way and will give you automatically access to the official Red Hat repositories. It requires having a Red Hat Network account though, so if you don't have one, you can use either Option 2 or 3. For option run you would do:
 
@@ -822,3 +891,19 @@ A much briefer video with a quick demo can be found here: https://vimeo.com/2293
 [solutionstack]: </dev/images/solutionstack.png> "Figure 2. Solution stack"
 [provisioning]: </ops/images/provisioning.png> "Figure 3. Provisioning steps"
 
+[createnewvm]: </ops/images/createnewvirtualmachine.png> "Figure 4. Create New Virtual Machine"
+[vmnamelocation]: </ops/images/vmnamelocation.png> "Figure 5. Specify name and location for the virtual machine" 
+[choosehost]: </ops/images/choosehost.png> "Figure 6. Choose host / cluster"
+[selectstorage]: </ops/images/selectstorage.png> "Figure 7. Select storage for template files"
+[chooseos]: </ops/images/chooseos.png> "Figure 8. Choose operating system"
+[createnetwork]: </ops/images/createnetwork.png> "Figure 9. Create network connections"
+[createprimarydisk]: </ops/images/createprimarydisk.png> "Figure 10. Create primary disk"
+[confirmsettings]: </ops/images/confirmsettings.png> "Figure 11. Confirm settings"
+[vmprops]: </ops/images/vmprops.png> "Figure 12. Virtual machine properties"
+[removefloppy]: </ops/images/removefloppy.png> "Figure 13. Remove Floppy drive"
+[welcomescreen]: </ops/images/welcomescreen.png> "Figure 14. Welcome screen"
+[installsummary]: </ops/images/installsummary.png> "Figure 15. Installation summary"
+[installdestination]: </ops/images/installdestination.png> "Figure 16. Installation destination"
+[installdrive]: </ops/images/installdrive.png> "Figure 17. Select installation drive"
+[configuser]: </ops/images/configuser.png> "Figure 18. Configure user settings"
+[setrootpwd]: </ops/images/setrootpwd.png> "Figure 19. Set root password"
