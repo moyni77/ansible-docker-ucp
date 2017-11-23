@@ -95,10 +95,24 @@ In addition to the above, the playbooks also set up:
 
 These nodes can live in any of the hosts and they are not redundant. The vSphere Docker volume plug-in stores data in a shared datastore that can be accessed from any machine in the cluster.
 
+![Solution stack][solutionstack]
+**Figure 2.** Solution stack
 
 
+# Sizing considerations
 
+A node is a machine in the cluster (virtual or physical) with Docker Engine running on it. When provisioning each node, assign it a role: UCP Controller, DTR, or worker node so that they are protected from running application workloads.
 
+To decide what size the node should be in terms of CPU, RAM, and storage resources, consider the following:
+
+1. All nodes should at least fulfil the minimal requirements, for UCP 2.0 2GB of RAM and 3GB of storage. More detailed requirements are in the UCP documentation.
+2. UCP Controller nodes should be provided with more than the minimal requirements, but won’t need much more if nothing else runs on them.
+3. Ideally, Worker node size will vary based on your workloads so it is impossible to define a universal standard size.
+4. Other considerations like target density (average number of containers per node), whether one standard node type or several are preferred, and other operational considerations might also influence sizing.
+
+If possible, node size should be determined by experimentation and testing actual workloads, and they should be refined iteratively. A good starting point is to select a standard or default machine type in your environment and use this size only. If your standard machine type provides more resources than the UCP Controllers need, it makes sense to have a smaller node size for these. Whatever the starting choice, it is important to monitor resource usage and cost to improve the model.
+
+For Express Containers with Docker EE: Dev Edition, the following section describes sizing configurations. The vCPU allocations are described in Table 1 while the memory allocation is described in Table 2. 
 
 
 
@@ -715,6 +729,6 @@ A much briefer video with a quick demo can be found here: https://vimeo.com/2293
 
 
 [dev-architecture]: </dev/images/architecture.png> "Figure 1. Solution Architecture"
-
+[solutionstack]: </dev/images/solutionstack.png> "Figure 2. Solution stack"
 
 
