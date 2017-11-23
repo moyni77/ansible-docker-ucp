@@ -1,11 +1,10 @@
-# ansible-docker-ucp
-Spin up a virtual Docker UCP "Development" environment using ansible and use some of the simplivity features
 # Introduction
 
-This document describes how to automate the provisioning of a Docker Enterprise Edition environment by using a set of Ansible playbooks. It also outlines a set of manual steps to harden, secure and audit the overall status of the system.
+Express Containers with Docker Enterprise Edition (EE) is a complete solution from Hewlett Packard Enterprise that includes all the hardware, software, professional services, and support you need to deploy a containers-as-a-service (CaaS) platform, allowing you to get up and running quickly and efficiently. The solution takes the HPE hyperconverged infrastructure and combines it with Docker’s enterprise-grade container platform, popular open source tools, along with deployment and advisory services from HPE Pointnext.
 
-For the dev edition we've selected enterprise edition standard license, which omits image security scanning.
-Capabilities that are provided by the enterprise edition standard follow: Container engine and built in orchestration, networking, security, Certified infrastructure, plugins and ISV containers, Image management, and Container app management. Image security scanning is only available with the advanced license.
+Express Containers with Docker EE is ideal for customers migrating legacy applications to containers, transitioning to a container DevOps development model or needing a hybrid environment to support container and non-containerized applications on a common VM platform.  Express Containers with Docker EE provides a solution for both IT development and IT operations, and comes in two versions.  The version for IT developers (Express Containers with Docker EE: Dev Edition) addresses the need to provide a cloud-like container development environment with built-in container tooling.  The version for IT operations (Express Containers with Docker EE: Ops Edition) addresses the need to have a production ready environment that is very easy to deploy and manage.  
+
+This document describes the best practices for deploying and operating the Express Containers with Docker EE: Dev Edition. It describes how to automate the provisioning of the environment using a set of Ansible playbooks. It also outlines a set of manual steps to harden, secure and audit the overall status of the system. A corresponding document focused on setting up Express Containers with Docker: Ops Edition is also available. 
 
 
 ## About Docker Enterprise Edition
