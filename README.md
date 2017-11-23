@@ -431,19 +431,24 @@ You should work from the root account for the configuration steps and later when
 
 ## Editing the inventory
 
-Change to the directory that you previously cloned using git and edit the vm\_hosts file.
+The inventory is the file named `vm_hosts` in the `~Docker-SimpliVity/dev` directory. You need to edit this file to describe the configuration you want to deploy.
 
-The nodes inside the inventory are organized in groups. The groups are defined by brackets and the group names are static so they must not be changed. All other inforamtion, including hostnames, specifications, IP addresses can be edited to match your needs. The groups are as follows:
+
+
+The nodes inside the inventory are organized in groups. The groups are defined by brackets and the group names are static so they must not be changed. All other information, including hostnames, specifications, IP addresses, etc. can be edited to match your needs. The groups are as follows:
 
 - [ucp\_main]: A group containing one single node which will be the main UCP node and swarm leader. Do not add more than one node under this group.
-- [ucp]: A group containing all the UCP nodes, including the main UCP node. Typically you should have either 3 or 5 nodes under this group. For dev were only specifying 1 node.
+- [ucp]: A group containing all the UCP nodes, including the main UCP node. For the Dev edition, you will only have the main node.
 - [dtr\_main]: A group containing one single node which will be the first DTR node to be installed. Do not add more than one node under this group.
-- [dtr]: A group containing all the DTR nodes, including the main DTR node. Typically you should have either 3 or 5 nodes under this group. For dev were only specifying 1 node.
-- [worker]: A group containing all the UCP nodes, including the main UCP node. Typically you should have either 3 or 5 nodes under this group.
-- [ucp\_lb]: A group containing one single node which will be the load balancer for the UCP nodes. Do not add more than one node under this group. 
-- [dtr\_lb]: A group containing one single node which will be the load balancer for the DTR nodes. Do not add more than one node under this group.
+- [dtr]: A group containing all the DTR nodes, including the main DTR node. For the Dev edition, you will only have the main node.
+- [worker]: A group containing all the worker nodes. For the Dev edition, you will have two nodes under this group.
+- [cloudbees]: A group containing the single node for CloudBees.
+- [playwithdocker]: A group containing the single node for Play with Docker
+- [elk]: A group containing the single node for ELK.
+- [ucp\_lb]: A group containing one single node which will be the load balancer for the UCP node. Do not add more than one node under this group. 
+- [dtr\_lb]: A group containing one single node which will be the load balancer for the DTR node. Do not add more than one node under this group.
 - [worker\_lb]: A group containing one single node which will be the load balancer for the worker nodes. Do not add more than one node under this group.
-- [lbs]: A group containing all the load balances. This group will have 3 nodes, also defined in the three groups above.
+- [lbs]: A group containing all the load balancers. This group will have 3 nodes, also defined in the three groups above.
 - [nfs]: A group containing one single node which will be the NFS node. Do not add more than one node under this group.
 - [logger]: A group containing one single node which will be the logger node. Do not add more than one node under this group.
 - [local]: A group containing the local Ansible host. It contains an entry that should not be modified.
@@ -455,6 +460,7 @@ There are also a few special groups:
 
 Finally, you will find some variables defined for each group:
 
+- [vms:vars]: A set of variables defined for all VMs. Currently only the size of the boot disk is defined here.
 - [ucp:vars]: A set of variables defined for all nodes in the [ucp] group.
 - [dtr:vars]: A set of variables defined for all nodes in the [dtr] group.
 - [worker:vars]: A set of variables defined for all nodes in the [worker] group.
@@ -468,8 +474,8 @@ If you wish to configure your nodes with different specifications rather than th
 ```
 [worker]
 worker01 ip_addr='10.0.0.10/16' esxi_host='esxi1.domain.local'
-worker02 ip_addr='10.0.0.11/16' esxi_host='esxi1.domain.local'
-worker03 ip_addr='10.0.0.12/16' esxi_host='esxi1.domain.local' cpus='16' ram'32768'
+worker02 ip_addr='10.0.0.11/16' esxi_host='esxi1.domain.local' cpus='16' ram'32768'
+ 
 [worker:vars]
 cpus='4'
 ram='16384'
@@ -477,18 +483,23 @@ disk2_size='200'
 node_policy='bronze'
 ```
 
-In  the example above, the worker03 node would have 4 times more CPU and double RAM than the rest of worker nodes.
+In  the example above, the worker02 node would have 4 times more CPU and double RAM compared to the other worker node.
 
-The different variables you can use are as described in the table below. They are all mandatory unless if specified otherwise:
+The different variables you can use are as described in Table 4 below. They are all mandatory unless if specified otherwise:
+
+**Table 4.** Variables
 
 | Variable | Scope | Description |
 | --- | --- | --- |
 | ip\_addr | Node | IP address in CIDR format to be given to a node |
-| esxi\_host | Node | ESXi host where the node will be deployed. Please note that if the cluster is configured with DRS, this option will be overriden |
+| esxi\_host | Node | ESXi host where the node will be deployed. if the cluster is configured with DRS, this option will be overriden |
 | cpus | Node/Group | Number of CPUs to assign to a VM or a group of VMs |
 | RAM | Node/Group | Amount of RAM in MB to assign to a VM or a group of VMs |
 | disk2\_usage | Node/Group | Size of the second disk in GB to attach to a VM or a group of VMs. This variable is only mandatory on Docker nodes (UCP, DTR, worker) and NFS node. It is not required for the logger node or the load balancers. |
-| node\_policy | Node/Group | Simplivity backup policy to assign to a VM or a group of VMs. The name has to match one of the backup policies defined in the group\_vars/vars file described in the next section |
+| node\_policy | Node/Group | Simplivity backup policy to assign to a VM or a group of VMs. The name has to match one of the backup policies defined in the `group_vars/vars` file described in the next section |
+
+
+
 
 ## Editing the group variables
 
