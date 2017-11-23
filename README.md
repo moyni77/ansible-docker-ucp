@@ -95,7 +95,7 @@ In addition to the above, the playbooks also set up:
 
 These nodes can live in any of the hosts and they are not redundant. The vSphere Docker volume plug-in stores data in a shared datastore that can be accessed from any machine in the cluster.
 
-![Solution stack][solutionstack]
+![Solution stack][solutionstack]  
 **Figure 2.** Solution stack
 
 
@@ -113,6 +113,53 @@ To decide what size the node should be in terms of CPU, RAM, and storage resourc
 If possible, node size should be determined by experimentation and testing actual workloads, and they should be refined iteratively. A good starting point is to select a standard or default machine type in your environment and use this size only. If your standard machine type provides more resources than the UCP Controllers need, it makes sense to have a smaller node size for these. Whatever the starting choice, it is important to monitor resource usage and cost to improve the model.
 
 For Express Containers with Docker EE: Dev Edition, the following section describes sizing configurations. The vCPU allocations are described in Table 1 while the memory allocation is described in Table 2. 
+
+
+
+**Table 1.** vCPU
+
+| vCPUs | simply01 | simply02 | 
+|:------|:--------:|:--------:|
+| ucp1  |	4      |          |
+| dtr1  | 2		   |          |
+| worker1 |4	   |          |
+| worker2| 	       | 	4	  | 
+| ucb_lb| 	2      | 		  | 
+| dtr_lb| 	2       | 		  | 
+| worker_lb	| 2	   |          |
+| nfs	| 	       |    2      |
+| logger	| 	   |  2	      | 
+| **Total vCPU per node**|	**16** |**8**|
+
+
+
+**Note:**  In the case of one ESX host failure, the remaining node can accommodate the amount of vCPU required.
+
+
+
+
+**Table 2.** Memory allocation
+
+| RAM | simply01 | simply02 |
+|:------|:--------:|:--------:|
+| ucp1  |	8      |          |
+| dtr1  | 16	   |          |
+| worker1 |16	   |          |
+| worker2| 	       | 	16 | 
+| ucb_lb| 	2      | 		  | 
+| dtr_lb| 	2       | 		  | 
+| worker_lb	|2 	   |          |
+| nfs	| 	       |  2        |
+| logger	| 	   |  2	      | 
+| **Total RAM required** (per node)| 	**46**	| **20*| 
+| **Total RAM required**| 	| 	**66**	
+| Available RAM	| 384	| 384| 	
+
+
+**Note:** In the case of one ESX host failure, the remaining host can accommodate the amount of RAM required for all VMs.
+
+
+
 
 
 
