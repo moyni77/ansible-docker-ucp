@@ -922,3 +922,28 @@ A much briefer video with a quick demo can be found here: https://vimeo.com/2293
 [dtrrepos]: </dev/images/dtrrepos.png> "Figure 26. DTR repositories"
 [imagescanning]: </dev/images/imagescanning.png> "Figure 27. Image scanning in DTR"
 [DTRstorage]: </dev/images/DTRstorage.png> "Figure 28. DTR storage settings"
+
+
+
+
+
+[create_vms]: </playbooks/create_vms.yml>
+[config_networking]: </playbooks/config_networking.yml>
+[distribute_keys]: </playbooks/distribute_keys.yml>
+[config_subscription]: </playbooks/config_subscription.yml>
+[install_haproxy]: </playbooks/install_haproxy.yml>
+[install_ntp]: </playbooks/install_ntp.yml>
+[install_docker]: </playbooks/install_docker.yml>
+[install_rsyslog]: </playbooks/install_rsyslog.yml>
+[config_docker_lvs]: </playbooks/config_docker_lvs.yml>
+[docker_post_config]: </playbooks/docker_post_config.yml>
+[install_nfs_server]: </playbooks/install_nfs_server.yml>
+[install_nfs_clients]: </playbooks/install_nfs_clients.yml>
+[install_ucp_nodes]: </playbooks/install_ucp_nodes.yml>
+[install_dtr_nodes]: </playbooks/install_dtr_nodes.yml>
+[install_worker_nodes]: </playbooks/install_worker_nodes.yml>
+[config_monitoring]: </playbooks/config_monitoring.yml>
+[config_dummy_vms_for_docker_volumes_backup]: </playbooks/config_dummy_vms_for_docker_volumes_backup.yml>
+[config_simplivity_backups]: </playbooks/config_simplivity_backups.yml>
+
+
