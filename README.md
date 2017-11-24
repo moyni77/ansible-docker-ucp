@@ -769,80 +769,28 @@ The playbook [install_dtr_nodes.yml][install_dtr_nodes] installs and configures 
 The playbook [install_worker_nodes.yml][install_worker_nodes] installs and configures the Docker Worker nodes defined in the inventory.
 
 
+## Install ELK stack
+The playbook [install_elk.yml][install_elk] installs and configures the ELK stack and Logspout container defined in the inventory.
+
+## Install CloudBees Team Edition (Jenkins CI/CD Pipeline)
+The playbook [install_cloudbees.yml][install_cloudbees] installs and configures CloudBees Team Edition software defined in the inventory.
+
+## Install Play with Docker
+The playbook [install_playwithdocker.yml][install_playwithdocker] installs Play with Docker software defined in the inventory.
+
+
+
+## Configure dummy VMs to backup Docker volumes
+The playbook [config_dummy_vms_for_docker_volumes_backup.yml][config_dummy_vms_for_docker_volumes_backup] ensures that you can backup Docker volumes that have been created using the vSphere plugin (vDVS) in SimpliVity. There is not a straight forward way to do this, so you need to use a workaround. Since all Docker volumes are going to be stored in the dockvols folder in the datastore(s), you need to create a ‘dummy’ VM per datastore. The `vmx`, `vmsd` and `vmkd` files from this VMs will have to be inside the `dockvols` folder, so when these VMs are backed up, the volumes are backed up as well. Obviously these VMs don’t need to take any resources and you can keep them powered off.
+
+
+## Configure SimpliVity backups
+The playbook [config_simplivity_backups.yml][config_simplivity_backups] configures the defined backup policies in the group variables file in SimpliVity and will include all Docker nodes plus the ‘dummy’ VMs created before, so the existing Docker volumes are also taken in account. The playbook will mainly use the SimpliVity REST API to perform these tasks. A reference to the REST API can be found here: https://api.simplivity.com/rest-api_getting-started_overview/rest-api_getting-started_overview_rest-api-overview.html
 
 
 
 
 
-
-
-## playbooks/install\_elk.yml
-
-This playbook will install and configure ELK stack defined in the inventory.
-
-It is composed of the following sequential tasks:
-
-- Open port: Makes use of the firewalld command to open the required ports tcp/5000
-- Reload firewalld configuration: Reloads the firewall to apply the new rules
-- Copies configuration files from src: files/elk/* to elk virtual machine under root
-- Installing elk stack: install docker\-compose from github.com/docker/compose
-- Starts docker.service
-- Docker build from file elk-Dockerfile usning docker.elastic.co/logstash/logstash:5.4.2_hpe
-- Execute compose file: elk-docker-compose.yml
-- Run logspout as a service which will send all container logs to logstash elk host which are visible through http://(your-elk-host}:5000
-
-## playbooks/install\_cloudbees.yml
-
-This playbook will install and configure Cloudbees Team Edition CI/CD Jekins pipe line.
-
-- Cloudbees team edition software is pulled from docker hub
-- Container is spun up from cloudbees\-jenkins\-team image
-- exposing port 8080
-- Jenkins application starts and provides you with instance ID for licensing
-- Admin password will be displayed on start\-up or alternativley \/var\/jenkins\_home\/secrets/initailAdminPasssword
-
-
-## playbooks/install\_playwithdocker.yml
-
-This playbook will install and configure Play With Docker container defined in the inventory.
-
-- Play with docker or PWD will provide a developer with a crash and burn environment to run up to 5 instances in docker swarm mode for a duration of 24hrs which will assist with knowledge take on and temp tested bed.
-
-#ADD tasks here#
-
-## playbooks/config\_dummy\_vms\_for\_docker\_volumes\_backup.yml
-
-This playbook will make sure that we are able to backup Docker volumes that have been created using the vSphere plugin in Simplivity. There is not a straight forward way to do this, so we need to use a workaround. Since all Docker volumes are going to be stored in the dockvols folder in the datastore(s), we need to create a 'dummy' VM per datastore. The vmx, vmsd and vmkd files from this VMs will have to be inside the dockvols folder, so when these VMs are backed up, the volumes are backed up as well. Obviously these VMs don't need to take any resources and we can keep them powered off. Remember to create the dockvols folder under your specific datastores.
-
-It is composed of the following sequential tasks:
-
-- Create Dummy VMs: Creates a 'dummy' VM per datastore using extremely low specifications. The name of the VMs will be prefixed with the variable dummy\_vm\_prefix and suffixed with the datastore name where it lives.
-- Generate powercli script: Generates a powerCLI script using a template that will take in account all defined datastores and that will be copied to the main UCP node in the location defined by the powercli\_script variable. The template file is called powercli\_script.j2 and is located in the templates folder. The script will perform the following tasks:
-  - For each 'dummy' VM, the files \*.vmx, \*.vmsd and \*.vmdk will be copied over to the dockvols folder in its current datastore
-  - Using the \*.vmx files, we'll registed new 'dummy' VMs that now live inside the dockvols folder. The name of these VMs will be composed of the dummy\_vm\_prefix, the string "-in-dockvols-" and the datastore name as the suffix.
-  - The old dummy VMs will be removed
-- Run powercli script on temporary docker container: Runs the generated script on a powerCLI container to perform the tasks described above. The container provides a powerCLI core environment and is provided by VMWare. More information about powerCLI core can be found here: [https://labs.vmware.com/flings/powercli-core](https://labs.vmware.com/flings/powercli-core). A good article on how to use the container can be found here: [http://www.virtuallyghetto.com/2016/10/5-different-ways-to-run-powercli-script-using-powercli-core-docker-container.html](http://www.virtuallyghetto.com/2016/10/5-different-ways-to-run-powercli-script-using-powercli-core-docker-container.html)
-- Delete powercli script from docker host: Deletes the generated script from the UCP host since it contains sensitive information, like the vCenter credentials, in plain text.
-
-## playbooks/config\_simplivity\_backups.yml
-
-This playbook will configure the defined backup policies in the group variables file in Simplivity and will include all Docker nodes plus the 'dummy' VMs created before, so the existing Docker volumes are also taken in account. The playbook will mainly use the Simplivite REST API to perform these tasks. A reference to the REST API can be found here: [https://api.simplivity.com/rest-api\_getting-started\_overview/rest-api\_getting-started\_overview\_rest-api-overview.html](https://api.simplivity.com/rest-api_getting-started_overview/rest-api_getting-started_overview_rest-api-overview.html)
-
-It is composed of the following sequential tasks:
-
-- Get Simplivity token: Makes a REST call against the Simplivity API to authenticate and retrieve a token that will be used in the following tasks. More information about authenticating against the Simplivity API can be found here: [https://api.simplivity.com/rest-api\_getting-started\_getting-started/rest-api\_getting-started\_getting-started\_request-oauth-2-token.html](https://api.simplivity.com/rest-api_getting-started_getting-started/rest-api_getting-started_getting-started_request-oauth-2-token.html)
-- Retrieve current backup policies: Makes a REST call against the Simplivity API to retrieve all the current backup policies. The result will be stored in a variable current\_policies.
-- Extract existing policies names: Uses the Ansible directive set\_fact to create a variable current\_policies\_names that will store a list of the names of all the currently available backup policies, based on the result of a JSON query against the variable current\_policies, registered above. This task provides a subset of the output from the previous task, which will return not just the policies names, but all the related information to each policy.
-- Extract policies names to be added: Uses the Ansible directive set\_fact to create a variable backup\_policies\_names that will store a list of the names of the backup policies defined by the user, based on the result of a JSON query against the variable backup\_policies, defined in the group variables.
-- Set list of nonexistent policies to be added: Uses the Ansible directive set\_fact to create a variable new\_policies\_names that will store a list of the names of the backup policies to be created, based on the result of the difference between the existing policies and the newly defined ones.
-- Create backup policies: Makes a REST call against the Simplivity API to create the backup policies listed in the new\_policies\_names variable.
-- Get policy IDs: Makes a REST call against the Simplivity API to retrieve all the current backup policies. The result will be stored in a variable policy\_ids.
-- Create backup rules: Makes a REST call against the Simplivity API to create the defined backup rules in the global variable backup\_policies. In order to avoid duplicated rules, the task will only run when the new\_policies\_names is not empty, meaning that the backup policies defined by the user had not been created yet before running this playbook.
-- Get VMs information: Makes a REST call against the Simplivity API to retrieve all the VMs information.
-- Assign backup policies to VMs: Makes a REST call against the Simplivity API to assign the previously created VMs to a backup policy in Simplivity. Each node or node group in the inventory has a node\_policy variable that will define which policy they should be on.
-- Set dummy VM names in one string: Uses the Ansible directive set\_fact to create a variable dummy\_vms\_string that will store a string with the the names of the dummy VMs, separated by commas
-- Convert to list: Uses the Ansible directive set\_fact to create a list dummy\_vms that will be a list based on the string dummy\_vms\_string from the previous task
-- Assign backup policies to Docker volumes: Makes a REST call against the Simplivity API to assign the previously created dummy VMs to a backup policy in Simplivity. This will make sure that all the Docker volumes will be also backed up on a regular basis
 
 # Accessing the UCP UI
 Once the playbooks have run and completed successfully, the Docker UCP UI should be available by browsing to the UCP load balancer or any of the nodes via HTTPS. The authentication screen will appear. Enter your credentials and the dashboard will be displayed. You should see all the nodes information in your Docker environment by clicking on Nodes. By looking into the services you should see the monitoring services that were installed during the playbooks execution:
