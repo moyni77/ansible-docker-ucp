@@ -708,225 +708,73 @@ The playbooks are intended to be used to deploy a new environment. You should on
 
 
 
+# Overview of the playbooks
 
 
 
-## Scaling out your environment
+## Create virtual machines
 
-The playbooks are idempotent, which means that they can be run over and over but only the changes that are found from the previous run will be applied. In a second or subsequent run you might see some errors in the output but these are normal and can be safely ignored.
+The playbook [playbooks/create\_vms.yml][create_vms] will create all the necessary Virtual Machines for the environment from the VM Template defined in the vm_template variable.
 
-The reasoning behind providing idempotency is that you would be able to scale out your system if you wished to do so. If you had deployed an environment with 3 workers, 3 DTRs and 3 UCPs and you wanted to have 5 of each, you would just need to amend your inventory (vm\_hosts file) and run the above command again.
+## Configure network settings
+The playbook [config\_networking.yml][config_networking] will configure the network settings in all the Virtual Machines. 
 
-# Deep dive into the playbooks
+## Distribute public keys
+The playbook [distribute\_keys.yml][distribute_keys] distributes public keys between all nodes, to allow each node to password-less login to every other node. As this is not essential and can be regarded as a security risk (a worker node probably should not be able to log in to a UCP node, for instance), this playbook is commented out in site.yml by default and must be explicitly uncommented to enable this functionality.
 
-This section will go more in detail about how the playbooks work and what functionalities are being provided.
+## Register the VMs with Red Hat
+The playbook [config\_subscription.yml][config_subscription] registers and subscribes all virtual machines to the Red Hat Customer Portal. This is only needed if you pull packages from Red Hat. This playbook is commented out by default but you should uncomment it to make sure each VM registers with the Red Hat portal. It is commented out so that you can test the deployment first without having to unregister all the VMs from the Red Hat Customer Portal between each test. If you are using an internal repository, as described in the paragraph "Create a VM template", you can keep this playbook commented out.
 
-## site.yml
+## Install HAProxy
+The playbook [install\_haproxy.yml][install_haproxy] installs and configures the HAProxy package in the load balancer nodes. HAProxy is the chosen tool to implement load balancing between UCP nodes, DTR nodes and worker nodes.
 
-The site.yml playbook is the main playbook and will contain a list of playbooks to be run sequentially. The list of playbooks is described in the following sections in running order:
+## Install NTP
+The playbook [install\_ntp.yml][install_ntp] configures the chrony package in all Virtual Machines in order to have a synchronized clock across the environment. It will use the server or servers specified in the ntp_servers variable in the group variables file.
 
-## playbooks/create\_vms.yml
+## Install Docker Enterprise Edition
+The playbook [install\_docker.yml][install_docker] installs Docker along with all its dependencies.
 
-This playbook will create all the necessary Virtual Machines for the environment from the VM Template defined in the vm\_template variable.
 
-It is composed of the following sequential tasks:
+## Install rsyslog
+The playbook [install_rsyslog.yml][install_rsyslog] installs and configures rsyslog in the logger node and in all Docker nodes. The logger node will be configured to receive all syslogs on port 514 and the Docker nodes will be configured to send all logs (including container logs) to the logger node.
 
-- Create all VMs: Creates all the required VMs from the specified templates in the specified folder. Each VM will be hosted by the specified esxi\_host defined in the inventory, unless if VMWare DRS technology is used, in which case the setting will be ignored and DRS will decide how to spread the load. The Virtual Machines will be powered on upon creation.
-- Add secondary disks: Adds a second disk on the VMs having the disk2\_size variable defined (usually the Docker nodes and the NFS server, but not the load balancers or the logger node). The datastore will be chosen at random from the list provided in the group variables.
-- Wait for VMs to boot up: Waits for 3 minutes for the VMs to be completely booted up.
 
-The first two tasks make use of the vmware\_guest Ansible module. More information about the module can be found here: [http://docs.ansible.com/ansible/latest/vmware\_guest\_module.html](http://docs.ansible.com/ansible/latest/vmware_guest_module.html)
+## Configure Docker LVs
+The playbook [config_docker_lvs.yml][config_docker_lvs] performs a set of operations on the Docker nodes in order to create a partition on the second disk and carry out the LVM configuration, required for a sound Docker installation.
 
-## playbooks/config\_networking.yml
 
-This playbook will configure the network settings in all Virtual Machines.
+## Docker post-install configuration
+The playbook [docker_post_config.yml][docker_post_config] performs a variety of tasks to complete the installation of the Docker environment.
 
-It is composed of the following sequential tasks:
 
-- Change hostname: Updates the /etc/hostname file with the hostname and domain name provided in the group variables.
-- Update hostname: Makes the new hostname current by using the hostnamectl tool
-- Add new connection: Adds a new network connection using the nmcli tool along with the network information provided in the group variables and inventory (IP address, gateway, interface name, etc.)
-- Bring connection up: Brings up the newly created connection.
-- Enable connection autoconnect: Makes sure the connection is brought up after a reboot.
-- Update /etc/hosts: Updates the /etc/hosts file using a template. The template file is called j2 and is located in the templates folder. The template will loop over all the nodes defined in the inventory to have a complete and up-to-date hosts file. More information about Ansible templates can be found here: [http://docs.ansible.com/ansible/latest/playbooks\_templating.html](http://docs.ansible.com/ansible/latest/playbooks_templating.html)
-- Update DNS settings: Updates the /etc/resolv.conf file using a template. The template file is called conf.j2 and is located in the templates folder. The template will loop over all the DNS hosts defined in the group variables to have a complete conf file. More information about Ansible templates can be found here: [http://docs.ansible.com/ansible/latest/playbooks\_templating.html](http://docs.ansible.com/ansible/latest/playbooks_templating.html)
 
-Since at the beginning of the playbook the Virtual Machines don't have yet network connectivity, in most tasks we will make use of the vmware\_vm\_shell Ansible module, that allows us to run shell commands directly on the Virtual Machines. More information about this module can be found here: [http://docs.ansible.com/ansible/latest/vmware\_vm\_shell\_module.html](http://docs.ansible.com/ansible/latest/vmware_vm_shell_module.html)
+## Install NFS server 
+The playbook [install_nfs_server.yml][install_nfs_server] installs and configures an NFS server on the NFS node.
 
-## playbooks/distribute\_keys.yml
 
-This playbook is optional and will distribute all nodes' public keys around so all nodes can password-less login to one another. Since this could be seen as a security risk (there is technically no need for a worker node user to log into an UCP node, for instance), it is disabled by default but can be uncommented for the site.yml file if required.
 
-It is composed of the following sequential tasks:
+## Install NFS clients
+The playbook [install_nfs_clients.yml][install_nfs_clients] installs the required packages on the DTR nodes to be able to mount an NFS share.
 
-- Register key: Stores the default SSH private key (/root/.ssh/id\_rsa)
-- Create keypairs: Creates SSH key pairs in the nodes where these didn't yet exist, using the ssh-keygen tool.
-- Fetch all public ssh keys: Registers all public keys from all nodes.
-- Deploy keys on all servers: Pushes all keys to all nodes using a nested loop.
 
-## playbooks/install\_haproxy.yml
+## Install and configure Docker UCP nodes
+The playbook [install_ucp_nodes.yml][install_ucp_nodes] installs and configures the Docker UCP nodes defined in the inventory.
 
-This playbook will install and configure the haproxy package in the load balancer nodes. haproxy is the chosen tool to implement load balancing between UCP nodes, DTR nodes and worker nodes.
 
-It is composed of the following sequential tasks:
 
-- Open http and https ports: Makes use of the firewalld command to open the required ports tcp/80 and tcp/443
-- Reload firewalld configuration: Reloads the firewall to apply the new rules
-- Install haproxy: Installs the latest version of haproxy using the Ansible yum module.
-- Update haproxy.cfg on Worker Load Balancer: Updates the /etc/haproxy/haproxy.cfg file using a template on the Worker load balancer. The template file is called worker.j2 and is located in the templates folder. The template will loop over all the Worker nodes defined in the inventory to have a complete list of hosts in the backend. More information about Ansible templates can be found here: [http://docs.ansible.com/ansible/latest/playbooks\_templating.html](http://docs.ansible.com/ansible/latest/playbooks_templating.html). This task will notify the handler defined below in order to restart the haproxy service if a change in the file has occurred.
-- Update haproxy.cfg on UCP Load Balancer: Updates the /etc/haproxy/haproxy.cfg file using a template on the Worker load balancer. The template file is called ucp.j2 and is located in the templates folder. The template will loop over all the UCP nodes defined in the inventory to have a complete list of hosts in the backend. More information about Ansible templates can be found here: [http://docs.ansible.com/ansible/latest/playbooks\_templating.html](http://docs.ansible.com/ansible/latest/playbooks_templating.html). This task will notify the handler defined below in order to restart the haproxy service if a change in the file has occurred.
-- Update haproxy.cfg on DTR Load Balancer: Updates the /etc/haproxy/haproxy.cfg file using a template on the Worker load balancer. The template file is called dtr.j2 and is located in the templates folder. The template will loop over all the DTR nodes defined in the inventory to have a complete list of hosts in the backend. More information about Ansible templates can be found here: [http://docs.ansible.com/ansible/latest/playbooks\_templating.html](http://docs.ansible.com/ansible/latest/playbooks_templating.html). This task will notify the handler defined below in order to restart the haproxy service if a change in the file has occurred.
+## Install and configure DTR nodes
+The playbook [install_dtr_nodes.yml][install_dtr_nodes] installs and configures the Docker DTR nodes defined in the inventory. Note that serialization is set to 1 in this playbook as two concurrent installations of DTR may in some cases be assigned the same replica ID.
 
-This playbook also contains a handler, which is a task that will be run when notified by one or more of the specified tasks above. The goal of having a handler is typically to restart a service only when a configuration file has been changed.
+## Install worker nodes
+The playbook [install_worker_nodes.yml][install_worker_nodes] installs and configures the Docker Worker nodes defined in the inventory.
 
-- Enable and restart haproxy service: Makes sure that the service is enabled and restarted.
 
-## playbooks/install\_ntp.yml
 
-This playbook will install and configure the ntp package in all Virtual Machines in order to have a synchronized clock all across the environment. It will use the server or servers specified in the ntp\_servers variable in the group variables file.
 
-It is composed of the following sequential tasks:
 
-- Install ntp: Updates the /etc/haproxy/haproxy.cfg file using a template on the Worker load
-- Update ntp.conf: Updates the /etc/ntp.conf file using a template. The template file is called conf.j2 and is located in the templates folder. The template will loop over all the provided NTP servers defined in the ntp\_servers variable. More information about Ansible templates can be found here: [http://docs.ansible.com/ansible/latest/playbooks\_templating.html](http://docs.ansible.com/ansible/latest/playbooks_templating.html). This task will notify the handler defined below in order to restart the ntp service if a change in the file has occurred.
 
-This playbook also contains a handler, which is a task that will be run when notified by one or more of the specified tasks above. The goal of having a handler is typically to restart a service only when a configuration file has been changed.
 
-- Enable and restart ntp service: Makes sure that the service is enabled and restarted.
 
-## playbooks/install\_docker.yml
-
-This playbook will install Docker along with all its dependencies.
-
-It is composed of the following sequential tasks:
-
-- Install dependencies: Uses yum to install all the packages that are required by Docker.
-- Set Docker url: Updates the /etc/yum/vars/dockerurl file with the contents of the docker\_ee\_url variable.
-- Set Docker version: Updates the /etc/yum/vars/dockerosversion file with the contents of the rhel\_version variable.
-- Add Docker repository: Runs yum-config-manager in order to add the yum repository specified in the docker\_ee\_url variable.
-- Install Docker: Uses yum to install the latest version of Docker Enterprise Edition.
-
-## playbooks/install\_rsyslog.yml
-
-This playbook will install and configure rsyslog in the logger node and in all Docker nodes. The logger node will be configured to receive all syslogs on port 514 and the Docker nodes will be configured to send all logs (including container logs) to the logger node.
-
-It is composed of the following sequential tasks:
-
-- Open required ports for rsyslog: Makes use of the firewalld command to open the required ports tcp/514 and ucp/514 on the logger node
-- Reload firewalld configuration: Reloads the firewall on the logger node to apply the new rules
-- Install rsyslog: Install the latest version of rsyslog on all docker and logger nodes
-- Configure logger server: Updates the /etc/rsyslog.conf configuration file on the logger node with an updated file that allows to receive logs on port 514 using both UCP and TCP protocols. To achieve this, an amended conf file, stored under the files folder, is copied over to the logger server. This task will notify the handler defined below in order to restart the rsyslog service if a change in the file has occurred.
-- Allow docker nodes to send logs: Updates the /etc/rsyslog.conf file using a template to allow sending logs to the logger node. The template file is called conf.j2 and is located in the templates folder. More information about Ansible templates can be found here: [http://docs.ansible.com/ansible/latest/playbooks\_templating.html](http://docs.ansible.com/ansible/latest/playbooks_templating.html). This task will notify the handler defined below in order to restart the rsyslog service if a change in the file has occurred.
-
-This playbook also contains a handler, which is a task that will be run when notified by one or more of the specified tasks above. The goal of having a handler is typically to restart a service only when a configuration file has been changed.
-
-- Restart Rsyslog: Makes sure that the rsyslog service is enabled and restarted.
-
-## playbooks/config\_docker\_lvs.yml
-
-This playbook will perform a set of operations on the Docker nodes in order to create a partition on the second disk and carry out the LVM configuration, required for a sound Docker installation.
-
-It is composed of the following sequential tasks:
-
-- Create partition on second disk: Uses the Ansible parted module to create a LVM partition on the second disk. The partition will have a GPT label and will use the 100% of the drive. The directive ignore\_errors present in this task (and in some of the following ones) exists in order to allow for the playbook to be run more than once, for instance if we're running yml again to scale out our environment. Since the partition will be already created in this case scenario, the task will fail but will be safely ignored. Unfortunately, Ansible does not provide, as of today, with a more elegant method to allow for this module to be idempotent when using GPT labels.
-- Create Docker VG: Creates a Volume Group called docker in the newly created partition.
-- Create thinpool LV: Creates a Logical Volume called thinpool in the docker Volume Group.
-- Create thinpoolmeta LV: Creates a Logical Volume called thinpoolmeta in the docker Volume Group.
-- Convert LVs to thinpool and storage for metadata: Uses the lvconvert command to convert the Logical Volumes to a thin pool and storage location for metadata for the thin pool
-- Config thinpool profile: Creates the /etc/lvm/profile/docker-thinpool.profile configuration file. To achieve this, an preconfigured docker-thinpool.profile file, stored under the files folder, is copied over to the Docker nodes
-- Apply the LVM profile: Uses the command lvchange to apply the changes of the profile file that was just copied
-- Enable monitoring for LVs: Uses the command lvs to enable monitoring on the Logical Volumes
-- Create /etc/docker directory: Creates an /etc/docker folder, that will be used to push the json file in the next task
-- Config Docker daemon: Creates the /etc/docker/daemon.json file, containing the configuration required to use the devicemapper driver. The file also contains some configuration options for the rsyslog logging, allowing the container logs to be centralized. The template file is called json.j2 and is located in the templates folder. More information about Ansible templates can be found here: [http://docs.ansible.com/ansible/latest/playbooks\_templating.html](http://docs.ansible.com/ansible/latest/playbooks_templating.html)
-- Enable and restart docker service: Makes sure that the docker service is enabled and restarted
-
-## playbooks/docker\_post\_config.yml
-
-This playbook will run a variety of tasks to complete the installation of the Docker environment.
-
-It is composed of the following sequential tasks:
-
-- Create Docker service directory: Creates a folder /etc/systemd/system/docker.service.d on all Docker nodes
-- Add proxy details: Updates the /etc/systemd/system/docker.service.d/http-proxy.conf file using a template to configure the proxy settings when these have been defined in the env variable. The template file is called http-proxy.conf.j2 and is located in the templates folder. More information about Ansible templates can be found here: [http://docs.ansible.com/ansible/latest/playbooks\_templating.html](http://docs.ansible.com/ansible/latest/playbooks_templating.html). This task will notify the handler defined below in order to restart the docker service if a change in the file has occurred.
-- Add insecure registry: Modifies the file /usr/lib/systemd/system/docker.service on all Docker nodes, modifying the line containing the directive ExecStart to allow using an insecure DTR.
-
-At this point we have a meta task which goal is to run the handlers if required so the changes above are taken in account. More information about meta tasks can be found here: [http://docs.ansible.com/ansible/latest/meta\_module.html](http://docs.ansible.com/ansible/latest/meta_module.html)
-
-- Check if vsphere plugin is installed: Queries the list of Docker plugins to find out if the vSphere plugin has already been installed. The task will record the output, which will be used as a conditional for the next step
-- Install vsphere plugin: Installs the vSphere plugin if it's not already installed
-
-This playbook also contains a handler, which is a task that will be run when notified by one or more of the specified tasks above. The goal of having a handler is typically to restart a service only when a configuration file has been changed.
-
-- Restart Docker: Makes sure that the docker service is restarted.
-
-## playbooks/install\_nfs\_server.yml
-
-This playbook will install and configure an NFS server on the NFS node.
-
-It is composed of the following sequential tasks:
-
-- Open required ports: Makes use of the firewalld command to open the required ports for the NFS server
-- Reload firewalld configuration: Reloads the firewall on the logger node to apply the new rules
-- Create partition on second disk: Uses the Ansible parted module to create a partition on the second disk. Please note that since the GPT label is not used here, the module is by default idempotent and the tasks can be run multiple times, regardless of whether the partition exists or not, without failing. Hence we don't need the directive ignore\_errors in this occasion.
-- Create filesystem: Creates an xfs filesystem in the partition created above.
-- Create images folder: Creates a directory in the filesystem above. The directory will be named after the variable images\_folder and will host the images stored in the DTR nodes
-- Mount filesystem: Uses the Ansible mount module to mount the directory created above
-- Install NFS server: Uses the Ansible yum module to install the latest versions of the packages nfs-utils and rpcbind.
-- Enable and start NFS services on server: Makes sure that the following services are enabled and started: rpcbind, nfs-server, nfs-lock, nfs-idmap.
-- Modify exports file on NFS server: Updates the /etc/exports file using a template with all the mount points to be exported by the NFS service. The template file is called j2 and is located in the templates folder. More information about Ansible templates can be found here: [http://docs.ansible.com/ansible/latest/playbooks\_templating.html](http://docs.ansible.com/ansible/latest/playbooks_templating.html).
-- Refresh exportfs: Runs the exportfs command to make the shared folder available
-
-## playbooks/install\_nfs\_clients.yml
-
-This playbook will install the required packages on the DTR nodes to be able to mount an NFS share.
-
-It is composed of one single task:
-
-- Install NFS client: Uses the Ansible yum module to install the latest version of the package nfs-utils.
-
-## playbooks/install\_ucp\_nodes.yml
-
-This playbook will install and configure the Docker UCP nodes defined in the inventory.
-
-It is composed of the following sequential tasks:
-
-- Open required ports for UCP: Makes use of the firewalld command to open the required ports for UCP
-- Reload firewalld configuration: Reloads the firewall on the logger node to apply the new rules
-- Check if node already belongs to the swarm: Uses the docker info command to verify if the node is already part of the swarm and records the output to be used in later tasks. This is to prevent trying to install UCP on nodes that are already part of the swarm
-- Copy the license: Uses the Ansible copy module to push the license file into the first UCP node, prior to starting the installation
-- Install swarm leader and first UCP node: Installs UCP in the first node. The command will specify the UCP version to install, the host IP address, the user and password for the administrator, the license and all the san information. More details on installing UCP can be found here: [https://docs.docker.com/datacenter/ucp/2.1/guides/admin/install/](https://docs.docker.com/datacenter/ucp/2.1/guides/admin/install/)
-- Get swarm manager token: Generates and registers the command to add a manager node to the swarm
-- Get swarm worker token: Generates and registers the command to add a worker node to the swarm
-- Save worker token: Creates (or rewrites) a file /tmp/worker\_token and copies the worker token generated earlier into the file. This file will be used later to add the worker and DTR nodes to the swarm
-- Add additional UCP nodes to the swarm: Makes use of registered manager token two tasks above to join the rest of the UCP nodes to the swarm
-
-## playbooks/install\_dtr\_nodes.yml
-
-This playbook will install and configure the Docker DTR nodes defined in the inventory.
-
-It is composed of the following sequential tasks:
-
-- Open required ports for DTR: Makes use of the firewalld command to open the required ports for the DTR
-- Reload firewalld configuration: Reloads the firewall on the logger node to apply the new rules
-- Get worker token: Retrieves the file created in the previous playbook (/tmp/worker\_token) and registers the contents in a variable
-- Check if node already belongs to the swarm: Uses the docker info command to verify if the node is already part of the swarm and records the output to be used in later tasks. This is to prevent trying to install DTR on nodes that are already part of the swarm
-- Add DTR nodes to the swarm: Uses the previously registered command to join the swarm
-- Install first DTR node: Installs DTR in the first node. The command will specify the DTR version to install, the NFS images folder location, the fully qualified hostname of the DTR node, the address of the DTR load balancer, the URL of the main UCP node and the username and password to access UCP. More details on installing the DTR can be found here: [https://docs.docker.com/datacenter/dtr/2.2/guides/admin/install/](https://docs.docker.com/datacenter/dtr/2.2/guides/admin/install/)
-- Get replica ID: Uses the docker ps command to extract and register the replica ID. This is used to add additional DTR nodes to the first one
-- Add DTR nodes: Adds additional nodes to the DTR cluster. The command will specify the DTR version to install, the fully qualified hostname of the DTR node, the URL of the main UCP node, the username and password to access UCP and the replica ID captured in the previous step.
-- Enable image scanning: *Note: this step is now disabled since from DTR 2.2.0 the API has changed and the image scanning is enabled by default*. Makes use of the DTR REST API to enable the Image Scanning feature. This feature is only available when using a Docker EE Advanced license. More information about the Image Scanning feature can be found here: [https://docs.docker.com/datacenter/dtr/2.2/guides/user/manage-images/scan-images-for-vulnerabilities/#change-the-scanning-mode](https://docs.docker.com/datacenter/dtr/2.2/guides/user/manage-images/scan-images-for-vulnerabilities/#change-the-scanning-mode). A reference for the REST API can be found here: [https://docs.docker.com/datacenter/dtr/2.2/reference/api/](https://docs.docker.com/datacenter/dtr/2.2/reference/api/). Please note that the REST API is still under development and some of the described methods might not reflect the reality of the current available API.
-
-## playbooks/install\_worker\_nodes.yml
-
-This playbook will install and configure the Docker Worker nodes defined in the inventory.
-
-It is composed of the following sequential tasks:
-
-- Open required ports for Workers: Makes use of the firewalld command to open the required ports for the Worker nodes
-- Reload firewalld configuration: Reloads the firewall on the logger node to apply the new rules
-- Get worker token: Retrieves the file created in the previous playbook (/tmp/worker\_token) and registers the contents in a variable
-- Check if node already belongs to the swarm: Uses the docker info command to verify if the node is already part of the swarm and records the output to be used in later tasks. This is to prevent trying to install Workers on nodes that are already part of the swarm
-- Add Worker nodes to the swarm: Uses the previously registered command to join the swarm
 
 ## playbooks/install\_elk.yml
 
