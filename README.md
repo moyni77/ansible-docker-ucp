@@ -816,23 +816,23 @@ Click on `Services` to see the services that were installed during the playbooks
 # Accessing the DTR UI
 The Docker DTR UI should be available by browsing to the DTR load balancer or any of the nodes via HTTPS. The authentication screen will appear as shown in Figure 26:
 
-![DTR authentication screen][dtrauth]
+![DTR authentication screen][dtrauth]  
 **Figure 26.** DTR authentication screen
 
 
 Enter your UCP credentials and you should see the empty list of repositories as shown in Figure 27:
 
-![DTR repositories][dtrrepos]
+![DTR repositories][dtrrepos]  
 **Figure 27.** DTR repositories
 
 If you navigate to `Settings > Security`, you should see the Image Scanning feature already enabled as shown in Figure 28. (Note that you need an Advanced license to have access to this feature).
 
-![Image scanning in DTR][imagescanning]
+![Image scanning in DTR][imagescanning]  
 **Figure 28.** Image scanning in DTR
 
 If you navigate to Settings > Storage, you should see that DTR is configured to use shared NFS storage as shown in Figure 29.
 
-![DTR storage settings][DTRstorage]
+![DTR storage settings][DTRstorage]  
 **Figure 29.** DTR storage settings
 
 
