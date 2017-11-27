@@ -1199,7 +1199,13 @@ After you login as the admin user, you can either enter a valid license key or r
 **Figure 33.** License options
 
 
+To obtain a license, you need to open a support ticket with CloudBees, specifying your instance ID which is displayed when you click either option in the dialog. For more information on license generation, see the documentation available at https://support.cloudbees.com/hc/en-us/articles/218233918-Jenkins-Enterprise-License-Activation.
 
+Once you enter a valid (or trial) license key, you can proceed to customize Jenkins. It is recommended that you install the suggested plugins, as shown in Figure 34, unless you have a specific requirement for a particular plugin or plugins to be installed.
+
+
+![Customize Jenkins][licenseoptions]
+**Figure 34.** Customize Jenkins
 
 
 [dev-architecture]: </dev/images/architecture.png> "Figure 1. Solution Architecture"
@@ -1239,8 +1245,7 @@ After you login as the admin user, you can either enter a valid license key or r
 
 
 [licenseoptions]: </dev/images/licenseoptions.jpg> "Figure 33. License options"
-
-
+[customizejenkins]: </dev/images/customizejenkins.png> "Figure 34. Customize Jenkins"
 
 
 [dockerupdate]: </dev/images/dockerupdate.png> "Figure 41. Docker update notification"
