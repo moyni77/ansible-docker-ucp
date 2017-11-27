@@ -1273,7 +1273,7 @@ Documentation for administering CloudBees Jenkins Enterprise docs is available a
 [customizejenkins]: </dev/images/customizejenkins.png> "Figure 34. Customize Jenkins"
 [installingplugins]: </dev/images/installingplugins.png> "Figure 35. Installing plugins"
 [createadminuser]: </dev/images/createadminuser.png> "Figure 36. Create Admin user"
-[welcometojenkins]: </dev/images/welcometojenkins.png> "Figure 37. Welcome to Jenkins"
+[welcometojenkins]: </dev/images/welcometojenkins.jpg> "Figure 37. Welcome to Jenkins"
 
 
 
