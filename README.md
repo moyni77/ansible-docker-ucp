@@ -863,6 +863,30 @@ More information about this subject can be found here: : https://docs.docker.com
 
 
 
+# CloudBees Team Edition Solution
+ 
+## Instance Administration for CloudBees Jenkins Solutions
+
+The CloudBees Jenkins Enterprise offering provides Managed Masters "as-a-service" on most public and private cloud providers, to help organizations scale continuous integration and continuous delivery (CI / CD). The CloudBees Jenkins Team product, on the other hand, provides a single-instance option that allows small, independent teams to implement continuous integration and delivery.
+CloudBees Jenkins Enterprise works best for large-scale installations while CloudBees Jenkins Team is designed for smaller-scale installations. Both products include verified integrations and worry-free upgrades that are enabled by and monitored through Beekeeper Upgrade Assistant, and available through the CloudBees Assurance Program. You can see what plugins are available using the Beekeeper Upgrade Assistant, along with which ones have been updated and which ones you have already installed.
+CloudBees Jenkins Team provides a stable Jenkins distribution, verified (or curated) plugins, and expert assistance. It can run as a stand-alone Java process installed manually for your operating system, or as a pre-configured Docker image, or within cloud-based infrastructure from Amazon (Amazon Web Service) or Microsoft (Azure). You can easily down-size from the Enterprise offering to the Team offering by removing the license.xml file in your JENKINS_HOME, disabling any unlicensed plugins, and restarting Jenkins.
+This section is aimed at instance administrators who want to continuously build, test, and deliver applications using either Managed Masters or CloudBees Jenkins Team instance.
+
+
+## Building, testing, and deploying applications
+
+A continuous delivery pipeline is an automated expression of your process for getting software from version control right through to your end users. Every change to your software (committed in source control) goes through a complex process on its way to being released. This process involves building the software in a reliable and repeatable manner, as well as the progression of the build through multiple stages of testing and deployment. Jenkins Pipeline is a suite of plugins that support implementing and integrating continuous delivery pipelines into Jenkins.
+“Infrastructure as Code” is the process by which configuration and provisioning code is managed in the same way as source code. Typically, the definition of a Jenkins Pipeline is written into a text file (called a Jenkinsfile) which in turn is checked into a project’s source control repository. As a result, the continuous delivery pipeline is treated as a part of the application, to be versioned and reviewed like any other code. 
+Jenkins Pipeline provides an extensible set of tools for modeling simple-to-complex delivery pipelines, using a domain specific language (DSL) syntax based on Groovy. The Pipeline code can be entered directly using the Jenkins UI, but for more complex processes, it is more likely that you will use a script that is loaded from your source control management (SCM) system.
+Accessing CloudBees Jenkins Team
+
+Details for configuring the CloudBees Jenkins Team Edition installation are available in Appendix B. Once the configuration is complete, you can access the UI by browsing to `http://worknode02:8080` as shown in Figure 29.
+
+
+
+
+
+
 
 # Contact
 Please get in touch via Github if you have any questions.
