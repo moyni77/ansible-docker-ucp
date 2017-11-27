@@ -928,13 +928,6 @@ Kibana is used for data visualization. Kibana queries Elasticsearch periodically
 
 
 
-# Contact
-Please get in touch via Github if you have any questions.
-
-# Demo
-A much briefer video with a quick demo can be found here: https://vimeo.com/229389079
-
-
 
 [dev-architecture]: </dev/images/architecture.png> "Figure 1. Solution Architecture"
 [solutionstack]: </dev/images/solutionstack.png> "Figure 2. Solution stack"
@@ -967,6 +960,8 @@ A much briefer video with a quick demo can be found here: https://vimeo.com/2293
 [imagescanning]: </dev/images/imagescanning.png> "Figure 27. Image scanning in DTR"
 [DTRstorage]: </dev/images/DTRstorage.png> "Figure 28. DTR storage settings"
 
+[jenkinsui]: </dev/images/jenkinsui.jpg> "Figure 29. Jenkins UI"
+[elkdataflow]: </dev/images/elkdataflow.png> "Figure 30. ELK data flow"
 
 
 
