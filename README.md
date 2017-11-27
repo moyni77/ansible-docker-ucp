@@ -1239,7 +1239,39 @@ Documentation for administering CloudBees Jenkins Enterprise docs is available a
 
 ## Kibana configuration 
 
-Kibana is used for data visualization. Kibana queries Elasticsearch periodically and helps a user create monitoring dashboard. The following figures show how to setup the index and discover data. Please note that the default port for Kibana, 5601, is mapped to port 80 on the ELK node. As a result, you can access the Kibana dashboards by accessing the VM for the ELK node on the standard port 80. 
+Kibana is used for data visualization. Kibana queries Elasticsearch periodically and helps a user create monitoring dashboard. The following figures show how to setup the index and discover data. Please note that the default port for Kibana, `5601`, is mapped to port `80` on the ELK node. As a result, you can access the Kibana dashboards by accessing the VM for the ELK node on the standard port `80`. 
+
+
+![Configure an index pattern in Kibana][configureindex]  
+**Figure 39.** Configure an index pattern in Kibana
+
+
+For more information on building dashboard, please see the relevant Kibana documentation at https://www.elastic.co/guide/en/kibana/current/dashboard-getting-started.html
+
+The following configuration files are available for the ELK stack:
+
+- `logstash.conf` specifies input plugins, filters and output plugins for the stack.
+- `elk-docker-compose.yml` defines ELK container services which will be started on ELK Node. 
+
+# Appendix D: Play with Docker Customization and Installation 
+
+The Play with Docker instance is deployed via the `install_playwithdocker.yml` Ansible playbook.  The version of PWD included with this solution has been customized to use a 24-hour session timeout value by default, as we believe this offers the most flexibility for enterprise customers interested in testing application code in a Docker environment.
+
+To modify the PWD session timeout value, change the following variable in the `group_vars/vars` file:
+```
+pwd_duration: '24h'
+```
+
+For example, to deploy a PWD session with a 12-hour timeout value, change this variable as follows:
+```
+pwd_duration: '12h'
+```
+
+To deploy a new PWD session using the modified session timer, re-run the `install_playwithdocker.yml` playbook.  Once the session is deployed, launch a web browser on the system where PWD is running and browse to `localhost` as shown in Figure 42:
+
+
+
+
 
 
 
@@ -1285,7 +1317,7 @@ Kibana is used for data visualization. Kibana queries Elasticsearch periodically
 [createadminuser]: </dev/images/createadminuser.png> "Figure 36. Create Admin user"
 [welcometojenkins]: </dev/images/welcometojenkins.jpg> "Figure 37. Welcome to Jenkins"
 [elkdeployment]: </dev/images/elkdeployment.png> "Figure 38. ELK Deployment"
-
+[configureindex]: </dev/images/configureindex.png> "Figure 39. Configure an index pattern in Kibana"
 
 [dockerupdate]: </dev/images/dockerupdate.png> "Figure 41. Docker update notification"
 [dependencymap]: </dev/images/dependencymap.png> "Figure 42. High-level dependency map"
