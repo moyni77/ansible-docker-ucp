@@ -793,10 +793,52 @@ The playbook [config_simplivity_backups.yml][config_simplivity_backups] configur
 
 
 # Accessing the UCP UI
-Once the playbooks have run and completed successfully, the Docker UCP UI should be available by browsing to the UCP load balancer or any of the nodes via HTTPS. The authentication screen will appear. Enter your credentials and the dashboard will be displayed. You should see all the nodes information in your Docker environment by clicking on Nodes. By looking into the services you should see the monitoring services that were installed during the playbooks execution:
+Once the playbooks have run and completed successfully, the Docker UCP UI should be available by browsing to the UCP load balancer or any of the nodes via HTTPS. The authentication screen will appear as shown in Figure 22:
+
+![UCP authentication screen][ucpauth]
+**Figure 22.** UCP authentication screen
+
+Enter your credentials and the dashboard will be displayed as shown in Figure 23:
+
+![UCP dashboard][ucpdash]
+**Figure 23.** UCP dashboard
+
+You should see all the nodes information in your Docker environment by clicking on `Nodes`, as shown in Figure 24:
+
+![Nodes information][nodesinfo]
+**Figure 24.** Nodes information
+
+Click on `Services` to see the services that were installed during the playbooks execution, as shown in Figure 25:
+
+![Services information][servicesinfo]
+**Figure 25.** Services information
 
 # Accessing the DTR UI
-The Docker DTR UI should be available by browsing to the DTR load balancer or any of the nodes via HTTPS. The authentication screen will appear. Enter your UCP credentials and you should see the empty list of repositories. If you navigate to `Settings > Security`, you should see the Image Scanning feature already enabled (note that you need an Advanced license to have access to this feature).
+The Docker DTR UI should be available by browsing to the DTR load balancer or any of the nodes via HTTPS. The authentication screen will appear as shown in Figure 26:
+
+![DTR authentication screen][dtrauth]
+**Figure 26.** DTR authentication screen
+
+
+Enter your UCP credentials and you should see the empty list of repositories as shown in Figure 27:
+
+![DTR repositories][dtrrepos]
+**Figure 27.** DTR repositories
+
+If you navigate to `Settings > Security`, you should see the Image Scanning feature already enabled as shown in Figure 28. (Note that you need an Advanced license to have access to this feature).
+
+![Image scanning in DTR][imagescanning]
+**Figure 28.** Image scanning in DTR
+
+If you navigate to Settings > Storage, you should see that DTR is configured to use shared NFS storage as shown in Figure 29.
+
+![DTR storage settings][DTRstorage]
+**Figure 29.** DTR storage settings
+
+
+
+
+
 
 # Security considerations
 In addition to having all logs centralized in an unique place and the image scanning feature enabled, there are another few guidelines that should be followed in order to keep your Docker environment as secure as possible.
