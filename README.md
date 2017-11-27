@@ -1204,18 +1204,21 @@ To obtain a license, you need to open a support ticket with CloudBees, specifyin
 Once you enter a valid (or trial) license key, you can proceed to customize Jenkins. It is recommended that you install the suggested plugins, as shown in Figure 34, unless you have a specific requirement for a particular plugin or plugins to be installed.
 
 
-![Customize Jenkins][customizejenkins]
+![Customize Jenkins][customizejenkins]  
 **Figure 34.** Customize Jenkins
 
 
 
 As the plugins are installed, they will change to a green color in the user interface, as shown in Figure 35. The text box on the right hand side of the screen provides details of the plugins and any dependencies that need to be installed. 
 
-![Installing plugins][installingplugins]
+![Installing plugins][installingplugins]  
 **Figure 35.** Installing plugins
 
 
 It is recommended that you create a new administration account, using the dialog shown in Figure 36.
+
+![Create Admin user][createadminuser]  
+**Figure 36.** Create Admin user
 
 
 When the installation and configuration of CloudBees Jenkins Team Edition is complete, the Welcome to Jenkins screen will appear, as show in Figure 37.
@@ -1266,6 +1269,7 @@ Documentation for administering CloudBees Jenkins Enterprise docs is available a
 [licenseoptions]: </dev/images/licenseoptions.jpg> "Figure 33. License options"
 [customizejenkins]: </dev/images/customizejenkins.png> "Figure 34. Customize Jenkins"
 [installingplugins]: </dev/images/installingplugins.png> "Figure 35. Installing plugins"
+[createadminuser]: </dev/images/createadminuser.png> "Figure 36. Create Admin user"
 
 
 
