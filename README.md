@@ -1106,10 +1106,10 @@ This solution is built using Red Hat Enterprise Linux (see Table 18) as the base
 
 Each release of Docker Enterprise Edition contains three technology components – UCP, DTR and the Docker Daemon or Engine. It is imperative that the components belonging to the same version are deployed or upgraded together – see Table 19. 
 
-A banner will be displayed on the UI, as shown in Figure 41, when an update is available for UCP or DTR. You can start the upgrade process by clicking on the banner.
+A banner will be displayed on the UI, as shown in Figure 32, when an update is available for UCP or DTR. You can start the upgrade process by clicking on the banner.
 
 ![Docker update notification][dockerupdate]
-**Figure 41.** Docker update notification
+**Figure 32.** Docker update notification
 
 
 **Table 19.** Docker EE components
@@ -1144,11 +1144,11 @@ A banner will be displayed on the UI, as shown in Figure 41, when an update is a
 
 ## High-Level dependency map
 
-Based on the lifecycle management details provided above, Figure 42 is a consolidated diagram that shows the dependencies between the various components in the solution stack. Bi-directional arrows between components indicate that the two components have an interoperability dependence. Before upgrading a component to a newer version, you must ensure that the new version of that component is compatible the current version of any dependent components.
+Based on the lifecycle management details provided above, Figure 32 is a consolidated diagram that shows the dependencies between the various components in the solution stack. Bi-directional arrows between components indicate that the two components have an interoperability dependence. Before upgrading a component to a newer version, you must ensure that the new version of that component is compatible the current version of any dependent components.
 
 ![High-level dependency map][dependencymap]
 
-**Figure 42.** High-level dependency map
+**Figure 32.** High-level dependency map
 
 
 
@@ -1245,6 +1245,12 @@ Kibana is used for data visualization. Kibana queries Elasticsearch periodically
 ![Configure an index pattern in Kibana][configureindex]  
 **Figure 39.** Configure an index pattern in Kibana
 
+![Logstash index, showing the mappings][logstash]  
+**Figure 40.** Logstash index, showing the mappings
+
+
+![Data discovery in Kibana][datadiscovery]  
+**Figure 41.** Data discovery in Kibana
 
 For more information on building dashboard, please see the relevant Kibana documentation at https://www.elastic.co/guide/en/kibana/current/dashboard-getting-started.html
 
@@ -1269,8 +1275,15 @@ pwd_duration: '12h'
 
 To deploy a new PWD session using the modified session timer, re-run the `install_playwithdocker.yml` playbook.  Once the session is deployed, launch a web browser on the system where PWD is running and browse to `localhost` as shown in Figure 42:
 
+![Play with Docker user interface][pwdui]  
+**Figure 42.** Play with Docker user interface
 
+Selecting the wrench icon opens a “Templates” box allowing users to choose between 3 Docker Swarm Manager nodes and 2 Worker nodes or 5 Manager nodes and no Workers, as shown in Figure 43:
 
+![Configure Play with Docker][configurepwd]  
+**Figure 43.** Configure Play with Docker
+
+For more information about using the Play with Docker service, visit the Play with Docker Classroom site: http://training.play-with-docker.com.  
 
 
 
@@ -1310,6 +1323,8 @@ To deploy a new PWD session using the modified session timer, re-run the `instal
 [elkdataflow]: </dev/images/elkdataflow.png> "Figure 30. ELK data flow"
 [devmonitoringarchitecture]: </dev/images/devmonitoringarchitecture.png> "Figure 31. Monitoring architecture"
 
+[dockerupdate]: </dev/images/dockerupdate.png> "Figure 31. Docker update notification"
+[dependencymap]: </dev/images/dependencymap.png> "Figure 32. High-level dependency map"
 
 [licenseoptions]: </dev/images/licenseoptions.jpg> "Figure 33. License options"
 [customizejenkins]: </dev/images/customizejenkins.png> "Figure 34. Customize Jenkins"
@@ -1318,9 +1333,14 @@ To deploy a new PWD session using the modified session timer, re-run the `instal
 [welcometojenkins]: </dev/images/welcometojenkins.jpg> "Figure 37. Welcome to Jenkins"
 [elkdeployment]: </dev/images/elkdeployment.png> "Figure 38. ELK Deployment"
 [configureindex]: </dev/images/configureindex.png> "Figure 39. Configure an index pattern in Kibana"
+[logstash]: </dev/images/logstash.png> "Figure 40. Logstash index, showing the mappings"
+[datadiscovery]: </dev/images/datadiscovery.png> "Figure 41. Data discovery in Kibana"
+[pwdui]: </dev/images/pwdui.png> "Figure 42. Play with Docker user interface"
+[configurepwd]: </dev/images/configurepwd.png> "Figure 43. Configure Play with Docker"
 
-[dockerupdate]: </dev/images/dockerupdate.png> "Figure 41. Docker update notification"
-[dependencymap]: </dev/images/dependencymap.png> "Figure 42. High-level dependency map"
+
+
+
 
 [create_vms]: </playbooks/create_vms.yml>
 [config_networking]: </playbooks/config_networking.yml>
