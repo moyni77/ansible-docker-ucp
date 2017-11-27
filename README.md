@@ -1180,6 +1180,24 @@ This is a recommended BOM for the 2 nodes Express Containers for Docker EE: Dev 
 
 
 
+# Appendix B: CloudBees Team Edition configuration 
+
+The playbook `install_cloudbees.yml` installs the CloudBees Team Edition software. To configure the setup, you need to browse to http://worknode02:8080 and login for the first time. The initial `admin` password is available from the container running CloudBees, in the file `/var/jenkins_home/secrets/initialAdminPassword`. To retrieve the password, determine the container ID using the `docker ps` command and then execute a bash command on that container to display the password.
+
+```
+# docker ps | grep cloudbees-jenkins-team
+CONTAINER ID    IMAGE …
+354d8d65242e    cloudbees/cloudbees-jenkins-team …
+# docker exec –it 354d8d65242e bash  
+/ # cat /var/Jenkins_home/secrets/initialAdminPassword
+<b>754ba6ca54904c43bc04ea5d0dc74298</b>
+```
+
+After you login as the admin user, you can either enter a valid license key or request a trial license, as shown in Figure 33.
+
+![License options][licenseoptions]
+**Figure 33.** License options
+
 
 
 
@@ -1218,6 +1236,12 @@ This is a recommended BOM for the 2 nodes Express Containers for Docker EE: Dev 
 [jenkinsui]: </dev/images/jenkinsui.jpg> "Figure 29. Jenkins UI"
 [elkdataflow]: </dev/images/elkdataflow.png> "Figure 30. ELK data flow"
 [devmonitoringarchitecture]: </dev/images/devmonitoringarchitecture.png> "Figure 31. Monitoring architecture"
+
+
+[licenseoptions]: </dev/images/licenseoptions.jpg> "Figure 33. License options"
+
+
+
 
 [dockerupdate]: </dev/images/dockerupdate.png> "Figure 41. Docker update notification"
 [dependencymap]: </dev/images/dependencymap.png> "Figure 42. High-level dependency map"
