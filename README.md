@@ -1234,6 +1234,8 @@ Documentation for administering CloudBees Jenkins Enterprise docs is available a
 
 # Appendix C: ELK Stack Deployment workflow
 
+![ELK Deployment][elkdeployment]  
+**Figure 38.** ELK Deployment
 
 ## Kibana configuration 
 
@@ -1282,7 +1284,7 @@ Kibana is used for data visualization. Kibana queries Elasticsearch periodically
 [installingplugins]: </dev/images/installingplugins.png> "Figure 35. Installing plugins"
 [createadminuser]: </dev/images/createadminuser.png> "Figure 36. Create Admin user"
 [welcometojenkins]: </dev/images/welcometojenkins.jpg> "Figure 37. Welcome to Jenkins"
-
+[elkdeployment]: </dev/images/elkdeployment.png> "Figure 38. ELK Deployment"
 
 
 [dockerupdate]: </dev/images/dockerupdate.png> "Figure 41. Docker update notification"
