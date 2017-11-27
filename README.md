@@ -923,6 +923,30 @@ Kibana is used for data visualization. Kibana queries Elasticsearch periodically
 
 
 
+# Deploying the Play with Docker service
+
+Play with Docker (PWD) is a free, cloud-based service that gives users the ability to experiment and interact with real live Docker instances for testing or educational purposes.  PWD provides the experience of having an Alpine Linux Virtual Machine, where you can build and run Docker containers and even create clusters with Docker features like Swarm Mode. The service allows users with no previous Docker experience or no access to local hardware the opportunity to work in a live Docker environment.  
+
+Under the hood, Docker-in-Docker (DinD) is used to give the effect of multiple VMs/PCs. In addition to the playground, PWD also includes a training site composed of a large set of Docker labs and quizzes from beginner to advanced level available at http://training.play-with-docker.com. 
+The public cloud-based version of PWD is available at http://play-with-docker.com.  The service allows users to create up to 5 Docker nodes per session.  Users have the option of deploying a 5-node Docker Swarm, a 3-node Swarm with 2 worker nodes, or 5 separate worker nodes. 
+
+While the cloud-based version of PWD is great for learning and experimentation, enterprise users interested in testing their proprietary application code in a Docker environment may be hesitant to upload their source code to an external cloud-based environment due to security concerns.  In addition, the cloud-based PWD service has a strict time limit, allowing users to work with their Docker instances for up to 4 hours. After this time, the entire environment is automatically deleted.
+
+For these reasons, HPE is providing a locally deployed Play with Docker service as part of this solution stack.  Additionally, a slightly modified version of the PWD service is deployed, allowing users to extend the session timer to as long as 24 hours.  This locally-deployed instance with a customizable session timer allows enterprise customers, interested in quickly and painlessly testing their applications in a Docker environment, a much safer and more secure experience.
+
+Before you can use Play with Docker (PWD), you must first decide on what software package to use to expose your desktop display environment. VNC or the main Server GUI are popular choices, as your UCP node doesn’t have a GUI installed as a default.  PWD requires a node with manager role permissions so you should use the main UCP node. This example uses the “Server with GUI” packages, but feel free to use VNC or your own preferred method.
+
+Connect using ssh to main UCP node which is running RHEL7, and run the following commands to install the packages to enable access to a graphic console desktop. 
+
+``` 	
+# yum –y groupinstall “Server with GUI”
+# init 5 “This will alter your current run level from 3 to 5”
+# systemctl set-default graphical.target “Sets the default run level to graphical”
+```
+
+Now, from your vSphere client, open the console for the UCP node and carry out the initial setup steps. Select the language and time zone and then create a Play with Docker user account. Once the desktop is visible, click on Applications, select the Firefox web browser and browse to http://localhost.
+
+For more information on configuring Play with Docker, see Appendix D.
 
 
 
