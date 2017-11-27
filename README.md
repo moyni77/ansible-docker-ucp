@@ -1232,6 +1232,14 @@ Instance administration for CloudBees Jenkins Team Edition is documented at http
 Documentation for administering CloudBees Jenkins Enterprise docs is available at https://go.cloudbees.com/docs/cloudbees-documentation/admin-cje/.
 
 
+# Appendix C: ELK Stack Deployment workflow
+
+
+## Kibana configuration 
+
+Kibana is used for data visualization. Kibana queries Elasticsearch periodically and helps a user create monitoring dashboard. The following figures show how to setup the index and discover data. Please note that the default port for Kibana, 5601, is mapped to port 80 on the ELK node. As a result, you can access the Kibana dashboards by accessing the VM for the ELK node on the standard port 80. 
+
+
 
 [dev-architecture]: </dev/images/architecture.png> "Figure 1. Solution Architecture"
 [solutionstack]: </dev/images/solutionstack.png> "Figure 2. Solution stack"
