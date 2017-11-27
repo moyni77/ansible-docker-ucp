@@ -962,7 +962,7 @@ Kibana is used for data visualization. Kibana queries Elasticsearch periodically
 
 [jenkinsui]: </dev/images/jenkinsui.jpg> "Figure 29. Jenkins UI"
 [elkdataflow]: </dev/images/elkdataflow.png> "Figure 30. ELK data flow"
-
+[devmonitoringarchitecture]: </dev/images/devmonitoringarchitecture.png> "Figure 31. Monitoring architecture"
 
 
 
