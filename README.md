@@ -1223,6 +1223,9 @@ It is recommended that you create a new administration account, using the dialog
 
 When the installation and configuration of CloudBees Jenkins Team Edition is complete, the Welcome to Jenkins screen will appear, as show in Figure 37.
 
+![Welcome to Jenkins][welcometojenkins]  
+**Figure 37.** Welcome to Jenkins
+
 
 Instance administration for CloudBees Jenkins Team Edition is documented at https://go.cloudbees.com/docs/cloudbees-documentation/admin-instance/, covering management of upgrades/plugins, securing an instance and common configuration options.
 
@@ -1270,7 +1273,7 @@ Documentation for administering CloudBees Jenkins Enterprise docs is available a
 [customizejenkins]: </dev/images/customizejenkins.png> "Figure 34. Customize Jenkins"
 [installingplugins]: </dev/images/installingplugins.png> "Figure 35. Installing plugins"
 [createadminuser]: </dev/images/createadminuser.png> "Figure 36. Create Admin user"
-
+[welcometojenkins]: </dev/images/welcometojenkins.png> "Figure 37. Welcome to Jenkins"
 
 
 
