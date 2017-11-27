@@ -841,38 +841,28 @@ If you navigate to Settings > Storage, you should see that DTR is configured to 
 
 
 # Security considerations
-In addition to having all logs centralized in an unique place and the image scanning feature enabled, there are another few guidelines that should be followed in order to keep your Docker environment as secure as possible.
+In addition to having all logs centralized in a single place and the image scanning feature enabled for the DTR nodes, there are other guidelines that should be followed in order to keep your Docker environment as secure as possible. The HPE Reference Configuration paper for securing Docker on HPE Hardware places a special emphasis on securing Docker in DevOps environments and covers best practices in terms of Docker security. The document can be found here: http://h20195.www2.hpe.com/V2/GetDocument.aspx?docname=a00020437enw. Some newer Docker security features that were not covered in the reference configuration are outlined below.
 
-## Securing the daemon socket
-The default is to create a non-networked socket to communicate with the daemon, but you could alternatively communicate using TLS. This will require you to create a CA and server and client keys with OpenSSL. The whole procedure is explained in detail here: [https://docs.docker.com/engine/security/https/](https://docs.docker.com/engine/security/https/)
 
-## Start with known images
-Developers can pick base images from the Docker Hub to start with. Although this allows them a great deal of freedom, some caution is needed. Images from Docker Hub are uncurated and may contain vulnerabilities. Use store images where possible. These are curated images. Use small base images to reduce the surface area.
-
-## Enable Docker Content Trust
-Notary/Docker Content Trust is a tool for publishing and managing trusted collections of content. Publishers can digitally sign collections and consumers can verify integrity and origin of content. This ability is built on a straightforward key management and signing interface to create signed collections and configure trusted publishers. More information about Notary can be found here: [https://success.docker.com/Architecture/Docker\_Reference\_Architecture%3A\_Securing\_Docker\_EE\_and\_Security\_Best\_Practices#dtr-notary](https://success.docker.com/Architecture/Docker_Reference_Architecture%3A_Securing_Docker_EE_and_Security_Best_Practices#dtr-notary)
 
 ## Prevent tags from being overwritten
-By default, users with access to push to a repository, can push the same tag multiple times to the same repository. As an example, a user pushes an image to library/wordpress:latest, and later another user can push the image with exactly the same name but different functionality. This might make it difficult to trace back the image to the build that generated it.
+By default, an image tag can be overwritten by a user with the correct access rights. As an example, an image such as `library/wordpress:latest` can be pushed and tagged by different users, yet have different functionality. This might make it difficult to trace back the image to the build that generated it.
+Docker DTR can prevent this from happening with the immutable tags feature that can be configured on a per repository basis. Once an image is pushed with a tag, that particular tag cannot be overwritten.
 
-To prevent this from happening you can configure a repository to be immutable. Once you push a tag, DTR won't anyone else to push another tag with the same name.
 
-More information about immutable tags can be found here: [https://beta.docs.docker.com/datacenter/dtr/2.3/guides/user/manage-images/prevent-tags-from-being-overwritten/](https://beta.docs.docker.com/datacenter/dtr/2.3/guides/user/manage-images/prevent-tags-from-being-overwritten/)
+More information about immutable tags can be found here: 
+https://docs.docker.com/datacenter/dtr/2.3/guides/user/manage-images/prevent-tags-from-being-overwritten/ 
 
-## Use secrets
-Use secrets to pass credentials to a container. Never pass as an environment variable which is clear
+
 
 ## Isolate swarm nodes to a specific team
 With Docker EE Advanced, you can enable physical isolation of resources by organizing nodes into collections and granting Scheduler access for different users. To control access to nodes, move them to dedicated collections where you can grant access to specific users, teams, and organizations.
 
-More information about this subject can be found here: [https://beta.docs.docker.com/datacenter/ucp/2.2/guides/admin/manage-users/isolate-nodes-between-teams/](https://beta.docs.docker.com/datacenter/ucp/2.2/guides/admin/manage-users/isolate-nodes-between-teams/)
+More information about this subject can be found here: : https://docs.docker.com/datacenter/ucp/2.2/guides/access-control/isolate-volumes-between-teams/.
 
-## Docker Bench for Security
-The Docker Bench for Security is a script that checks for dozens of common best-practices around deploying Docker containers in production. The tests are all automated, and are inspired by the CIS Docker Community Edition Benchmark v1.1.0.
 
-The Docker Bench for Security should be run on a regular basis to make sure that our system is as secure as we'd expect it to be.
 
-More information about this tool plus the files to run it can be found in its Github repository: [https://github.com/docker/docker-bench-security](https://github.com/docker/docker-bench-security)
+
 
 # Contact
 Please get in touch via Github if you have any questions.
