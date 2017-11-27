@@ -840,26 +840,6 @@ If you navigate to Settings > Storage, you should see that DTR is configured to 
 
 
 
-# Security considerations
-In addition to having all logs centralized in a single place and the image scanning feature enabled for the DTR nodes, there are other guidelines that should be followed in order to keep your Docker environment as secure as possible. The HPE Reference Configuration paper for securing Docker on HPE Hardware places a special emphasis on securing Docker in DevOps environments and covers best practices in terms of Docker security. The document can be found here: http://h20195.www2.hpe.com/V2/GetDocument.aspx?docname=a00020437enw. Some newer Docker security features that were not covered in the reference configuration are outlined below.
-
-
-
-## Prevent tags from being overwritten
-By default, an image tag can be overwritten by a user with the correct access rights. As an example, an image such as `library/wordpress:latest` can be pushed and tagged by different users, yet have different functionality. This might make it difficult to trace back the image to the build that generated it.
-Docker DTR can prevent this from happening with the immutable tags feature that can be configured on a per repository basis. Once an image is pushed with a tag, that particular tag cannot be overwritten.
-
-
-More information about immutable tags can be found here: 
-https://docs.docker.com/datacenter/dtr/2.3/guides/user/manage-images/prevent-tags-from-being-overwritten/ 
-
-
-
-## Isolate swarm nodes to a specific team
-With Docker EE Advanced, you can enable physical isolation of resources by organizing nodes into collections and granting Scheduler access for different users. To control access to nodes, move them to dedicated collections where you can grant access to specific users, teams, and organizations.
-
-More information about this subject can be found here: : https://docs.docker.com/datacenter/ucp/2.2/guides/access-control/isolate-volumes-between-teams/.
-
 
 
 
@@ -950,6 +930,225 @@ For more information on configuring Play with Docker, see Appendix D.
 
 
 
+# Security considerations
+In addition to having all logs centralized in a single place and the image scanning feature enabled for the DTR nodes, there are other guidelines that should be followed in order to keep your Docker environment as secure as possible. The HPE Reference Configuration paper for securing Docker on HPE Hardware places a special emphasis on securing Docker in DevOps environments and covers best practices in terms of Docker security. The document can be found here: http://h20195.www2.hpe.com/V2/GetDocument.aspx?docname=a00020437enw. Some newer Docker security features that were not covered in the reference configuration are outlined below.
+
+
+
+## Prevent tags from being overwritten
+By default, an image tag can be overwritten by a user with the correct access rights. As an example, an image such as `library/wordpress:latest` can be pushed and tagged by different users, yet have different functionality. This might make it difficult to trace back the image to the build that generated it.
+Docker DTR can prevent this from happening with the immutable tags feature that can be configured on a per repository basis. Once an image is pushed with a tag, that particular tag cannot be overwritten.
+
+
+More information about immutable tags can be found here: 
+https://docs.docker.com/datacenter/dtr/2.3/guides/user/manage-images/prevent-tags-from-being-overwritten/ 
+
+
+
+## Isolate swarm nodes to a specific team
+With Docker EE Advanced, you can enable physical isolation of resources by organizing nodes into collections and granting Scheduler access for different users. To control access to nodes, move them to dedicated collections where you can grant access to specific users, teams, and organizations.
+
+More information about this subject can be found here: : https://docs.docker.com/datacenter/ucp/2.2/guides/access-control/isolate-volumes-between-teams/.
+
+
+
+# Solution Lifecycle Management
+
+## Introduction
+
+Lifecycle management with respect to this solution refers to the maintenance and management of software and hardware of various components within that build up the solution stack. Lifecycle management is required to keep the solution up-to date and ensure that latest versions of the software are running in to provide optimal performance, security and fix any existing defects within the product.
+
+
+## SimpliVity environment
+
+The SimpliVity environment is made up of proprietary SimpliVity software, VMware software and HPE firmware. There are interdependencies between the various components that need to be accounted and are provided in the table below. The components in Table 14 are part of the SimpliVity environment that require lifecycle management.
+
+In general, ensure that the software bits for the Arbiter and vSphere extension corresponding to an OmniStack release are used.
+
+**Table 14.** SimpliVity components
+
+<table>
+  <tr>
+    <th>Order</th>
+    <th>Component</th>
+    <th>Dependency (compatibility)</th>
+    <th>Download/Documentation</th>	
+  </tr>
+  <tr>
+    <td>1</td>
+	<td>HPE SimpliVity Arbiter</td>
+	<td>1. HPE OmniStack</td>
+    <td rowspan=3>SimpliVity OmniStack for vSphere Upgrade Guide<br><br>Download software bits from HPE’s support website.<br><br>http://www.hpe.com/support</td>
+  </tr>
+  <tr>
+    <td>2</td>
+	<td>HPE SimpliVity VMware Plug-in</td>
+	<td>1. HPE SimpliVity Arbiter <br>2. HPE OmniStack</td>
+  </tr>
+  <tr>
+    <td>3</td>
+	<td>HPE Omnistack</td>
+	<td>1. HPE SimpliVity VMware Plug-in <br>2. HPE SimpliVity Arbiter</td>
+  </tr>  
+</table>
+
+
+
+## VMware Components 
+
+The SimpliVity solution used in this deployment guide is built on VMware vSphere. VMware ESXi and vCenter (see Table 15) are the two components from VMware that are leveraged by the SimpliVity software.
+
+The VMware ESXi and vCenter versions must be compatible with each other and with the HPE OmniStack version that is running on the SimpliVity systems.
+
+**Table 15.** VMware components
+
+<table>
+  <tr>
+    <th>Order</th>
+    <th>Component</th>
+    <th>Dependency (compatibility)</th>
+    <th>Download/Documentation</th>	
+  </tr>
+  <tr>
+    <td>1</td>
+	<td>VMware vCenter</td>
+	<td>1. HPE OmniStack <br>2. VMware ESXi</td>
+    <td rowspan=2><a href="https://support.simplivity.com/Site_Specific_Content/Product_Manuals/Upgrade_Guides/ESXi_Guided_Upgrade">VMware Upgrade for SimpliVity</a></td>
+  </tr>
+  <tr>
+    <td>2</td>
+	<td>VMware ESXi</td>
+	<td>1. HPE OmniStack<br>2. VMware vCenter</td>
+  </tr>
+
+</table>
+
+
+
+## HPE Server Software
+
+SimpliVity servers are based on HPE server platforms and require compatible firmware version to function with HPE OmniStack Software, as shown in Table 16.
+
+**Table 16.** HPE server components
+
+<table>
+  <tr>
+    <th>Order</th>
+    <th>Component</th>
+    <th>Dependency (compatibility)</th>
+    <th>Download/Documentation</th>	
+  </tr>
+  <tr>
+    <td>1</td>
+	<td>HPE Firmware</td>
+	<td>1. HPE OmniStack Software</td>
+	<td><a href="https://support.simplivity.com/Site_Specific_Content/Product_Manuals/Upgrade_Guides/SimpliVity_Platform_Firmware_Guided_Upgrade">
+	Firmware Upgrade for SimpliVity</a></td>
+	
+  </tr>
+</table>
+
+
+## vSphere Docker Volume Service Plug-in
+
+vSphere Docker Volume service plug-in is part of an open source project by VMware that enables running stateful containers by providing persistent docker volumes leveraging existing storage technology from VMware. There are two parts to the plug-in, namely, client software and server software (see Table 17). Every version of the plug-in that is released includes both pieces of software and it is imperative that the version number installed on the client side and server side are the same.
+
+When updating the Docker Volume service plug-in, ensure the ESXi version you are running is supported and that the client software is compatible with the operating system.
+
+**Table 17.**	 vSphere Docker Volume service components
+
+<table>
+  <tr>
+    <th>Order</th>
+    <th>Component</th>
+    <th>Dependency (compatibility)</th>
+    <th>Download/Documentation</th>	
+  </tr>
+  <tr>
+    <td>1</td>
+	<td>Server Software</td>
+	<td>1. VMware ESXi<br>2. Docker EE</td>
+    <td rowspan=2><a href="http://vmware.github.io/docker-volume-vsphere/documentation/index.html">vSphere Docker Volume Service on GitHub</a></td>
+  </tr>
+  <tr>
+    <td>2</td>
+	<td>Client Software</td>
+	<td>1. VM Operating System<br>2. Docker EE</td>
+  </tr>
+
+</table>
+
+
+
+## Red Hat Enterprise Linux operating system
+
+This solution is built using Red Hat Enterprise Linux (see Table 18) as the base operating system.  When upgrading the operating system on the VMs, first verify that the OS version is compatible to run Docker EE by looking at the Docker OS compatibility metric.
+
+**Table 18.** Operating system
+
+<table>
+  <tr>
+    <th>Order</th>
+    <th>Component</th>
+    <th>Dependency (compatibility)</th>
+    <th>Download/Documentation</th>	
+  </tr>
+  <tr>
+    <td>1</td>
+	<td>Red Hat Enterprise Linux</td>
+	<td>1. Docker EE <br>2. vDVS client software plugin</td>
+	<td><a href="https://access.redhat.com/articles/11258">RHEL</a></td>	
+  </tr>
+</table>
+
+
+## Docker EE Environment
+
+Each release of Docker Enterprise Edition contains three technology components – UCP, DTR and the Docker Daemon or Engine. It is imperative that the components belonging to the same version are deployed or upgraded together – see Table 19. 
+
+A banner will be displayed on the UI, as shown in Figure 41, when an update is available for UCP or DTR. You can start the upgrade process by clicking on the banner.
+
+![Docker update notification][dockerupdate]
+**Figure 41.** Docker update notification
+
+
+**Table 19.** Docker EE components
+
+
+<table>
+  <tr>
+    <th>Order</th>
+    <th>Component</th>
+    <th>Dependency (compatibility)</th>
+    <th>Download/Documentation</th>	
+  </tr>
+  <tr>
+    <td>1</td>
+	<td>Docker Daemon/Engine</td>
+	<td rowspan="3">1. VM Operating System <br><br> 2. vDVS plugin <br><br>3. Prometheus and Grafana</td>
+	<td rowspan="3"><a href="https://success.docker.com/Policies/Maintenance_Lifecycle">Docker Lifecycle Maintenance</a><br><br>
+	<a href="https://success.docker.com/Policies/Compatibility_Matrix">Docker Compatibility Matrix</a>
+	</td>	
+  </tr>
+  <tr>
+    <td>2</td>
+	<td>Universal Control Plane</td>  
+  </tr>
+  <tr>
+    <td>3</td>
+	<td>Docker Trusted Registry</td>  
+  </tr>  
+</table>
+
+
+
+## High-Level dependency map
+
+Based on the lifecycle management details provided above, Figure 42 is a consolidated diagram that shows the dependencies between the various components in the solution stack. Bi-directional arrows between components indicate that the two components have an interoperability dependence. Before upgrading a component to a newer version, you must ensure that the new version of that component is compatible the current version of any dependent components.
+
+![High-level dependency map][dependencymap]
+
+**Figure 42.** High-level dependency map
 
 
 
