@@ -1335,8 +1335,8 @@ For more information about using the Play with Docker service, visit the Play wi
 [configureindex]: </dev/images/configureindex.png> "Figure 39. Configure an index pattern in Kibana"
 [logstash]: </dev/images/logstash.png> "Figure 40. Logstash index, showing the mappings"
 [datadiscovery]: </dev/images/datadiscovery.png> "Figure 41. Data discovery in Kibana"
-[pwdui]: </dev/images/pwdui.png> "Figure 42. Play with Docker user interface"
-[configurepwd]: </dev/images/configurepwd.png> "Figure 43. Configure Play with Docker"
+[pwdui]: </dev/images/pwdui.jpg> "Figure 42. Play with Docker user interface"
+[configurepwd]: </dev/images/configurepwd.jpg> "Figure 43. Configure Play with Docker"
 
 
 
