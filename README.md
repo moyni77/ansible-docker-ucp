@@ -714,7 +714,7 @@ The playbooks are intended to be used to deploy a new environment. You should on
 
 ## Create virtual machines
 
-The playbook [playbooks/create\_vms.yml][create_vms] will create all the necessary Virtual Machines for the environment from the VM Template defined in the vm_template variable.
+The playbook [create\_vms.yml][create_vms] will create all the necessary Virtual Machines for the environment from the VM Template defined in the vm_template variable.
 
 ## Configure network settings
 The playbook [config\_networking.yml][config_networking] will configure the network settings in all the Virtual Machines. 
