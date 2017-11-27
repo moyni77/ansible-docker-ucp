@@ -1187,7 +1187,8 @@ Based on the lifecycle management details provided above, Figure 42 is a consoli
 [elkdataflow]: </dev/images/elkdataflow.png> "Figure 30. ELK data flow"
 [devmonitoringarchitecture]: </dev/images/devmonitoringarchitecture.png> "Figure 31. Monitoring architecture"
 
-
+[dockerupdate]: </ops/images/dockerupdate.png> "Figure 41. Docker update notification"
+[dependencymap]: </ops/images/dependencymap.png> "Figure 42. High-level dependency map"
 
 [create_vms]: </playbooks/create_vms.yml>
 [config_networking]: </playbooks/config_networking.yml>
