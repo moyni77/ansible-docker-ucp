@@ -435,7 +435,7 @@ The inventory is the file named `vm_hosts` in the `~Docker-SimpliVity/dev` direc
 
 
 
-The nodes inside the inventory are organized in groups. The groups are defined by brackets and the group names are static so they must not be changed. All other information, including hostnames, specifications, IP addresses, etc. can be edited to match your needs. The groups are as follows:
+The nodes inside the inventory are organized in groups. The groups are defined by brackets and the group names are static so they must not be changed. All other information, including hostnames, specifications, IP addresses, etc., can be edited to match your needs. The groups are as follows:
 
 - [ucp\_main]: A group containing one single node which will be the main UCP node and swarm leader. Do not add more than one node under this group.
 - [ucp]: A group containing all the UCP nodes, including the main UCP node. For the Dev edition, you will only have the main node.
@@ -523,7 +523,7 @@ All VMware-related variables are mandatory and are described in Table 5.
 | datastores               | List of datastores to be used, in list format, i.e. ['`Datastore1`','`Datastore2`'...]. Please note that from a Simplivity perspective, it is best practice to use just one Datastore. Using more than one will not provide any advantages in terms of reliability and will add additional complexity. This datastore must exist before you run the playbooks. |
 | disk2                    | UNIX name of the second disk for the Docker VMs. Typically `/dev/sdb` |
 | disk2\_part              | UNIX name of the partition of the second disk for the Docker VMs. Typically `/dev/sdb1` |
-| vsphere\_plugin\_version | Version of the vSphere plugin for Docker. The default is 0.18 which is the latest version at the time of writing this document. The version of the plugin should match the version of the vSphere Installation Bundle (VIB) that you installed on the ESXi servers. |
+| vsphere\_plugin\_version | Version of the vSphere plugin for Docker. The default is 0.19 which is **not** the latest version at the time of writing this document. The version of the plugin should match the version of the vSphere Installation Bundle (VIB) that you installed on the ESXi servers. |
 
 
 ### Simplivity configuration
