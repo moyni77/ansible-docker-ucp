@@ -22,5 +22,5 @@
 - include: playbooks/install_elk.yml
 - include: playbooks/install_cloudbees.yml
 - include: playbooks/install_playwithdocker.yml
-- include: playbooks/config_dummy_vms_for_docker_volumes_backup.yml
-- include: playbooks/config_simplivity_backups.yml
+#- include: playbooks/config_dummy_vms_for_docker_volumes_backup.yml
+#- include: playbooks/config_simplivity_backups.yml

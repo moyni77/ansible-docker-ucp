@@ -10,7 +10,7 @@ folder_name: '/nm'
 datastores: ['docker_share_data1','docker_share_data2']
 disk2: '/dev/sdb'
 disk2_part: '/dev/sdb1'
-vsphere_plugin_version: '0.13' # was 0.12
+vsphere_plugin_version: '0.19' # was 0.12
 
 # Simplivity information
 simplivity_username: 'David.Pintor@DEMO'
@@ -37,10 +37,8 @@ domain_name: 'am2.cloudra.local'
 ntp_servers: [' 10.12.2.1','0.us.pool.net.org','1.us.pool.net.org']
 
 # Docker settings
-#docker_ee_url: 'https://storebits.docker.com/ee/linux/sub-bee89908-9360-4f5c-a3e2-e059a8f88605'
-#docker_ee_url: 'https://storebits.docker.com/ee/rhel/sub-33cfc952-4f93-4a5f-a5d5-115f999cc45c'
-#docker_ee_url: 'https://storebits.docker.com/ee/rhel/sub-79f44c03-82cc-44c5-b5b7-7d53b37a5668'
-docker_ee_url: 'https://storebits.docker.com/ee/rhel/sub-11f3b7bb-6f60-4b0b-9c9b-fd9ad9b8f3ab'
+#docker_ee_url: 'https://storebits.docker.com/ee/rhel/sub-11f3b7bb-6f60-4b0b-9c9b-fd9ad9b8f3ab'
+docker_ee_url: 'https://storebits.docker.com/ee/rhel/sub-59bd1dc7-18a8-41c6-ab4a-493d915b4495'
 rhel_version: '7.3'
 dtr_version: '2.4.0'
 ucp_version: '2.2.4'
