@@ -530,7 +530,7 @@ All VMware-related variables are mandatory and are described in Table 5.
 | datastores               | List of datastores to be used, in list format, i.e. ['`Datastore1`','`Datastore2`'...]. Please note that from a Simplivity perspective, it is best practice to use only one Datastore. Using more than one will not provide any advantages in terms of reliability and will add additional complexity. This datastore must exist before you run the playbooks. |
 | disk2                    | UNIX® name of the second disk for the Docker VMs. Typically `/dev/sdb` |
 | disk2\_part              | UNIX name of the partition of the second disk for the Docker VMs. Typically `/dev/sdb1` |
-| vsphere\_plugin\_version | Version of the vSphere plugin for Docker. The default is 0.19 which is **not** the latest version at the time of writing this document. The version of the plugin should match the version of the vSphere Installation Bundle (VIB) that you installed on the ESXi servers. |
+| vsphere\_plugin\_version | Version of the vSphere plugin for Docker. The default is 0.19 which is the latest version at the time of writing this document. The version of the plugin should match the version of the vSphere Installation Bundle (VIB) that you installed on the ESXi servers. |
 
 
 ### HPE SimpliVity configuration
@@ -800,47 +800,47 @@ The playbook [config_simplivity_backups.yml][config_simplivity_backups] configur
 
 
 # Accessing the UCP UI
-Once the playbooks have run and completed successfully, the Docker UCP UI should be available by browsing to the UCP load balancer or any of the nodes via HTTPS. The authentication screen will appear as shown in Figure 22:
+Once the playbooks have run and completed successfully, the Docker UCP UI should be available by browsing to the UCP load balancer or any of the nodes via HTTPS. The authentication screen will appear as shown in Figure 20:
 
 ![UCP authentication screen][ucpauth]
-**Figure 22.** UCP authentication screen
+**Figure 20.** UCP authentication screen
 
-Enter your credentials and the dashboard will be displayed as shown in Figure 23:
+Enter your credentials and the dashboard will be displayed as shown in Figure 21:
 
 ![UCP dashboard][ucpdash]
-**Figure 23.** UCP dashboard
+**Figure 21.** UCP dashboard
 
-You should see all the nodes information in your Docker environment by clicking on `Nodes`, as shown in Figure 24:
+You should see all the nodes information in your Docker environment by clicking on `Nodes`, as shown in Figure 22:
 
 ![Nodes information][nodesinfo]
-**Figure 24.** Nodes information
+**Figure 22.** Nodes information
 
-Click on `Services` to see the services that were installed during the playbooks execution, as shown in Figure 25:
+Click on `Services` to see the services that were installed during the playbooks execution, as shown in Figure 23:
 
 ![Services information][servicesinfo]
-**Figure 25.** Services information
+**Figure 23.** Services information
 
 # Accessing the DTR UI
-The Docker DTR UI should be available by browsing to the DTR load balancer or any of the nodes via HTTPS. The authentication screen will appear as shown in Figure 26:
+The Docker DTR UI should be available by browsing to the DTR load balancer or any of the nodes via HTTPS. The authentication screen will appear as shown in Figure 24:
 
 ![DTR authentication screen][dtrauth]  
-**Figure 26.** DTR authentication screen
+**Figure 24.** DTR authentication screen
 
 
-Enter your UCP credentials and you should see the empty list of repositories as shown in Figure 27:
+Enter your UCP credentials and you should see the empty list of repositories as shown in Figure 25:
 
 ![DTR repositories][dtrrepos]  
-**Figure 27.** DTR repositories
+**Figure 25.** DTR repositories
 
-If you navigate to `Settings -> Security`, you should see the Image Scanning feature already enabled as shown in Figure 28. (Note that you need an Advanced license to have access to this feature.)
+If you navigate to `Settings -> Security`, you should see the Image Scanning feature already enabled as shown in Figure 26. (Note that you need an Advanced license to have access to this feature.)
 
 ![Image scanning in DTR][imagescanning]  
-**Figure 28.** Image scanning in DTR
+**Figure 26.** Image scanning in DTR
 
-If you navigate to Settings -> Storage, you should see that DTR is configured to use shared NFS storage as shown in Figure 29.
+If you navigate to Settings -> Storage, you should see that DTR is configured to use shared NFS storage as shown in Figure 27.
 
 ![DTR storage settings][DTRstorage]  
-**Figure 29.** DTR storage settings
+**Figure 27.** DTR storage settings
 
 
 
@@ -1320,13 +1320,13 @@ For more information about using the Play with Docker service, visit the Play wi
 
 [converttotemplate]: </dev/images/converttotemplate.png> "Figure 19. Convert to template"
 [ucpauth]: </dev/images/ucpauth.png> "Figure 20. UCP authentication screen"
-[ucpdash]: </dev/images/ucpdash.png> "Figure 22. UCP dashboard"
-[nodesinfo]: </dev/images/nodesinfo.png> "Figure 23. Nodes information"
-[servicesinfo]: </dev/images/servicesinfo.png> "Figure 24. Services information"
-[dtrauth]: </dev/images/dtrauth.png> "Figure 25. DTR authentication screen"
-[dtrrepos]: </dev/images/dtrrepos.png> "Figure 26. DTR repositories"
-[imagescanning]: </dev/images/imagescanning.png> "Figure 27. Image scanning in DTR"
-[DTRstorage]: </dev/images/DTRstorage.png> "Figure 28. DTR storage settings"
+[ucpdash]: </dev/images/ucpdash.png> "Figure 21. UCP dashboard"
+[nodesinfo]: </dev/images/nodesinfo.png> "Figure 22. Nodes information"
+[servicesinfo]: </dev/images/servicesinfo.png> "Figure 23. Services information"
+[dtrauth]: </dev/images/dtrauth.png> "Figure 24. DTR authentication screen"
+[dtrrepos]: </dev/images/dtrrepos.png> "Figure 25. DTR repositories"
+[imagescanning]: </dev/images/imagescanning.png> "Figure 26. Image scanning in DTR"
+[DTRstorage]: </dev/images/DTRstorage.png> "Figure 27. DTR storage settings"
 
 [jenkinsui]: </dev/images/jenkinsui.jpg> "Figure 29. Jenkins UI"
 [elkdataflow]: </dev/images/elkdataflow.png> "Figure 30. ELK data flow"
