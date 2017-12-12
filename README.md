@@ -1,31 +1,31 @@
 # Introduction
 
-Express Containers with Docker Enterprise Edition (EE) is a complete solution from Hewlett Packard Enterprise that includes all the hardware, software, professional services, and support you need to deploy a containers-as-a-service (CaaS) platform, allowing you to get up and running quickly and efficiently. The solution takes the HPE hyperconverged infrastructure and combines it with Docker’s enterprise-grade container platform, popular open source tools, along with deployment and advisory services from HPE Pointnext.
+HPE Express Containers with Docker Enterprise Edition (EE) is a complete solution from Hewlett Packard Enterprise that includes all the hardware, software, professional services, and support you need to deploy a containers-as-a-service (CaaS) platform, allowing you to get up and running quickly and efficiently. The solution takes the HPE hyperconverged infrastructure and combines it with Docker’s enterprise-grade container platform, popular open source tools, along with deployment and advisory services from HPE Pointnext.
 
-Express Containers with Docker EE is ideal for customers migrating legacy applications to containers, transitioning to a container DevOps development model or needing a hybrid environment to support container and non-containerized applications on a common VM platform.  Express Containers with Docker EE provides a solution for both IT development and IT operations, and comes in two versions.  The version for IT developers (Express Containers with Docker EE: Dev Edition) addresses the need to provide a cloud-like container development environment with built-in container tooling.  The version for IT operations (Express Containers with Docker EE: Ops Edition) addresses the need to have a production ready environment that is very easy to deploy and manage.  
+HPE Express Containers with Docker EE is ideal for customers migrating legacy applications to containers, transitioning to a container DevOps development model or needing a hybrid environment to support container and non-containerized applications on a common VM platform.  HPE Express Containers with Docker EE provides a solution for both IT development and IT operations, and comes in two versions.  The version for IT developers (HPE Express Containers with Docker EE: Dev Edition) addresses the need to provide a cloud-like container development environment with built-in container tooling.  The version for IT operations (HPE Express Containers with Docker EE: Ops Edition) addresses the need to have a production ready environment that is very easy to deploy and manage.  
 
-This document describes the best practices for deploying and operating the Express Containers with Docker EE: Dev Edition. It describes how to automate the provisioning of the environment using a set of Ansible playbooks. It also outlines a set of manual steps to harden, secure and audit the overall status of the system. A corresponding document focused on setting up Express Containers with Docker: Ops Edition is also available. 
+This document describes the best practices for deploying and operating the HPE Express Containers with Docker EE: Dev Edition. It describes how to automate the provisioning of the environment using a set of Ansible playbooks. It also outlines a set of manual steps to harden, secure and audit the overall status of the system. A corresponding document focused on setting up HPE Express Containers with Docker: Ops Edition is also available. 
 
 **Note**
-- The Ansible playbooks described in this document are only intended for Day 0 deployment automation of Docker EE on SimpliVity
-- The Ansible playbooks described in this document are not directly supported by HPE and are intended as an example of deploying Docker EE on HPE SimpliVity.  We welcome input from the user community via Github to help us prioritize all future bug fixes and feature enhancements
+- The Ansible playbooks described in this document are only intended for Day 0 deployment automation of Docker EE on HPE SimpliVity
+- The Ansible playbooks described in this document are not directly supported by HPE and are intended as an example of deploying Docker EE on HPE SimpliVity.  We welcome input from the user community via GitHub to help us prioritize all future bug fixes and feature enhancements
 
 ## About Ansible
 
 Ansible is an open-source automation engine that automates software provisioning, configuration management and application deployment.
 
-As with most configuration management software, Ansible has two types of server: the controlling machine and the nodes. A single controlling machine orchestrates the nodes by deploying modules to the nodes over SSH. The modules are temporarily stored on the nodes and communicate with the controlling machine through a JSON protocol over the standard output. When Ansible is not managing nodes, it does not consume resources because no daemons or programs are executing for Ansible in the background. Ansible uses one or more inventory files to manage the configuration of the multiple nodes in the system.
+As with most configuration management software, Ansible has two types of servers: the controlling machine and the nodes. A single controlling machine orchestrates the nodes by deploying modules to the nodes over SSH. The modules are temporarily stored on the nodes and communicate with the controlling machine through a JSON protocol over the standard output. When Ansible is not managing nodes, it does not consume resources because no daemons or programs are executing for Ansible in the background. Ansible uses one or more inventory files to manage the configuration of the multiple nodes in the system.
 
-In contrast with other popular configuration management software such as Chef, Puppet, and CFEngine, Ansible uses an agentless architecture. With an agent-based architecture, nodes must have a locally installed daemon that communicates with a controlling machine. With an agentless architecture, nodes are not required to install and run background daemons to connect with a controlling machine. This type of architecture reduces the overhead on the network by preventing the nodes from polling the controlling machine.
+In contrast with other popular configuration management software, such as Chef, Puppet, and CFEngine, Ansible uses an agentless architecture. With an agent-based architecture, nodes must have a locally installed daemon that communicates with a controlling machine. With an agentless architecture, nodes are not required to install and run background daemons to connect with a controlling machine. This type of architecture reduces the overhead on the network by preventing the nodes from polling the controlling machine.
 
-More information about Ansible can be found here: [http://docs.ansible.com](http://docs.ansible.com)
+More information about Ansible can be found at: [http://docs.ansible.com](http://docs.ansible.com)
 
 
 ## About Docker Enterprise Edition
 
 Docker Enterprise Edition (EE) is the leading enterprise containers-as-a-service (CaaS) software platform for IT that manages and secures diverse applications across disparate infrastructure, both on-premises and in the cloud. Docker EE provides integrated container management and security from development to production. Enterprise-ready capabilities like multi-architecture orchestration and secure software supply chain give IT teams the ability to manage and secure containers without breaking the developer experience.
 
-Docker EE provides
+Docker EE provides:
 
 - Integrated management of all application resources from a single web admin UI.
 - Frictionless deployment of applications and Compose files to production in a few clicks.
@@ -34,39 +34,39 @@ Docker EE provides
 - End-to-end security model with secrets management, image signing and image security scanning.
 
 
-More information about Docker Enterprise Edition can be found here: [https://www.docker.com/enterprise-edition](https://www.docker.com/enterprise-edition)
+More information about Docker Enterprise Edition can be found at: [https://www.docker.com/enterprise-edition](https://www.docker.com/enterprise-edition)
 
 
 
-## About Simplivity
+## About HPE Simplivity
 
-Simplivity is an enterprise-grade hyper-converged platform uniting best-in-class data services with the world's best-selling server.
+HPE Simplivity is an enterprise-grade hyper-converged platform uniting best-in-class data services with the world's best-selling server.
 
 Rapid proliferation of applications and the increasing cost of maintaining legacy infrastructure causes significant IT challenges for many organizations. With HPE SimpliVity, you can streamline and enable IT operations at a fraction of the cost of traditional and public cloud solutions by combining your IT infrastructure and advanced data services into a single, integrated solution. HPE SimpliVity is a powerful, simple, and efficient hyperconverged platform that joins best-in-class data services with the world’s best-selling server and offers the industry’s most complete guarantee.
 
-More information about Simplivity can be found here: [https://www.hpe.com/us/en/integrated-systems/simplivity.html](https://www.hpe.com/us/en/integrated-systems/simplivity.html)
+More information about HPE Simplivity can be found at: [https://www.hpe.com/us/en/integrated-systems/simplivity.html](https://www.hpe.com/us/en/integrated-systems/simplivity.html)
 
 **Target Audience:** This document is primarily aimed at technical individuals working in the development side of the pipeline, such as technical architects, developers and system administrators, but anybody with an interest in automating the provisioning of virtual servers and containers may find this document useful.
 
-**Assumptions:** This document assumes a minimum understanding of concepts like virtualization, containerization and some knowledge around Linux and VMWare technologies.
+**Assumptions:** This document assumes a minimum understanding of concepts like virtualization, containerization and some knowledge around Linux® and VMWare® technologies.
 
 ## Required Versions
 
-The following software versions were used to implement the playbooks that are described in later sections. Other version may work but have not been tested.
+The following software versions were used to implement the playbooks that are described in later sections. Other versions may work but have not been tested.
 
 - Ansible 2.2 and 2.3. Please note that the playbooks will not work with Ansible 2.4 due to an open defect https://github.com/ansible/ansible/issues/32000. Do not use Ansible 2.4 until this defect is fixed.
 - Docker EE 17.06 (tested with UCP 2.2.3 and 2.2.4 and DTR 2.4.0)
-- Red Hat Enterprise Linux 7.3 and 7.4
+- Red Hat® Enterprise Linux 7.3 and 7.4
 - VMWare ESXi 6.5.0 and vCenter 6.5.0
 - HPE SimpliVity OmniStack 3.7.1.60
 
 
 # Architecture
 
-The development environment is comprised of two HPE SimpliVity 380 Gen10 servers. HPE recommends dual socket SimpliVity systems with at least 14 CPU cores per socket (28 total cores per system) for optimal performance and support during HA failover scenario. Please refer to Appendix A for a sample BOM.  Since the SimpliVity technology relies on VMware virtualization, the servers are managed using vCenter. The load among the two hosts will be shared as per Figure 1.
+The development environment is comprised of two HPE SimpliVity 380 Gen10 servers. HPE recommends dual socket HPE SimpliVity systems with at least 14 CPU cores per socket (28 total cores per system) for optimal performance and support during HA failover scenario. Please refer to Appendix A for a sample BOM.  Since the HPE SimpliVity technology relies on VMware virtualization, the servers are managed using vCenter. The load among the two hosts will be shared as per Figure 1.
 
-Uptime is paramount for any users implementing Docker containers in business critical environments. Express Containers offers various levels of high availability (HA) to support continuous availability. All containers including the Docker system containers are protected by Docker’s swarm mode. Swarm mode can protect against individual hardware, network, and container failures based on the user’s declarative model. 
-Express Containers with Docker EE also deploys load balancers in the system to help with container traffic management. There are three load balancer VMs – UCP load balancer, DTR load balancer, and Docker worker node load balancer. Since these load balancers exist in VMs, they have some degree of HA but may incur some downtime during the restoration of these VMs due to a planned or unplanned outage. For optimal HA configuration, the user should consider implementing a HA load balancer architecture using the Virtual Router Redundancy Protocol (VRRP). For more information see http://www.haproxy.com/solutions/high-availability/. 
+Uptime is paramount for any users implementing Docker containers in business critical environments. HPE Express Containers with Docker EE offers various levels of high availability (HA) to support continuous availability. All containers including the Docker system containers are protected by Docker’s swarm mode. Swarm mode can protect against individual hardware, network, and container failures based on the user’s declarative model. 
+HPE Express Containers with Docker EE also deploys load balancers in the system to help with container traffic management. There are three load balancer VMs – UCP load balancer, DTR load balancer, and Docker worker node load balancer. Since these load balancers exist in VMs, they have some degree of HA but may incur some downtime during the restoration of these VMs due to a planned or unplanned outage. For optimal HA configuration, the user should consider implementing a HA load balancer architecture using the Virtual Router Redundancy Protocol (VRRP). For more information see http://www.haproxy.com/solutions/high-availability/. 
 
 
 ![Solution Architecture][dev-architecture]
@@ -91,7 +91,7 @@ In addition to the above, the playbooks also set up:
 - Elasticsearch, Logstash, and Kibana (ELK) stack
 - Play with Docker (PWD)
 - CloudBees Jenkins
-- SimpliVity backup policy for data volumes and for the NFS storage used by DTR for storing Docker images
+- HPE SimpliVity backup policy for data volumes and for the NFS storage used by DTR for storing Docker images
 
 These nodes can live in any of the hosts and they are not redundant. The vSphere Docker volume plug-in stores data in a shared datastore that can be accessed from any machine in the cluster.
 
@@ -101,18 +101,18 @@ These nodes can live in any of the hosts and they are not redundant. The vSphere
 
 # Sizing considerations
 
-A node is a machine in the cluster (virtual or physical) with Docker Engine running on it. When provisioning each node, assign it a role: UCP Controller, DTR, or worker node so that they are protected from running application workloads.
+A node is a machine in the cluster (virtual or physical) with Docker Engine running on it. When provisioning each node, assign it a role: UCP Controller, DTR, or worker node so that it is protected from running application workloads.
 
 To decide what size the node should be in terms of CPU, RAM, and storage resources, consider the following:
 
-1. All nodes should at least fulfil the minimal requirements, for UCP 2.0 2GB of RAM and 3GB of storage. More detailed requirements are in the UCP documentation.
+1. All nodes should at least fulfil the minimal requirements, for UCP 2.0, 2GB of RAM and 3GB of storage. More detailed requirements are in the UCP documentation.
 2. UCP Controller nodes should be provided with more than the minimal requirements, but won’t need much more if nothing else runs on them.
-3. Ideally, Worker node size will vary based on your workloads so it is impossible to define a universal standard size.
+3. Ideally, worker node size will vary based on your workloads so it is impossible to define a universal standard size.
 4. Other considerations like target density (average number of containers per node), whether one standard node type or several are preferred, and other operational considerations might also influence sizing.
 
-If possible, node size should be determined by experimentation and testing actual workloads, and they should be refined iteratively. A good starting point is to select a standard or default machine type in your environment and use this size only. If your standard machine type provides more resources than the UCP Controllers need, it makes sense to have a smaller node size for these. Whatever the starting choice, it is important to monitor resource usage and cost to improve the model.
+If possible, node size should be determined by experimentation and testing actual workloads; and they should be refined iteratively. A good starting point is to select a standard or default machine type in your environment and use this size only. If your standard machine type provides more resources than the UCP Controllers need, it makes sense to have a smaller node size for these. Whatever the starting choice, it is important to monitor resource usage and cost to improve the model.
 
-For Express Containers with Docker EE: Dev Edition, the following section describes sizing configurations. The vCPU allocations are described in Table 1 while the memory allocation is described in Table 2. 
+For HPE Express Containers with Docker EE: Dev Edition, the following tables describes sizing configurations. The vCPU allocations are described in Table 1 while the memory allocation is described in Table 2. 
 
 
 
@@ -182,13 +182,13 @@ You must assemble the information required to assign values to each and every va
 |DNS|	You will need to know the IP addresses of your DNS server. In addition, all the VMs you configure in the inventory should have their names registered in DNS. In addition, you will need the domain name to use for configuring the virtual machines (such as example.com)
 |NTP Services|	You need time services configured in your environment. The solution being deployed (including Docker) uses certificates and certificates are time sensitive. You will need the IP addresses of your time servers (NTP).
 |RHEL Subscription	|A RHEL subscription is required to pull extra packages that are not on the DVD.|
-|Docker Prerequisites|	You will need a URL for the official Docker EE software download and a license file.  Refer to the Docker documentation to learn more about this URL and the licensing requirements here: https://docs.docker.com/engine/installation/linux/docker-ee/rhel/ in the section entitled "Docker EE repository URL"|
+|Docker Prerequisites|	You will need a URL for the official Docker EE software download and a license file.  Refer to the Docker documentation to learn more about this URL and the licensing requirements at: https://docs.docker.com/engine/installation/linux/docker-ee/rhel/ in the section entitled "Docker EE repository URL"|
 |Proxy	|The playbooks pull the Docker packages from the Internet. If you environment accesses the Internet through a proxy, you will need the details of the proxy including the fully qualified domain name and the port number.|
 
 
 
 ## Enable vSphere High Availability
-You must enable vSphere High Availability (HA) to support virtual machine failover during an HA event such as a host failure. Sufficient CPU and memory resources must be reserved across the system so that all VMs on the affected host(s) can fall over to remaining available hosts in the system. You configure an Admission Control Policy (ACP) to specify the percentage CPU and memory to reserve on all the hosts in the cluster to support HA functionality. 
+You must enable vSphere High Availability (HA) to support virtual machine failover during an HA event such as a host failure. Sufficient CPU and memory resources must be reserved across the system so that all VMs on the affected host(s) can fail over to remaining available hosts in the system. You configure an Admission Control Policy (ACP) to specify the percentage CPU and memory to reserve on all the hosts in the cluster to support HA functionality. 
 
 More information on enabling vSphere HA and configuring Admission Control Policy is available in the HPE SimpliVity documentation. Log in to the HPE Support Center at https://www.hpe.com/us/en/support.html and search for “HPE SimpliVity 380”. The administration guide is listed when you select the User document type.
 
@@ -197,7 +197,7 @@ More information on enabling vSphere HA and configuring Admission Control Policy
 
 ## Install vSphere Docker Volume Service driver on all ESXi hosts
 
-vSphere Docker Volume Service technology enables stateful containers to access the storage volumes provided by SimpliVity. This is a one-off manual step. In order to be able to use Docker volumes using the vSphere driver, you must first install the latest release of the vSphere Docker Volume Service (vDVS) driver, which is available as a vSphere Installation Bundle (VIB). To perform this operation, login to each of the ESXi hosts in turn and then download and install the latest release of vDVS driver.
+vSphere Docker Volume Service technology enables stateful containers to access the storage volumes provided by HPE SimpliVity. This is a one-off manual step. In order to be able to use Docker volumes using the vSphere driver, you must first install the latest release of the vSphere Docker Volume Service (vDVS) driver, which is available as a vSphere Installation Bundle (VIB). To perform this operation, log in to each of the ESXi hosts in turn and then download and install the latest release of vDVS driver.
 
 ```
 # esxcli software vib install -v /tmp/vmware-esx-vmdkops-<version>.vib --no-sig-check
@@ -236,7 +236,7 @@ It would be possible to automate the creation of the template. However, as this 
 **Figure 7.** Select storage for template files
 
 
-5. Choose the OS as shown in Figure 8, in this case Linux, RHEL7 64bit.
+5. Choose the OS as shown in Figure 8, in this case Linux, RHEL 7 64bit.
 ![Choose operating system][chooseos]  
 **Figure 8.** Choose operating system
 
@@ -250,12 +250,12 @@ It would be possible to automate the creation of the template. However, as this 
 **Figure 10.** Create primary disk
 
 
-8. Confirm that the settings are right and press Finish as shown in Figure 11.
+8. Confirm that the settings are correct and press Finish as shown in Figure 11.
 ![Confirm settings][confirmsettings]  
 **Figure 11.** Confirm settings
 
 
-9. The next step is to virtually insert the RHEL7 DVD, using the Settings of the newly created VM as shown in Figure 12. Select your ISO file in the Datastore ISO File Device Type and make sure that the “Connect at power on” checkbox is checked.  
+9. The next step is to virtually insert the RHEL 7 DVD, using the Settings of the newly created VM as shown in Figure 12. Select your ISO file in the Datastore ISO File Device Type and make sure that the “Connect at power on” checkbox is checked.  
 ![Virtual machine properties][vmprops]  
 **Figure 12.** Virtual machine properties
 
@@ -282,7 +282,7 @@ It would be possible to automate the creation of the template. However, as this 
 **Figure 17.** Select installation drive
 
 
-15. Click Begin Installation, using all the other default settings, and wait for the configuration of user settings dialog, shown in Figure 18.
+15. Click Begin Installation, using all the other default settings, and wait for the Configuration of User Settings dialog, shown in Figure 18.
 ![Configure user settings][configuser]  
 **Figure 18.** Configure user settings
 
@@ -293,7 +293,7 @@ It would be possible to automate the creation of the template. However, as this 
 
 
 
-17. Click Done and wait for the install to finish. Reboot and log in into the system using the VM console.
+17. Click Done and wait for the install to finish. Reboot and log into the system using the VM console.
 
 18.	The Red Hat packages required during the deployment of the solution come from two repositories: `rhel-7-server-rpms` and `rhel 7-server-extras-rpms`. The first repository can be found on the Red Hat DVD but the second cannot. There are two options, with both options requiring a Red Hat Network account.
 
@@ -335,13 +335,13 @@ Before converting the VM to a template, you will need to setup access for the An
 
 In addition to the VM Template, you need another Virtual Machine where Ansible will be installed. This node will act as the driver to automate the provisioning of the environment and it is essential that it is properly installed. The steps are as follows:
 
-1. Create a Virtual Machine and install your preferred OS (in this example, and for the sake of simplicity, RHEL7 will be used). The rest of the instructions assume that, if you use a different OS, you understand the possible differences in syntax for the provided commands. If you use RHEL 7, select **Infrastructure Server** as the base environment and the **Guests Agents** add-on during the installation.
+1. Create a Virtual Machine and install your preferred OS (in this example, and for the sake of simplicity, RHEL 7 will be used). The rest of the instructions assume that, if you use a different OS, you understand the possible differences in syntax for the provided commands. If you use RHEL 7, select **Infrastructure Server** as the base environment and the **Guests Agents** add-on during the installation.
 2. Log in to the root account and create an SSH key pair. Do not protect the key with a passphrase (unless you want to use ssh-agent).  
 ```
 # ssh-keygen
 ```
 3. Configure the following yum repositories, rhel-7-server-rpms and rhel-7-server-extras-rpms as explained in the previous section.
-4. Configure the EPEL repository. See here for more information: http://fedoraproject.org/wiki/EPEL. Note that `yum-config-manager` comes with the Infrastructure Server base environment, if you did not select this environment you will have to install the `yum-utils` package.
+4. Configure the EPEL repository. For more information, see: http://fedoraproject.org/wiki/EPEL. Note that `yum-config-manager` comes with the Infrastructure Server base environment, if you did not select this environment you will have to install the `yum-utils` package.
 ```
 # rpm -ivh https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
 # yum-config-manager --enable rhel-7-server-extras-rpms	
@@ -404,9 +404,9 @@ On the Ansible node, retrieve the latest version of the playbooks using git.
 # git clone https://github.com/HewlettPackard/Docker-SimpliVity
 ```
 Change to the directory which you just cloned:
-```# cd ~/Docker-SimplVity```
+```# cd ~/Docker-SimpliVity```
 
-Change to the `dev` directory
+Change to the `dev` directory:
 ```# cd dev```
 
 
@@ -483,7 +483,7 @@ disk2_size='200'
 node_policy='bronze'
 ```
 
-In  the example above, the worker02 node would have 4 times more CPU and double RAM compared to the other worker node.
+In the example above, the worker02 node would have 4 times more CPU and double RAM compared to the other worker node.
 
 The different variables you can use are as described in Table 4 below. They are all mandatory unless if specified otherwise:
 
@@ -503,7 +503,7 @@ The different variables you can use are as described in Table 4 below. They are 
 
 ## Editing the group variables
 
-Once the inventory is ready, the next step is to modify the group variables to match your environment. To do so, you need to edit the file `group_vars/vars`. The variables here can be defined in any order but for the sake of clarity they have been divided into sections.
+Once the inventory is ready, the next step is to modify the group variables to match your environment. To do so, you need to edit the file `group_vars/vars`. The variables can be defined in any order but for the sake of clarity they have been divided into sections.
 
 ### VMware configuration
 
@@ -518,15 +518,15 @@ All VMware-related variables are mandatory and are described in Table 5.
 |vcenter_validate_certs    | ‘no’ |
 | datacenter               | Name of the datacenter where the environment will be provisioned |
 | vm\_username             | Username to log into the VMs. It needs to match the one from the VM Template, so unless you have created an user, you must use 'root'. Note: The corresponding password is stored in a separate file (`group_vars/vault`) with the variable named `vm_password`.  |
-| vm\_template             | Name of the VM Template to be used. Note that this is the name from a vCenter perspective, not the hostname |
+| vm\_template             | Name of the VM Template to be used. Note that this is the name from a vCenter perspective, not the hostname. |
 | folder\_name             | vCenter folder to deploy the VMs. If you do not wish to deploy in a particular folder, the value should be `/`. **Note**: If you want to deploy in a specific folder, you need to create this folder in the inventory of the selected datacenter before starting the deployment. |
-| datastores               | List of datastores to be used, in list format, i.e. ['`Datastore1`','`Datastore2`'...]. Please note that from a Simplivity perspective, it is best practice to use just one Datastore. Using more than one will not provide any advantages in terms of reliability and will add additional complexity. This datastore must exist before you run the playbooks. |
-| disk2                    | UNIX name of the second disk for the Docker VMs. Typically `/dev/sdb` |
+| datastores               | List of datastores to be used, in list format, i.e. ['`Datastore1`','`Datastore2`'...]. Please note that from a Simplivity perspective, it is best practice to use only one Datastore. Using more than one will not provide any advantages in terms of reliability and will add additional complexity. This datastore must exist before you run the playbooks. |
+| disk2                    | UNIX® name of the second disk for the Docker VMs. Typically `/dev/sdb` |
 | disk2\_part              | UNIX name of the partition of the second disk for the Docker VMs. Typically `/dev/sdb1` |
 | vsphere\_plugin\_version | Version of the vSphere plugin for Docker. The default is 0.19 which is **not** the latest version at the time of writing this document. The version of the plugin should match the version of the vSphere Installation Bundle (VIB) that you installed on the ESXi servers. |
 
 
-### Simplivity configuration
+### HPE SimpliVity configuration
 
 All SimpliVity variables are mandatory and are described in Table 6.
 
@@ -539,7 +539,7 @@ All SimpliVity variables are mandatory and are described in Table 6.
   </tr>
   <tr>
     <td>simplivity_username</td>
-	<td>Username to log in to the Simplivity Omnistack appliances. It might include a domain, for example, <a href="mailto:administrator@vsphere.local">administrator@vsphere.local</a>. Note: The corresponding password is stored in a separate file (<code>group_vars/vault</code>) with the variable named <code>simplivity_password</code>.</td>
+	<td>Username to log in to the SimpliVity Omnistack appliances. It might include a domain, for example, <a href="mailto:administrator@vsphere.local">administrator@vsphere.local</a>. Note: The corresponding password is stored in a separate file (<code>group_vars/vault</code>) with the variable named <code>simplivity_password</code>.</td>
   </tr>
   <tr>
     <td>omnistack_ovc</td>
@@ -572,7 +572,7 @@ backup_policies:
   </tr>
   <tr>
   <td>dummy_vm_prefix</td>
-  <td>In order to be able to backup the Docker volumes, a number of "dummy" VMs need to spin up. This variable will set a recognizable prefix for them. </td>
+  <td>In order to be able to back up the Docker volumes, a number of "dummy" VMs need to spin up. This variable will set a recognizable prefix for them. </td>
   </tr>
   <tr>
 	<td>docker_volumes_policy</td>
@@ -645,7 +645,7 @@ All Environment-related variables should be here. All of them are described in t
 
 | Variable | Description                              |
 | -------- | ---------------------------------------- |
-| env      | Dictionary containing all environment variables. It contains three entries described below. Please leave empty the proxy related settings if not required: <ul><li>http\_proxy: HTTP proxy URL, i.e. 'http://15.184.4.2:8080'. This variable defines the HTTP proxy url if your environment is behind a proxy.</li><li>https\_proxy: HTTP proxy URL, i.e. 'http://15.184.4.2:8080'. This variable defines the HTTPS proxy url if your environment is behind a proxy.</li><li>no\_proxy: List of hostnames or IPs that don't require proxy, i.e. 'localhost,127.0.0.1,.cloudra.local,10.10.174.'</li></ul> |
+| env      | Dictionary containing all environment variables. It contains three entries described below. Please leave empty the proxy related settings if not required: <ul><li>http\_proxy: HTTP proxy URL, for example, 'http://15.184.4.2:8080'. This variable defines the HTTP proxy url if your environment is behind a proxy.</li><li>https\_proxy: HTTP proxy URL, for example, 'http://15.184.4.2:8080'. This variable defines the HTTPS proxy url if your environment is behind a proxy.</li><li>no\_proxy: List of hostnames or IPs that don't require proxy, i.e. 'localhost,127.0.0.1,.cloudra.local,10.10.174.'</li></ul> |
 
 
 
@@ -720,10 +720,10 @@ The playbook [create\_vms.yml][create_vms] will create all the necessary Virtual
 The playbook [config\_networking.yml][config_networking] will configure the network settings in all the Virtual Machines. 
 
 ## Distribute public keys
-The playbook [distribute\_keys.yml][distribute_keys] distributes public keys between all nodes, to allow each node to password-less login to every other node. As this is not essential and can be regarded as a security risk (a worker node probably should not be able to log in to a UCP node, for instance), this playbook is commented out in site.yml by default and must be explicitly uncommented to enable this functionality.
+The playbook [distribute\_keys.yml][distribute_keys] distributes public keys between all nodes, to allow each node to password-less log in to every other node. As this is not essential and can be regarded as a security risk (a worker node probably should not be able to log in to a UCP node, for instance), this playbook is commented out in site.yml by default and must be explicitly uncommented to enable this functionality.
 
 ## Register the VMs with Red Hat
-The playbook [config\_subscription.yml][config_subscription] registers and subscribes all virtual machines to the Red Hat Customer Portal. This is only needed if you pull packages from Red Hat. This playbook is commented out by default but you should uncomment it to make sure each VM registers with the Red Hat portal. It is commented out so that you can test the deployment first without having to unregister all the VMs from the Red Hat Customer Portal between each test. If you are using an internal repository, as described in the paragraph "Create a VM template", you can keep this playbook commented out.
+The playbook [config\_subscription.yml][config_subscription] registers and subscribes all virtual machines to the Red Hat Customer Portal. This is only needed if you pull packages from Red Hat. This playbook is commented out by default but you should uncomment it to make sure each VM registers with the Red Hat portal. It is commented out so that you can test the deployment first without having to unregister all the VMs from the Red Hat Customer Portal between each test. If you are using an internal repository, as described in the section "Create a VM template", you can keep this playbook commented out.
 
 ## Install HAProxy
 The playbook [install\_haproxy.yml][install_haproxy] installs and configures the HAProxy package in the load balancer nodes. HAProxy is the chosen tool to implement load balancing between UCP nodes, DTR nodes and worker nodes.
@@ -780,12 +780,12 @@ The playbook [install_playwithdocker.yml][install_playwithdocker] installs Play 
 
 
 
-## Configure dummy VMs to backup Docker volumes
-The playbook [config_dummy_vms_for_docker_volumes_backup.yml][config_dummy_vms_for_docker_volumes_backup] ensures that you can backup Docker volumes that have been created using the vSphere plugin (vDVS) in SimpliVity. There is not a straight forward way to do this, so you need to use a workaround. Since all Docker volumes are going to be stored in the dockvols folder in the datastore(s), you need to create a ‘dummy’ VM per datastore. The `vmx`, `vmsd` and `vmkd` files from this VMs will have to be inside the `dockvols` folder, so when these VMs are backed up, the volumes are backed up as well. Obviously these VMs don’t need to take any resources and you can keep them powered off.
+## Configure dummy VMs to back up Docker volumes
+The playbook [config_dummy_vms_for_docker_volumes_backup.yml][config_dummy_vms_for_docker_volumes_backup] ensures that you can back up Docker volumes that have been created using the vSphere plugin (vDVS) in HPE SimpliVity. There is not a straight forward way to do this, so you need to use a workaround. Since all Docker volumes are going to be stored in the dockvols folder in the datastore(s), you need to create a ‘dummy’ VM per datastore. The `vmx`, `vmsd` and `vmkd` files from this VMs will have to be inside the `dockvols` folder, so when these VMs are backed up, the volumes are backed up as well. Obviously these VMs don’t need to take any resources and you can keep them powered off.
 
 
 ## Configure SimpliVity backups
-The playbook [config_simplivity_backups.yml][config_simplivity_backups] configures the defined backup policies in the group variables file in SimpliVity and will include all Docker nodes plus the ‘dummy’ VMs created before, so the existing Docker volumes are also taken in account. The playbook will mainly use the SimpliVity REST API to perform these tasks. A reference to the REST API can be found here: https://api.simplivity.com/rest-api_getting-started_overview/rest-api_getting-started_overview_rest-api-overview.html
+The playbook [config_simplivity_backups.yml][config_simplivity_backups] configures the defined backup policies in the group variables file in SimpliVity and will include all Docker nodes plus the ‘dummy’ VMs created before, so the existing Docker volumes are also taken into account. The playbook will mainly use the SimpliVity REST API to perform these tasks. A reference to the REST API can be found at: https://api.simplivity.com/rest-api_getting-started_overview/rest-api_getting-started_overview_rest-api-overview.html
 
 
 
@@ -825,12 +825,12 @@ Enter your UCP credentials and you should see the empty list of repositories as 
 ![DTR repositories][dtrrepos]  
 **Figure 27.** DTR repositories
 
-If you navigate to `Settings > Security`, you should see the Image Scanning feature already enabled as shown in Figure 28. (Note that you need an Advanced license to have access to this feature).
+If you navigate to `Settings -> Security`, you should see the Image Scanning feature already enabled as shown in Figure 28. (Note that you need an Advanced license to have access to this feature.)
 
 ![Image scanning in DTR][imagescanning]  
 **Figure 28.** Image scanning in DTR
 
-If you navigate to Settings > Storage, you should see that DTR is configured to use shared NFS storage as shown in Figure 29.
+If you navigate to Settings -> Storage, you should see that DTR is configured to use shared NFS storage as shown in Figure 29.
 
 ![DTR storage settings][DTRstorage]  
 **Figure 29.** DTR storage settings
@@ -899,7 +899,7 @@ Logspout routes the data from all the containers running on each of the worker n
 
 ## Data visualization
 
-Kibana is used for data visualization. Kibana queries Elasticsearch periodically and helps a user create monitoring dashboard. TODO…more here. For more information on configuring Kibana, see Appendix C.
+Kibana is used for data visualization. Kibana queries Elasticsearch periodically and helps a user create monitoring dashboard. For more information on configuring Kibana, see Appendix C.
 
 
 
@@ -916,7 +916,7 @@ For these reasons, HPE is providing a locally deployed Play with Docker service 
 
 Before you can use Play with Docker (PWD), you must first decide on what software package to use to expose your desktop display environment. VNC or the main Server GUI are popular choices, as your UCP node doesn’t have a GUI installed as a default.  PWD requires a node with manager role permissions so you should use the main UCP node. This example uses the “Server with GUI” packages, but feel free to use VNC or your own preferred method.
 
-Connect using ssh to main UCP node which is running RHEL7, and run the following commands to install the packages to enable access to a graphic console desktop. 
+Connect using ssh to main UCP node which is running RHEL 7, and run the following commands to install the packages to enable access to a graphic console desktop. 
 
 ``` 	
 # yum –y groupinstall “Server with GUI”
@@ -931,7 +931,7 @@ For more information on configuring Play with Docker, see Appendix D.
 
 
 # Security considerations
-In addition to having all logs centralized in a single place and the image scanning feature enabled for the DTR nodes, there are other guidelines that should be followed in order to keep your Docker environment as secure as possible. The HPE Reference Configuration paper for securing Docker on HPE Hardware places a special emphasis on securing Docker in DevOps environments and covers best practices in terms of Docker security. The document can be found here: http://h20195.www2.hpe.com/V2/GetDocument.aspx?docname=a00020437enw. Some newer Docker security features that were not covered in the reference configuration are outlined below.
+In addition to having all logs centralized in a single place and the image scanning feature enabled for the DTR nodes, there are other guidelines that should be followed in order to keep your Docker environment as secure as possible. The HPE Reference Configuration paper for securing Docker on HPE Hardware places a special emphasis on securing Docker in DevOps environments and covers best practices in terms of Docker security. The document can be found at: http://h20195.www2.hpe.com/V2/GetDocument.aspx?docname=a00020437enw. Some newer Docker security features that were not covered in the reference configuration are outlined below.
 
 
 
@@ -940,7 +940,7 @@ By default, an image tag can be overwritten by a user with the correct access ri
 Docker DTR can prevent this from happening with the immutable tags feature that can be configured on a per repository basis. Once an image is pushed with a tag, that particular tag cannot be overwritten.
 
 
-More information about immutable tags can be found here: 
+More information about immutable tags can be found at: 
 https://docs.docker.com/datacenter/dtr/2.3/guides/user/manage-images/prevent-tags-from-being-overwritten/ 
 
 
@@ -948,7 +948,7 @@ https://docs.docker.com/datacenter/dtr/2.3/guides/user/manage-images/prevent-tag
 ## Isolate swarm nodes to a specific team
 With Docker EE Advanced, you can enable physical isolation of resources by organizing nodes into collections and granting Scheduler access for different users. To control access to nodes, move them to dedicated collections where you can grant access to specific users, teams, and organizations.
 
-More information about this subject can be found here: : https://docs.docker.com/datacenter/ucp/2.2/guides/access-control/isolate-volumes-between-teams/.
+More information about this subject can be found at: https://docs.docker.com/datacenter/ucp/2.2/guides/access-control/isolate-volumes-between-teams/.
 
 
 
@@ -956,12 +956,12 @@ More information about this subject can be found here: : https://docs.docker.com
 
 ## Introduction
 
-Lifecycle management with respect to this solution refers to the maintenance and management of software and hardware of various components within that build up the solution stack. Lifecycle management is required to keep the solution up-to date and ensure that latest versions of the software are running in to provide optimal performance, security and fix any existing defects within the product.
+Lifecycle management with respect to this solution refers to the maintenance and management of software and hardware of various components that make up the solution stack. Lifecycle management is required to keep the solution up-to date and ensure that the latest versions of the software are running to provide optimal performance, security and fix any existing defects within the product.
 
 
-## SimpliVity environment
+## HPE SimpliVity environment
 
-The SimpliVity environment is made up of proprietary SimpliVity software, VMware software and HPE firmware. There are interdependencies between the various components that need to be accounted and are provided in the table below. The components in Table 14 are part of the SimpliVity environment that require lifecycle management.
+The HPE SimpliVity environment is made up of proprietary HPE SimpliVity software, VMware software and HPE firmware. There are interdependencies between the various components that need to be accounted for and are provided in the table below. The components in Table 14 are part of the HPE SimpliVity environment that require lifecycle management.
 
 In general, ensure that the software bits for the Arbiter and vSphere extension corresponding to an OmniStack release are used.
 
@@ -1027,7 +1027,7 @@ The VMware ESXi and vCenter versions must be compatible with each other and with
 
 ## HPE Server Software
 
-SimpliVity servers are based on HPE server platforms and require compatible firmware version to function with HPE OmniStack Software, as shown in Table 16.
+SimpliVity servers are based on HPE server platforms and require a compatible firmware version to function with HPE OmniStack Software, as shown in Table 16.
 
 **Table 16.** HPE server components
 
@@ -1051,7 +1051,7 @@ SimpliVity servers are based on HPE server platforms and require compatible firm
 
 ## vSphere Docker Volume Service Plug-in
 
-vSphere Docker Volume service plug-in is part of an open source project by VMware that enables running stateful containers by providing persistent docker volumes leveraging existing storage technology from VMware. There are two parts to the plug-in, namely, client software and server software (see Table 17). Every version of the plug-in that is released includes both pieces of software and it is imperative that the version number installed on the client side and server side are the same.
+vSphere Docker Volume service plug-in is part of an open source project by VMware that enables running stateful containers by providing persistent Docker volumes leveraging existing storage technology from VMware. There are two parts to the plug-in, namely, client software and server software (see Table 17). Every version of the plug-in that is released includes both pieces of software and it is imperative that the version number installed on the client side and server side are the same.
 
 When updating the Docker Volume service plug-in, ensure the ESXi version you are running is supported and that the client software is compatible with the operating system.
 
@@ -1144,7 +1144,7 @@ A banner will be displayed on the UI, as shown in Figure 32, when an update is a
 
 ## High-Level dependency map
 
-Based on the lifecycle management details provided above, Figure 32 is a consolidated diagram that shows the dependencies between the various components in the solution stack. Bi-directional arrows between components indicate that the two components have an interoperability dependence. Before upgrading a component to a newer version, you must ensure that the new version of that component is compatible the current version of any dependent components.
+Based on the lifecycle management details provided above, Figure 32 is a consolidated diagram that shows the dependencies between the various components in the solution stack. Bi-directional arrows between components indicate that the two components have an interoperability dependence. Before upgrading a component to a newer version, you must ensure that the new version of that component is compatible with the current version of any dependent components.
 
 ![High-level dependency map][dependencymap]
 
@@ -1154,7 +1154,7 @@ Based on the lifecycle management details provided above, Figure 32 is a consoli
 
 
 # Appendix A
-This is a recommended BOM for the 2 nodes Express Containers for Docker EE: Dev Edition.  Please verify with your HPE account team to ensure these are the latest BOM SKUs.
+This is a recommended BOM for the 2 nodes HPE Express Containers with Docker EE: Dev Edition.  Please verify with your HPE account team to ensure these are the latest BOM SKUs.
 
 **Table 21.** BOM for each SimpliVity node. Dual Socket – 14 cores per Socket, 5x1.92TB value flash
 
@@ -1170,9 +1170,9 @@ This is a recommended BOM for the 2 nodes Express Containers for Docker EE: Dev 
 |665243-B21|HPE Ethernet 10Gb 2P 560FLR-SFP+ Adptr (SFP+ connector)|1
 |864279-B21|HPE TPM 2.0 Gen10 Kit	|1
 |865414-B21|800W Flex Slot Platinum Hot Plug Low Halogen Power Supply Kit	|2
-|733664-B21|HP 2U Cable Management Arm for Easy Install Rail Kit	|1
+|733664-B21|HPE 2U Cable Management Arm for Easy Install Rail Kit	|1
 |867809-B21|HPE Gen10 2U Bezel Kit	|1
-|758959-B22|HP Legacy FIO Mode Setting	|1
+|758959-B22|HPE Legacy FIO Mode Setting	|1
 |874543-B21|HPE 1U Gen10 SFF Easy Install Rail Kit	|1
 ||	BD505A - HPE iLO Adv incl 3yr TSU
 |BD505A|	1-Svr Lic (HPE)|	1
