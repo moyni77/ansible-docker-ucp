@@ -854,26 +854,29 @@ If you navigate to Settings -> Storage, you should see that DTR is configured to
  
 ## Instance Administration for CloudBees Jenkins Solutions
 
-The CloudBees Jenkins Enterprise offering provides Managed Masters "as-a-service" on most public and private cloud providers, to help organizations scale continuous integration and continuous delivery (CI / CD). The CloudBees Jenkins Team product, on the other hand, provides a single-instance option that allows small, independent teams to implement continuous integration and delivery.
+The CloudBees Jenkins Enterprise offering provides Managed Masters "as-a-service" on most public and private cloud providers, helping organizations to scale continuous integration and continuous delivery (CI / CD). The CloudBees Jenkins Team product, on the other hand, provides a single-instance option that allows small, independent teams to implement continuous integration and delivery.
 
-CloudBees Jenkins Enterprise works best for large-scale installations while CloudBees Jenkins Team is designed for smaller-scale installations. Both products include verified integrations and worry-free upgrades that are enabled by and monitored through Beekeeper Upgrade Assistant, and available through the CloudBees Assurance Program. You can see what plugins are available using the Beekeeper Upgrade Assistant, along with which ones have been updated and which ones you have already installed.
+CloudBees Jenkins Enterprise works best for large-scale installations while CloudBees Jenkins Team is designed for smaller-scale installations. Both products include verified integrations and worry-free upgrades that are enabled by and monitored through the Beekeeper Upgrade Assistant, and available through the CloudBees Assurance Program. You can see what plugins are available using the Beekeeper Upgrade Assistant, together with what ones have been updated and what ones you have already installed.
 
-CloudBees Jenkins Team provides a stable Jenkins distribution, verified (or curated) plugins, and expert assistance. It can run as a stand-alone Java process installed manually for your operating system, or as a pre-configured Docker image, or within cloud-based infrastructure from Amazon (Amazon Web Service) or Microsoft (Azure). You can easily down-size from the Enterprise offering to the Team offering by removing the license.xml file in your `JENKINS_HOME`, disabling any unlicensed plugins, and restarting Jenkins.
+CloudBees Jenkins Team provides a stable Jenkins distribution, verified (or curated) plugins, and expert assistance. It can run as a stand-alone Java process installed manually for your operating system, or as a pre-configured Docker image, or within cloud-based infrastructure from Amazon (Amazon Web Service) or Microsoft (Azure). You can easily down-size from the Enterprise offering to the Team offering by removing the `license.xml` file in your JENKINS_HOME directory, disabling any unlicensed plugins, and restarting Jenkins.
+
 This section is aimed at instance administrators who want to continuously build, test, and deliver applications using either Managed Masters or CloudBees Jenkins Team instance.
 
 
 ## Building, testing, and deploying applications
 
-A continuous delivery pipeline is an automated expression of your process for getting software from version control right through to your end users. Every change to your software (committed in source control) goes through a complex process on its way to being released. This process involves building the software in a reliable and repeatable manner, as well as the progression of the build through multiple stages of testing and deployment. Jenkins Pipeline is a suite of plugins that support implementing and integrating continuous delivery pipelines into Jenkins.
+A continuous delivery pipeline is an automated expression of your process for getting software from version control right through to your end users. Every change to your software (committed in source control) goes through a complex process on its way to being released. This process involves building the software in a reliable and repeatable manner, as well as the progression of the build through multiple stages of testing and deployment. Jenkins Pipeline is a suite of plugins that support implementing and integrating continuous delivery pipelines into Jenkins. 
+
 “Infrastructure as Code” is the process by which configuration and provisioning code is managed in the same way as source code. Typically, the definition of a Jenkins Pipeline is written into a text file (called a Jenkinsfile) which in turn is checked into a project’s source control repository. As a result, the continuous delivery pipeline is treated as a part of the application, to be versioned and reviewed like any other code. 
+
 Jenkins Pipeline provides an extensible set of tools for modeling simple-to-complex delivery pipelines, using a domain specific language (DSL) syntax based on Groovy. The Pipeline code can be entered directly using the Jenkins UI, but for more complex processes, it is more likely that you will use a script that is loaded from your source control management (SCM) system.
 
 ## Accessing CloudBees Jenkins Team
 
-Details for configuring the CloudBees Jenkins Team Edition installation are available in Appendix B. Once the configuration is complete, you can access the UI by browsing to `http://worknode02:8080` as shown in Figure 29.
+Details for configuring the CloudBees Jenkins Team Edition installation are available in Appendix B. Once the configuration is complete, you can access the UI by browsing to `http://worknode02:8080` as shown in Figure 28.
 
 ![Jenkins UI][jenkinsui]  
-**Figure 29.** Jenkins UI
+**Figure 28.** Jenkins UI
 
 
 # Container logs monitoring using ELK Monitoring
@@ -885,17 +888,17 @@ ELK is a framework used to collect, filter and visualize log data. The ELK stack
 - **L**ogstash, a data collection engine with pipelining capabilities.
 - **K**ibana, a front end to parse, filter and visualize logs
 
-The data flow in the stack is shown in Figure 30. 
+The data flow in the stack is shown in Figure 29. 
 
 ![ELK data flow][elkdataflow]  
-**Figure 30.** ELK data flow
+**Figure 29.** ELK data flow
 
 ## Log Aggregation
 
-Each Docker Container Engine is configured to send its logs to a common aggregation point. Tools can then be used to process the logs, deploying filters, searches and dashboards. The logs from the containers on each worker node are captured using a logspout container running on the node and are then routed to logstash, running on ELK node. Figure 31 depicts the logical layout of the monitoring architecture.
+Each Docker Container Engine is configured to send its logs to a common aggregation point. Tools can then be used to process the logs, deploying filters, searches and dashboards. The logs from the containers on each worker node are captured using a `logspout` container running on the node and are then routed to `logstash`, running on ELK node. Figure 30 depicts the logical layout of the monitoring architecture.
 
 ![Monitoring architecture][devmonitoringarchitecture]  
-**Figure 31.** Monitoring architecture
+**Figure 30.** Monitoring architecture
 
 
 
@@ -912,14 +915,15 @@ Kibana is used for data visualization. Kibana queries Elasticsearch periodically
 
 # Deploying the Play with Docker service
 
-Play with Docker (PWD) is a free, cloud-based service that gives users the ability to experiment and interact with real live Docker instances for testing or educational purposes.  PWD provides the experience of having an Alpine Linux Virtual Machine, where you can build and run Docker containers and even create clusters with Docker features like Swarm Mode. The service allows users with no previous Docker experience or no access to local hardware the opportunity to work in a live Docker environment.  
+Play with Docker (PWD) is a free, cloud-based service that gives users the ability to experiment and interact with real live Docker instances for testing or educational purposes.  PWD provides the experience of deploying an Alpine Linux Virtual Machine, where you can build and run Docker containers and even create clusters with Docker features like Swarm Mode. The service allows users who have no previous Docker experience or no access to local hardware with the opportunity to work in a live Docker environment.  
 
-Under the hood, Docker-in-Docker (DinD) is used to give the effect of multiple VMs/PCs. In addition to the playground, PWD also includes a training site composed of a large set of Docker labs and quizzes from beginner to advanced level available at http://training.play-with-docker.com. 
+Under the hood, Docker-in-Docker (DinD) is used to give the effect of multiple VMs/PCs. In addition to the playground, PWD also includes a training site composed of a large set of Docker labs and quizzes from beginner to advanced level available at http://training.play-with-docker.com.
+ 
 The public cloud-based version of PWD is available at http://play-with-docker.com.  The service allows users to create up to 5 Docker nodes per session.  Users have the option of deploying a 5-node Docker Swarm, a 3-node Swarm with 2 worker nodes, or 5 separate worker nodes. 
 
 While the cloud-based version of PWD is great for learning and experimentation, enterprise users interested in testing their proprietary application code in a Docker environment may be hesitant to upload their source code to an external cloud-based environment due to security concerns.  In addition, the cloud-based PWD service has a strict time limit, allowing users to work with their Docker instances for up to 4 hours. After this time, the entire environment is automatically deleted.
 
-For these reasons, HPE is providing a locally deployed Play with Docker service as part of this solution stack.  Additionally, a slightly modified version of the PWD service is deployed, allowing users to extend the session timer to as long as 24 hours.  This locally-deployed instance with a customizable session timer allows enterprise customers, interested in quickly and painlessly testing their applications in a Docker environment, a much safer and more secure experience.
+For these reasons, HPE is providing a locally deployed Play with Docker service as part of this solution stack. Additionally, a slightly modified version of the PWD service is deployed, allowing users to extend the session timer to as long as 24 hours. This locally-deployed instance with a customizable session timer allows enterprise customers, interested in quickly and painlessly testing their applications in a Docker environment, a much safer and more secure experience.
 
 Before you can use Play with Docker (PWD), you must first decide on what software package to use to expose your desktop display environment. VNC or the main Server GUI are popular choices, as your UCP node doesn’t have a GUI installed as a default.  PWD requires a node with manager role permissions so you should use the main UCP node. This example uses the “Server with GUI” packages, but feel free to use VNC or your own preferred method.
 
@@ -944,6 +948,7 @@ In addition to having all logs centralized in a single place and the image scann
 
 ## Prevent tags from being overwritten
 By default, an image tag can be overwritten by a user with the correct access rights. As an example, an image such as `library/wordpress:latest` can be pushed and tagged by different users, yet have different functionality. This might make it difficult to trace back the image to the build that generated it.
+
 Docker DTR can prevent this from happening with the immutable tags feature that can be configured on a per repository basis. Once an image is pushed with a tag, that particular tag cannot be overwritten.
 
 
@@ -965,17 +970,19 @@ More information about this subject can be found at: https://docs.docker.com/dat
 
 Lifecycle management with respect to this solution refers to the maintenance and management of software and hardware of various components that make up the solution stack. Lifecycle management is required to keep the solution up-to date and ensure that the latest versions of the software are running to provide optimal performance, security and fix any existing defects within the product.
 
+In this section, we will cover lifecycle management of the different components that are used in this solution. The architectural diagram of the solution in Figure 31 shows the software and hardware stacks that make up the solution.
+
 ![Solution stack][solutionstack]  
-**Figure 2.** Solution stack
+**Figure 31.** Solution stack
 
 
 ## HPE SimpliVity environment
 
-The HPE SimpliVity environment is made up of proprietary HPE SimpliVity software, VMware software and HPE firmware. There are interdependencies between the various components that need to be accounted for and are provided in the table below. The components in Table 14 are part of the HPE SimpliVity environment that require lifecycle management.
+The HPE SimpliVity environment is made up of proprietary HPE SimpliVity software, VMware software and HPE firmware. There are interdependencies between the various components that need to be accounted for and are provided in the table below. The components in Table 11 are part of the HPE SimpliVity environment that require lifecycle management.
 
 In general, ensure that the software bits for the Arbiter and vSphere extension corresponding to an OmniStack release are used.
 
-**Table 14.** SimpliVity components
+**Table 11.** SimpliVity components
 
 <table>
   <tr>
@@ -1006,11 +1013,11 @@ In general, ensure that the software bits for the Arbiter and vSphere extension 
 
 ## VMware Components 
 
-The SimpliVity solution used in this deployment guide is built on VMware vSphere. VMware ESXi and vCenter (see Table 15) are the two components from VMware that are leveraged by the SimpliVity software.
+The SimpliVity solution used in this deployment guide is built on VMware vSphere. VMware ESXi and vCenter (see Table 12) are the two components from VMware that are leveraged by the SimpliVity software.
 
 The VMware ESXi and vCenter versions must be compatible with each other and with the HPE OmniStack version that is running on the SimpliVity systems.
 
-**Table 15.** VMware components
+**Table 12.** VMware components
 
 <table>
   <tr>
@@ -1037,9 +1044,9 @@ The VMware ESXi and vCenter versions must be compatible with each other and with
 
 ## HPE Server Software
 
-SimpliVity servers are based on HPE server platforms and require a compatible firmware version to function with HPE OmniStack Software, as shown in Table 16.
+SimpliVity servers are based on HPE server platforms and require a compatible firmware version to function with HPE OmniStack Software, as shown in Table 13.
 
-**Table 16.** HPE server components
+**Table 13.** HPE server components
 
 <table>
   <tr>
@@ -1061,11 +1068,11 @@ SimpliVity servers are based on HPE server platforms and require a compatible fi
 
 ## vSphere Docker Volume Service Plug-in
 
-vSphere Docker Volume service plug-in is part of an open source project by VMware that enables running stateful containers by providing persistent Docker volumes leveraging existing storage technology from VMware. There are two parts to the plug-in, namely, client software and server software (see Table 17). Every version of the plug-in that is released includes both pieces of software and it is imperative that the version number installed on the client side and server side are the same.
+vSphere Docker Volume service plug-in is part of an open source project by VMware that enables running stateful containers by providing persistent Docker volumes leveraging existing storage technology from VMware. There are two parts to the plug-in, namely, client software and server software (see Table 14). Every version of the plug-in that is released includes both pieces of software and it is imperative that the version number installed on the client side and server side are the same.
 
 When updating the Docker Volume service plug-in, ensure the ESXi version you are running is supported and that the client software is compatible with the operating system.
 
-**Table 17.**	 vSphere Docker Volume service components
+**Table 14.**	 vSphere Docker Volume service components
 
 <table>
   <tr>
@@ -1092,9 +1099,9 @@ When updating the Docker Volume service plug-in, ensure the ESXi version you are
 
 ## Red Hat Enterprise Linux operating system
 
-This solution is built using Red Hat Enterprise Linux (see Table 18) as the base operating system.  When upgrading the operating system on the VMs, first verify that the OS version is compatible to run Docker EE by looking at the Docker OS compatibility metric.
+This solution is built using Red Hat Enterprise Linux (see Table 15) as the base operating system.  When upgrading the operating system on the VMs, first verify that the OS version is compatible to run Docker EE by looking at the Docker OS compatibility metric.
 
-**Table 18.** Operating system
+**Table 15.** Operating system
 
 <table>
   <tr>
@@ -1114,7 +1121,7 @@ This solution is built using Red Hat Enterprise Linux (see Table 18) as the base
 
 ## Docker EE Environment
 
-Each release of Docker Enterprise Edition contains three technology components – UCP, DTR and the Docker Daemon or Engine. It is imperative that the components belonging to the same version are deployed or upgraded together – see Table 19. 
+Each release of Docker Enterprise Edition contains three technology components – UCP, DTR and the Docker Daemon or Engine. It is imperative that the components belonging to the same version are deployed or upgraded together – see Table 16. 
 
 A banner will be displayed on the UI, as shown in Figure 32, when an update is available for UCP or DTR. You can start the upgrade process by clicking on the banner.
 
@@ -1122,7 +1129,7 @@ A banner will be displayed on the UI, as shown in Figure 32, when an update is a
 **Figure 32.** Docker update notification
 
 
-**Table 19.** Docker EE components
+**Table 16.** Docker EE components
 
 
 <table>
@@ -1154,11 +1161,11 @@ A banner will be displayed on the UI, as shown in Figure 32, when an update is a
 
 ## High-Level dependency map
 
-Based on the lifecycle management details provided above, Figure 32 is a consolidated diagram that shows the dependencies between the various components in the solution stack. Bi-directional arrows between components indicate that the two components have an interoperability dependence. Before upgrading a component to a newer version, you must ensure that the new version of that component is compatible with the current version of any dependent components.
+Based on the lifecycle management details provided above, Figure 33 is a consolidated diagram that shows the dependencies between the various components in the solution stack. Bi-directional arrows between components indicate that the two components have an interoperability dependence. Before upgrading a component to a newer version, you must ensure that the new version of that component is compatible with the current version of any dependent components.
 
 ![High-level dependency map][dependencymap]
 
-**Figure 32.** High-level dependency map
+**Figure 33.** High-level dependency map
 
 
 
@@ -1166,7 +1173,7 @@ Based on the lifecycle management details provided above, Figure 32 is a consoli
 # Appendix A
 This is a recommended BOM for the 2 nodes HPE Express Containers with Docker EE: Dev Edition.  Please verify with your HPE account team to ensure these are the latest BOM SKUs.
 
-**Table 21.** BOM for each SimpliVity node. Dual Socket – 14 cores per Socket, 5x1.92TB value flash
+**Table 17.** BOM for each SimpliVity node. Dual Socket – 14 cores per Socket, 5x1.92TB value flash
 
 |Product #|	Product Description	|Qty
 |:------|:--------|:--------:|
@@ -1203,38 +1210,38 @@ CONTAINER ID    IMAGE …
 <b>754ba6ca54904c43bc04ea5d0dc74298</b>
 ```
 
-After you login as the admin user, you can either enter a valid license key or request a trial license, as shown in Figure 33.
+After you login as the `admin` user, you can either enter a valid license key or request a trial license, as shown in Figure 34.
 
 ![License options][licenseoptions]
-**Figure 33.** License options
+**Figure 34.** License options
 
 
 To obtain a license, you need to open a support ticket with CloudBees, specifying your instance ID which is displayed when you click either option in the dialog. For more information on license generation, see the documentation available at https://support.cloudbees.com/hc/en-us/articles/218233918-Jenkins-Enterprise-License-Activation.
 
-Once you enter a valid (or trial) license key, you can proceed to customize Jenkins. It is recommended that you install the suggested plugins, as shown in Figure 34, unless you have a specific requirement for a particular plugin or plugins to be installed.
+Once you enter a valid (or trial) license key, you can proceed to customize Jenkins. It is recommended that you install the suggested plugins, as shown in Figure 35, unless you have a specific requirement for a particular plugin or plugins to be installed.
 
 
 ![Customize Jenkins][customizejenkins]  
-**Figure 34.** Customize Jenkins
+**Figure 35.** Customize Jenkins
 
 
 
-As the plugins are installed, they will change to a green color in the user interface, as shown in Figure 35. The text box on the right hand side of the screen provides details of the plugins and any dependencies that need to be installed. 
+As the plugins are installed, they will change to a green color in the user interface, as shown in Figure 36. The text box on the right hand side of the screen provides details of the plugins and any dependencies that need to be installed. 
 
 ![Installing plugins][installingplugins]  
-**Figure 35.** Installing plugins
+**Figure 36.** Installing plugins
 
 
-It is recommended that you create a new administration account, using the dialog shown in Figure 36.
+It is recommended that you create a new administration account, using the dialog shown in Figure 37.
 
 ![Create Admin user][createadminuser]  
-**Figure 36.** Create Admin user
+**Figure 37.** Create Admin user
 
 
-When the installation and configuration of CloudBees Jenkins Team Edition is complete, the Welcome to Jenkins screen will appear, as show in Figure 37.
+When the installation and configuration of CloudBees Jenkins Team Edition is complete, the Welcome to Jenkins screen will appear, as show in Figure 38.
 
 ![Welcome to Jenkins][welcometojenkins]  
-**Figure 37.** Welcome to Jenkins
+**Figure 38.** Welcome to Jenkins
 
 
 Instance administration for CloudBees Jenkins Team Edition is documented at https://go.cloudbees.com/docs/cloudbees-documentation/admin-instance/, covering management of upgrades/plugins, securing an instance and common configuration options.
@@ -1245,7 +1252,7 @@ Documentation for administering CloudBees Jenkins Enterprise docs is available a
 # Appendix C: ELK Stack Deployment workflow
 
 ![ELK Deployment][elkdeployment]  
-**Figure 38.** ELK Deployment
+**Figure 39.** ELK Deployment
 
 ## Kibana configuration 
 
@@ -1253,14 +1260,14 @@ Kibana is used for data visualization. Kibana queries Elasticsearch periodically
 
 
 ![Configure an index pattern in Kibana][configureindex]  
-**Figure 39.** Configure an index pattern in Kibana
+**Figure 40.** Configure an index pattern in Kibana
 
 ![Logstash index, showing the mappings][logstash]  
-**Figure 40.** Logstash index, showing the mappings
+**Figure 41.** Logstash index, showing the mappings
 
 
 ![Data discovery in Kibana][datadiscovery]  
-**Figure 41.** Data discovery in Kibana
+**Figure 42.** Data discovery in Kibana
 
 For more information on building dashboard, please see the relevant Kibana documentation at https://www.elastic.co/guide/en/kibana/current/dashboard-getting-started.html
 
@@ -1283,17 +1290,41 @@ For example, to deploy a PWD session with a 12-hour timeout value, change this v
 pwd_duration: '12h'
 ```
 
-To deploy a new PWD session using the modified session timer, re-run the `install_playwithdocker.yml` playbook.  Once the session is deployed, launch a web browser on the system where PWD is running and browse to `localhost` as shown in Figure 42:
+To deploy a new PWD session using the modified session timer, re-run the `install_playwithdocker.yml` playbook.  Once the session is deployed, launch a web browser on the system where PWD is running and browse to `localhost` as shown in Figure 43:
 
 ![Play with Docker user interface][pwdui]  
-**Figure 42.** Play with Docker user interface
+**Figure 43.** Play with Docker user interface
 
-Selecting the wrench icon opens a “Templates” box allowing users to choose between 3 Docker Swarm Manager nodes and 2 Worker nodes or 5 Manager nodes and no Workers, as shown in Figure 43:
+Selecting the wrench icon opens a “Templates” box allowing users to choose between 3 Docker Swarm Manager nodes and 2 Worker nodes or 5 Manager nodes and no Workers, as shown in Figure 44:
 
 ![Configure Play with Docker][configurepwd]  
-**Figure 43.** Configure Play with Docker
+**Figure 44.** Configure Play with Docker
 
 For more information about using the Play with Docker service, visit the Play with Docker Classroom site: http://training.play-with-docker.com.  
+
+
+
+# Resources and additional links
+
+HPE Reference Architectures 
+hpe.com/info/ra
+
+HPE | Docker Alliance page
+http://h22168.www2.hpe.com/us/en/partners/docker/
+
+HPE Servers
+hpe.com/servers
+
+HPE Storage
+hpe.com/storage
+
+HPE Networking
+hpe.com/networking
+
+HPE Technology Consulting Services
+hpe.com/us/en/services/consulting.html
+
+
 
 
 
@@ -1330,24 +1361,24 @@ For more information about using the Play with Docker service, visit the Play wi
 
 [jenkinsui]: </dev/images/jenkinsui.jpg> "Figure 29. Jenkins UI"
 [elkdataflow]: </dev/images/elkdataflow.png> "Figure 30. ELK data flow"
-[devmonitoringarchitecture]: </dev/images/devmonitoringarchitecture.png> "Figure 31. Monitoring architecture"
+[solutionstack]: </dev/images/solutionstack.png> "Figure 31. Solution stack"
 
-[dockerupdate]: </dev/images/dockerupdate.png> "Figure 31. Docker update notification"
-[dependencymap]: </dev/images/dependencymap.png> "Figure 32. High-level dependency map"
+[dockerupdate]: </dev/images/dockerupdate.png> "Figure 32. Docker update notification"
+[dependencymap]: </dev/images/dependencymap.png> "Figure 33. High-level dependency map"
 
-[licenseoptions]: </dev/images/licenseoptions.jpg> "Figure 33. License options"
-[customizejenkins]: </dev/images/customizejenkins.png> "Figure 34. Customize Jenkins"
-[installingplugins]: </dev/images/installingplugins.png> "Figure 35. Installing plugins"
-[createadminuser]: </dev/images/createadminuser.png> "Figure 36. Create Admin user"
-[welcometojenkins]: </dev/images/welcometojenkins.jpg> "Figure 37. Welcome to Jenkins"
-[elkdeployment]: </dev/images/elkdeployment.png> "Figure 38. ELK Deployment"
-[configureindex]: </dev/images/configureindex.png> "Figure 39. Configure an index pattern in Kibana"
-[logstash]: </dev/images/logstash.png> "Figure 40. Logstash index, showing the mappings"
-[datadiscovery]: </dev/images/datadiscovery.png> "Figure 41. Data discovery in Kibana"
-[pwdui]: </dev/images/pwdui.jpg> "Figure 42. Play with Docker user interface"
-[configurepwd]: </dev/images/configurepwd.jpg> "Figure 43. Configure Play with Docker"
+[licenseoptions]: </dev/images/licenseoptions.jpg> "Figure 34. License options"
+[customizejenkins]: </dev/images/customizejenkins.png> "Figure 35. Customize Jenkins"
+[installingplugins]: </dev/images/installingplugins.png> "Figure 36. Installing plugins"
+[createadminuser]: </dev/images/createadminuser.png> "Figure 37. Create Admin user"
+[welcometojenkins]: </dev/images/welcometojenkins.jpg> "Figure 38. Welcome to Jenkins"
+[elkdeployment]: </dev/images/elkdeployment.png> "Figure 39. ELK Deployment"
+[configureindex]: </dev/images/configureindex.png> "Figure 40. Configure an index pattern in Kibana"
+[logstash]: </dev/images/logstash.png> "Figure 41. Logstash index, showing the mappings"
+[datadiscovery]: </dev/images/datadiscovery.png> "Figure 42. Data discovery in Kibana"
+[pwdui]: </dev/images/pwdui.jpg> "Figure 43. Play with Docker user interface"
+[configurepwd]: </dev/images/configurepwd.jpg> "Figure 44. Configure Play with Docker"
 
-[solutionstack]: </dev/images/solutionstack.png> "Figure 2. Solution stack"
+
 
 
 
