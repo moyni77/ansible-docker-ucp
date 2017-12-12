@@ -99,8 +99,7 @@ In addition to the above, the playbooks also set up:
 
 These nodes can live in any of the hosts and they are not redundant. The vSphere Docker volume plug-in stores data in a shared datastore that can be accessed from any machine in the cluster.
 
-![Solution stack][solutionstack]  
-**Figure 2.** Solution stack
+
 
 
 # Sizing considerations
@@ -142,9 +141,9 @@ For HPE Express Containers with Docker EE: Dev Edition, the following tables des
 
 
 
-**Table 2.** Memory allocation
+**Table 2.** Memory allocation (GB)
 
-| RAM | simply01 | simply02 |
+| RAM (GB) | simply01 | simply02 |
 |:------|:--------:|:--------:|
 | ucp1  |	8      |          |
 | dtr1  | 16	   |          |
@@ -166,10 +165,10 @@ For HPE Express Containers with Docker EE: Dev Edition, the following tables des
 
 # Provisioning the operations environment
 
-This section describes in detail how to provision the environment described previously in the architecture section. This section describes in detail how to provision the environment described previously in the architecture section. The high level steps this guide will take are shown in Figure 3.
+This section describes in detail how to provision the environment described previously in the architecture section. This section describes in detail how to provision the environment described previously in the architecture section. The high level steps this guide will take are shown in Figure 2.
 
 ![Provisioning steps][provisioning]
-**Figure 3.** Provisioning steps
+**Figure 2.** Provisioning steps
 
 
 ## Verify Prerequisites
@@ -222,95 +221,99 @@ The first step of the automated solution is the creation of a VM Template that y
 It would be possible to automate the creation of the template. However, as this is a one-off task, it is appropriate to do it manually. The steps to create a VM template manually are described below.
 
 
-1. Log in to vCenter and create a new Virtual Machine. In the dialog box, shown in Figure 4, select `Typical` and press `Next`.  
+1. Log in to vCenter and create a new Virtual Machine. In the dialog box, shown in Figure 3, select `Typical` and press `Next`.  
 ![Create New Virtual Machine][createnewvm]  
-**Figure 4.** Create New Virtual Machine  
+**Figure 3.** Create New Virtual Machine  
   
-2. Specify the name and location for your template, as shown in Figure 5.  
+2. Specify the name and location for your template, as shown in Figure 4.  
 ![Specify name and location for the virtual machine][vmnamelocation]  
-**Figure 5.** Specify name and location for the virtual machine  
+**Figure 4.** Specify name and location for the virtual machine  
   
-3. Choose the host/cluster on which you want to run this virtual machine, as shown in Figure 6.
+3. Choose the host/cluster on which you want to run this virtual machine, as shown in Figure 5.
 ![Choose host / cluster][choosehost]  
-**Figure 6.** Choose host / cluster 
+**Figure 5.** Choose host / cluster 
 
 
-4. Choose a datastore where the template files will be stored, as shown in Figure 7.
+4. Choose a datastore where the template files will be stored, as shown in Figure 6.
 ![Select storage for template files][selectstorage]  
-**Figure 7.** Select storage for template files
+**Figure 6.** Select storage for template files
 
 
-5. Choose the OS as shown in Figure 8, in this case Linux, RHEL 7 64bit.
+5. Choose the OS as shown in Figure 7, in this case Linux, RHEL 7 64bit.
 ![Choose operating system][chooseos]  
-**Figure 8.** Choose operating system
+**Figure 7.** Choose operating system
 
-6. Pick the network to attach to your template as shown in Figure 9. In this example there is only one NIC but depending on how you plan to architect your environment you might want to add more than one.
+6. Pick the network to attach to your template as shown in Figure 8. In this example there is only one NIC but depending on how you plan to architect your environment you might want to add more than one.
 ![Create network connections][createnetwork]  
-**Figure 9.** Create network connections
+**Figure 8.** Create network connections
 
 
-7. Create a primary disk as shown in Figure 10. The chosen size in this case is 50GB but 20GB should be typically enough.
+7. Create a primary disk as shown in Figure 9. The chosen size in this case is 50GB but 20GB should be typically enough. Select `Thin Provision` which does not pre-allocate space and press `Next`.
 ![Create primary disk][createprimarydisk]  
-**Figure 10.** Create primary disk
+**Figure 9.** Create primary disk
 
 
-8. Confirm that the settings are correct and press Finish as shown in Figure 11.
+8. Confirm that the settings are correct and press Finish as shown in Figure 10.
 ![Confirm settings][confirmsettings]  
-**Figure 11.** Confirm settings
+**Figure 10.** Confirm settings
 
 
-9. The next step is to virtually insert the RHEL 7 DVD, using the Settings of the newly created VM as shown in Figure 12. Select your ISO file in the Datastore ISO File Device Type and make sure that the “Connect at power on” checkbox is checked.  
+9. The next step is to virtually insert the RHEL 7 DVD, using the Settings of the newly created VM as shown in Figure 11. Select your ISO file in the Datastore ISO File Device Type and make sure that the “Connect at power on” checkbox is checked.  
 ![Virtual machine properties][vmprops]  
-**Figure 12.** Virtual machine properties
+**Figure 11.** Virtual machine properties
 
 
 
-10. Finally, you can optionally remove the Floppy Disk, as shown in Figure 13, as this is not required for the VM.
+10. Finally, you can optionally remove the Floppy Disk, as shown in Figure 12, as this is not required for the VM.
 ![Remove Floppy drive][removefloppy]  
-**Figure 13.** Remove Floppy drive
+**Figure 12.** Remove Floppy drive
 
-11. Power on the server and open the console to install the OS. On the welcome screen, as shown in Figure 14, pick your language and press `Continue`.
+11. Power on the server and open the console to install the OS. On the welcome screen, as shown in Figure 13, pick your language and press `Continue`.
 ![Welcome screen][welcomescreen]  
-**Figure 14.** Welcome screen
+**Figure 13.** Welcome screen
 
-12. The installation summary screen will appear, as shown in Figure 15.
+12. The installation summary screen will appear, as shown in Figure 14.
 ![Installation summary][installsummary]  
-**Figure 15.** Installation summary
+**Figure 14.** Installation summary
 
-13. Scroll down and click on Installation Destination, as shown in Figure 16.
+13. Scroll down and click on `Installation Destination`, as shown in Figure 15.
 ![Installation destination][installdestination]  
-**Figure 16.** Installation destination
+**Figure 15.** Installation destination
 
-14. Select your installation drive, as shown in Figure 17, and click Done.
+14. Select your installation drive, as shown in Figure 16, and click `Done`.
 ![Select installation drive][installdrive]  
-**Figure 17.** Select installation drive
+**Figure 16.** Select installation drive
 
 
-15. Click Begin Installation, using all the other default settings, and wait for the Configuration of User Settings dialog, shown in Figure 18.
+15. Click `Begin Installation`, using all the other default settings, and wait for the Configuration of User Settings dialog, shown in Figure 17.
 ![Configure user settings][configuser]  
-**Figure 18.** Configure user settings
+**Figure 17.** Configure user settings
 
 
-16. Select a root password, as shown in Figure 19.
+16. Select a root password, as shown in Figure 18.
 ![Set root password][setrootpwd]  
-**Figure 19.** Set root password
+**Figure 18.** Set root password
 
 
 
-17. Click Done and wait for the install to finish. Reboot and log into the system using the VM console.
+17. Click `Done` and wait for the install to finish. Reboot and log into the system using the VM console.
 
 18.	The Red Hat packages required during the deployment of the solution come from two repositories: `rhel-7-server-rpms` and `rhel 7-server-extras-rpms`. The first repository can be found on the Red Hat DVD but the second cannot. There are two options, with both options requiring a Red Hat Network account.
 
 
-  - **Option 1:** Use Red Hat subscription manager to register your system. This is the easiest way and will automatically give you access to the official Red Hat repositories. Use the `subscription-manager register` command as follows.
-```
-# subscription-manager register --auto-attach
-```
-If you are behind a proxy, you must configure this before running the above command to register.
+  - **Option 1:** Use Red Hat subscription manager to register your system. This is the easiest way and will automatically give you access to the official Red Hat repositories. 
+  
+If you are behind a proxy, you must configure the proxy before running command to register:
 ```
 # subscription-manager config --server.proxy_hostname=<proxy IP> --server.proxy_port=<proxy port>
 ```
-If you use this option, the playbooks will automatically enable the `extras` repository on the VMs that need it. If you encounter proxy errors related to `cdn.redhat.com`, you should run the subscription-manager refresh command to recreate your certificate.
+  
+Use the `subscription-manager register` command as follows:
+```
+# subscription-manager register --auto-attach
+```
+
+If you use this option, the playbooks will automatically enable the `extras` repository on the VMs that need it. If you encounter proxy errors related to `cdn.redhat.com`, you should run the subscription-manager refresh command to recreate your certificate and then re-run the `subscription-manager register` command.
 
   - **Option 2:** Use an internal repository. Instead of pulling the packages from Red Hat, you can create copies of the required repositories on a dedicated node. You can then configure the package manager to pull the packages from the dedicated node. Your `/etc/yum.repos.d/redhat.repo` could look as follows.
 ```
@@ -367,7 +370,7 @@ In addition to the VM Template, you need another Virtual Machine where Ansible w
 # ssh-copy-id root@<VM_Template>
 ```
 
-Please note that in both the Ansible node and the VM Template you might need to configure the network so one node can reach the other. Instructions for this step have been omitted since it is a basic step and could vary depending on the user’s environment.
+Please note that, in both the Ansible node and the VM Template, you might need to configure the network so one node can reach the other. Instructions for this step have been omitted since it is a basic step and could vary depending on the user’s environment.
 
 
 
@@ -389,9 +392,9 @@ Now that the VM Template has the public key of the Ansible node, we’re ready t
 # shutdown –h now
 ```
 
-3. Once the Virtual Machine is ready and turned off, convert it to a template as shown in Figure 20.
+3. Once the Virtual Machine is ready and turned off, convert it to a template as shown in Figure 19.
 ![Convert to template][converttotemplate]  
-**Figure 20** Convert to template  
+**Figure 19** Convert to template  
 
 This completes the creation of the VM Template.
 
@@ -962,6 +965,9 @@ More information about this subject can be found at: https://docs.docker.com/dat
 
 Lifecycle management with respect to this solution refers to the maintenance and management of software and hardware of various components that make up the solution stack. Lifecycle management is required to keep the solution up-to date and ensure that the latest versions of the software are running to provide optimal performance, security and fix any existing defects within the product.
 
+![Solution stack][solutionstack]  
+**Figure 2.** Solution stack
+
 
 ## HPE SimpliVity environment
 
@@ -1293,17 +1299,16 @@ For more information about using the Play with Docker service, visit the Play wi
 
 
 [dev-architecture]: </dev/images/architecture.png> "Figure 1. Solution Architecture"
-[solutionstack]: </dev/images/solutionstack.png> "Figure 2. Solution stack"
-[provisioning]: </dev/images/provisioning.png> "Figure 3. Provisioning steps"
+[provisioning]: </dev/images/provisioning.png> "Figure 2. Provisioning steps"
 
-[createnewvm]: </dev/images/createnewvirtualmachine.png> "Figure 4. Create New Virtual Machine"
-[vmnamelocation]: </dev/images/vmnamelocation.png> "Figure 5. Specify name and location for the virtual machine" 
-[choosehost]: </dev/images/choosehost.png> "Figure 6. Choose host / cluster"
-[selectstorage]: </dev/images/selectstorage.png> "Figure 7. Select storage for template files"
-[chooseos]: </dev/images/chooseos.png> "Figure 8. Choose operating system"
-[createnetwork]: </dev/images/createnetwork.png> "Figure 9. Create network connections"
-[createprimarydisk]: </dev/images/createprimarydisk.png> "Figure 10. Create primary disk"
-[confirmsettings]: </dev/images/confirmsettings.png> "Figure 11. Confirm settings"
+[createnewvm]: </dev/images/createnewvirtualmachine.png> "Figure 3. Create New Virtual Machine"
+[vmnamelocation]: </dev/images/vmnamelocation.png> "Figure 4. Specify name and location for the virtual machine" 
+[choosehost]: </dev/images/choosehost.png> "Figure 5. Choose host / cluster"
+[selectstorage]: </dev/images/selectstorage.png> "Figure 6. Select storage for template files"
+[chooseos]: </dev/images/chooseos.png> "Figure 7. Choose operating system"
+[createnetwork]: </dev/images/createnetwork.png> "Figure 8. Create network connections"
+[createprimarydisk]: </dev/images/createprimarydisk.png> "Figure 9. Create primary disk"
+[confirmsettings]: </dev/images/confirmsettings.png> "Figure 10. Confirm settings"
 [vmprops]: </dev/images/vmprops.png> "Figure 12. Virtual machine properties"
 [removefloppy]: </dev/images/removefloppy.png> "Figure 13. Remove Floppy drive"
 [welcomescreen]: </dev/images/welcomescreen.png> "Figure 14. Welcome screen"
@@ -1342,7 +1347,7 @@ For more information about using the Play with Docker service, visit the Play wi
 [pwdui]: </dev/images/pwdui.jpg> "Figure 42. Play with Docker user interface"
 [configurepwd]: </dev/images/configurepwd.jpg> "Figure 43. Configure Play with Docker"
 
-
+[solutionstack]: </dev/images/solutionstack.png> "Figure 2. Solution stack"
 
 
 
